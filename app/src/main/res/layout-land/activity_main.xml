@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg"
-    tools:context=".MainActivity">
+    android:background="@drawable/bg">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -170,22 +168,9 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
         <ImageView
-            android:id="@+id/cast_2"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:contentDescription="@string/todo"
-            android:src="@drawable/chris_evans"
-            app:layout_constraintEnd_toStartOf="@+id/cast_3"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/cast_1"
-            app:layout_constraintTop_toBottomOf="@id/tv_cast" />
-
-        <ImageView
             android:id="@+id/cast_1"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/todo"
@@ -197,9 +182,22 @@
             app:layout_constraintTop_toBottomOf="@id/tv_cast" />
 
         <ImageView
+            android:id="@+id/cast_2"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/chris_evans"
+            app:layout_constraintEnd_toStartOf="@+id/cast_3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/cast_1"
+            app:layout_constraintTop_toBottomOf="@id/tv_cast" />
+
+        <ImageView
             android:id="@+id/cast_3"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/todo"
@@ -211,8 +209,8 @@
 
         <ImageView
             android:id="@+id/cast_4"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
