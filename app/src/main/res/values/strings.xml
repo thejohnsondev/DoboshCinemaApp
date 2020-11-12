@@ -1,7 +1,4 @@
 <resources>
     <string name="app_name">DoboshAcademyApp</string>
     <string name="hello_android_academy">Hello Android Academy!</string>
-    <string name="name">Имя</string>
-    <string name="age">Возраст</string>
-    <string name="enter">Войти</string>
 </resources>
