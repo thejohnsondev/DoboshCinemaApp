@@ -10,83 +10,69 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="298dp"
+            android:id="@+id/head_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/todo"
             android:scaleType="centerCrop"
             android:src="@drawable/orig"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="298dp"
-            android:contentDescription="@string/todo"
-            android:scaleType="centerCrop"
-            android:src="@drawable/mask"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
-            android:id="@+id/pg_shape"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="16dp"
+            android:id="@+id/age_shape"
+            android:layout_width="@dimen/margin_24"
+            android:layout_height="@dimen/margin_24"
+            android:layout_marginStart="@dimen/margin_16"
             android:background="@drawable/pg_shape"
             app:layout_constraintBottom_toTopOf="@id/tv_title"
             app:layout_constraintStart_toStartOf="parent">
 
         </View>
 
-
         <TextView
+            android:id="@+id/age_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_medium"
-            android:text="@string/_13"
-            android:textColor="@color/text_color_light"
             android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/pg_shape"
-            app:layout_constraintStart_toStartOf="@id/pg_shape"
-            app:layout_constraintTop_toTopOf="@+id/pg_shape" />
-
+            style="@style/LightText"
+            android:text="@string/_13"
+            app:layout_constraintBottom_toBottomOf="@id/age_shape"
+            app:layout_constraintStart_toStartOf="@id/age_shape"
+            app:layout_constraintTop_toTopOf="@+id/age_shape" />
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/roboto_medium"
-            android:shadowColor="#000000"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginEnd="@dimen/margin_16"
+            android:textSize="@dimen/title_text_size"
+            style="@style/LightText"
+            android:shadowColor="@color/black"
             android:shadowDx="6"
             android:shadowDy="12"
             android:shadowRadius="12"
             android:text="@string/avengers_end_game"
-            android:textColor="@color/text_color_light"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/head_image" />
 
         <TextView
             android:id="@+id/tv_genre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/margin_4"
             android:fontFamily="@font/roboto_light"
             android:text="@string/action_adventure_fantasy"
             android:textColor="@color/genre_color_red"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_14"
             app:layout_constraintStart_toStartOf="@+id/tv_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
         <RatingBar
-            android:id="@+id/ratingBar"
+            android:id="@+id/movie_rating_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="35dp"
@@ -104,31 +90,21 @@
             android:id="@+id/tv_reviews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:fontFamily="@font/roboto_medium"
+            android:layout_marginTop="@dimen/margin_4"
+            style="@style/LightText"
             android:text="@string/_125_reviews"
             android:textColor="@color/gray"
-            android:textSize="14sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/tv_genre"
             app:layout_constraintTop_toBottomOf="@+id/tv_genre" />
 
         <TextView
             android:id="@+id/tv_story_line"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/roboto_medium"
-            android:shadowColor="#000000"
-            android:shadowDx="6"
-            android:shadowDy="12"
-            android:shadowRadius="12"
+            android:layout_marginTop="@dimen/margin_24"
+            android:layout_marginEnd="@dimen/margin_16"
+            style="@style/LightText"
             android:text="@string/storyline"
-            android:textColor="@color/text_color_light"
-            android:textSize="14sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/tv_reviews"
             app:layout_constraintTop_toBottomOf="@+id/tv_reviews" />
 
@@ -136,43 +112,48 @@
             android:id="@+id/tv_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:fontFamily="@font/roboto_light"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginTop="@dimen/margin_4"
+            android:paddingTop="@dimen/margin_8"
+            android:paddingBottom="@dimen/margin_8"
             android:text="@string/description"
-            android:textColor="@color/gray"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/tv_genre"
+            style="@style/DescriptionText"
+            app:layout_constraintEnd_toEndOf="@+id/tv_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_story_line"
             app:layout_constraintTop_toBottomOf="@+id/tv_story_line" />
 
         <TextView
             android:id="@+id/tv_cast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/roboto_medium"
-            android:shadowColor="#000000"
-            android:shadowDx="6"
-            android:shadowDy="12"
-            android:shadowRadius="12"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginTop="@dimen/margin_24"
+            android:layout_marginEnd="@dimen/margin_16"
+            android:textSize="@dimen/text_size_14"
+            style="@style/LightText"
             android:text="@string/cast"
-            android:textColor="@color/text_color_light"
-            android:textSize="14sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/tv_reviews"
             app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
         <ImageView
+            android:id="@+id/cast_2"
+            android:layout_width="@dimen/cast_dimension_land"
+            android:layout_height="@dimen/cast_dimension_land"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginTop="@dimen/margin_8"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/chris_evans"
+            app:layout_constraintEnd_toStartOf="@+id/cast_3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/cast_1"
+            app:layout_constraintTop_toBottomOf="@id/tv_cast" />
+
+        <ImageView
             android:id="@+id/cast_1"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="@dimen/cast_dimension_land"
+            android:layout_height="@dimen/cast_dimension_land"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginTop="@dimen/margin_8"
             android:contentDescription="@string/todo"
             android:src="@drawable/robert"
             app:layout_constraintEnd_toStartOf="@+id/cast_2"
@@ -182,24 +163,11 @@
             app:layout_constraintTop_toBottomOf="@id/tv_cast" />
 
         <ImageView
-            android:id="@+id/cast_2"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:contentDescription="@string/todo"
-            android:src="@drawable/chris_evans"
-            app:layout_constraintEnd_toStartOf="@+id/cast_3"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/cast_1"
-            app:layout_constraintTop_toBottomOf="@id/tv_cast" />
-
-        <ImageView
             android:id="@+id/cast_3"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="@dimen/cast_dimension_land"
+            android:layout_height="@dimen/cast_dimension_land"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginTop="@dimen/margin_8"
             android:contentDescription="@string/todo"
             android:src="@drawable/mark"
             app:layout_constraintEnd_toStartOf="@+id/cast_4"
@@ -209,11 +177,11 @@
 
         <ImageView
             android:id="@+id/cast_4"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_width="@dimen/cast_dimension_land"
+            android:layout_height="@dimen/cast_dimension_land"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginTop="@dimen/margin_8"
+            android:layout_marginEnd="@dimen/margin_16"
             android:contentDescription="@string/todo"
             android:src="@drawable/chris_hemsworth"
             app:layout_constraintEnd_toEndOf="parent"
@@ -223,72 +191,47 @@
 
         <TextView
             android:id="@+id/cast_1_desc"
-            android:layout_width="80dp"
+            android:layout_width="@dimen/cast_dimension"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:fontFamily="@font/roboto_medium"
-            android:shadowColor="#000000"
-            android:shadowDx="6"
-            android:shadowDy="12"
-            android:shadowRadius="12"
+            android:layout_marginTop="@dimen/margin_6"
+            android:textSize="@dimen/text_size_12"
+            style="@style/LightText"
             android:text="@string/robert_downey_jr"
-            android:textColor="@color/text_color_light"
-            android:textSize="12sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/cast_1"
             app:layout_constraintTop_toBottomOf="@+id/cast_1" />
 
         <TextView
             android:id="@+id/cast_2_desc"
-            android:layout_width="80dp"
+            android:layout_width="@dimen/cast_dimension"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:fontFamily="@font/roboto_medium"
-            android:shadowColor="#000000"
-            android:shadowDx="6"
-            android:shadowDy="12"
-            android:shadowRadius="12"
+            android:layout_marginTop="@dimen/margin_6"
+            android:textSize="@dimen/text_size_12"
+            style="@style/LightText"
             android:text="@string/chris_evans"
-            android:textColor="@color/text_color_light"
-            android:textSize="12sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/cast_2"
             app:layout_constraintTop_toBottomOf="@+id/cast_2" />
 
         <TextView
             android:id="@+id/cast_3_desc"
-            android:layout_width="80dp"
+            android:layout_width="@dimen/cast_dimension"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:fontFamily="@font/roboto_medium"
-            android:shadowColor="#000000"
-            android:shadowDx="6"
-            android:shadowDy="12"
-            android:shadowRadius="12"
+            android:layout_marginTop="@dimen/margin_6"
+            android:textSize="@dimen/text_size_12"
+            style="@style/LightText"
             android:text="@string/mark_ruffalo"
-            android:textColor="@color/text_color_light"
-            android:textSize="12sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/cast_3"
             app:layout_constraintTop_toBottomOf="@+id/cast_3" />
 
         <TextView
             android:id="@+id/cast_4_desc"
-            android:layout_width="80dp"
+            android:layout_width="@dimen/cast_dimension"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:fontFamily="@font/roboto_medium"
-            android:shadowColor="#000000"
-            android:shadowDx="6"
-            android:shadowDy="12"
-            android:shadowRadius="12"
+            android:layout_marginTop="@dimen/margin_6"
+            android:textSize="@dimen/text_size_12"
+            style="@style/LightText"
             android:text="@string/chris_hemsworth"
-            android:textColor="@color/text_color_light"
-            android:textSize="12sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/cast_4"
             app:layout_constraintTop_toBottomOf="@+id/cast_4" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
