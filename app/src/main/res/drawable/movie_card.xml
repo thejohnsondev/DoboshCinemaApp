@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/main_color_light" />
+            <size android:height="@dimen/movie_card_height"
+                android:width="@dimen/movie_card_width"/>
+            <corners
+                android:radius="8dp" />
+            <stroke
+                android:color="@color/gray"
+                android:width="1dp" />
+        </shape>
+    </item>
+</selector>
