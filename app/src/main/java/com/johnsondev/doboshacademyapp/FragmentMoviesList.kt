@@ -15,12 +15,12 @@ class FragmentMoviesList : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movies_list, container, false)
 
-        view.findViewById<View>(R.id.movie_card).apply {
-            setOnClickListener {
+        val movieCard = view.findViewById<View>(R.id.movie_card)
+        movieCard.setOnClickListener {
                 fragmentManager?.beginTransaction()?.apply {
                     setCustomAnimations(
-                       R.anim.slide_in,
-                       R.anim.fade_out,
+                        R.anim.slide_in,
+                        R.anim.fade_out,
                         R.anim.fade_in,
                         R.anim.slide_out
                     )
@@ -29,7 +29,7 @@ class FragmentMoviesList : Fragment() {
                     commit()
                 }
             }
-        }
+
         return view
+        }
     }
-}
