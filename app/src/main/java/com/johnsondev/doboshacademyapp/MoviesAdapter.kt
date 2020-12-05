@@ -50,10 +50,10 @@ class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bind(movie: Movie) {
         name.text = movie.name
         genre.text = movie.genre
-        reviews.text = "${movie.reviews} REVIEWS"
+        reviews.text = "${movie.reviews} ${R.string.reviews}"
         rating.progress = movie.rating
-        time.text = "${movie.time} MIN"
-        age.text = "${movie.age}+"
+        time.text = "${movie.time} ${R.string.min}"
+        age.text = "${movie.age}${R.string.plus}"
         movieImg.setImageResource(movie.movieImg)
         isFavorite.visibility = if (movie.isFavorite) View.VISIBLE else View.GONE
     }

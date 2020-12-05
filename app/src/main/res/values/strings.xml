@@ -16,4 +16,9 @@
     <string name="back">Back</string>
     <string name="movies_list">Movies list</string>
     <string name="_137_min">137 MIN</string>
+    <string name="inform_about">Information about</string>
+    <string name="missed">missed</string>
+    <string name="reviews">REVIEWS</string>
+    <string name="min">MIN</string>
+    <string name="plus">+</string>
 </resources>

@@ -14,7 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class FragmentMoviesList : Fragment() {
 
-    private var spanCount: Int? = null
+    private var spanCount: Int? = null    //I save it because at initialization it is equal to null (studio prompts to do save)
     private var movieList: RecyclerView? = null
 
     override fun onCreateView(
@@ -51,7 +51,7 @@ class FragmentMoviesList : Fragment() {
                 }
                 else -> Toast.makeText(
                     view?.context,
-                    "Information about ${movie.name} missed",
+                    "${R.string.inform_about} ${movie.name} ${R.string.missed}",
                     Toast.LENGTH_SHORT
                 ).show()
             }

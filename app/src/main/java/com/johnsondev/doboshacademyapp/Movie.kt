@@ -1,5 +1,7 @@
 package com.johnsondev.doboshacademyapp
 
+import androidx.annotation.DrawableRes
+
 data class Movie(
     val id: Int,
     val name: String,
@@ -8,6 +10,7 @@ data class Movie(
     val rating: Int,
     val time: Int,
     val age: Int,
+    @DrawableRes
     val movieImg: Int,
     val isFavorite: Boolean
 ) {
