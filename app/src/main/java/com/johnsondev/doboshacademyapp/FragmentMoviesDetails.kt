@@ -17,11 +17,10 @@ class FragmentMoviesDetails : Fragment() {
         val view = inflater.inflate(R.layout.fragment_movies_details, container, false)
 
         val backBtn : TextView = view.findViewById(R.id.back_btn)
-        backBtn.apply {
-            setOnClickListener {
-                fragmentManager?.popBackStack()
-            }
+        backBtn.setOnClickListener(){
+            fragmentManager?.popBackStack()
         }
+
         return view
     }
 
