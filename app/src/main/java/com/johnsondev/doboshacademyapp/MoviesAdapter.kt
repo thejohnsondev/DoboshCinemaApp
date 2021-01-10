@@ -1,30 +1,30 @@
 package com.johnsondev.doboshacademyapp
 
 import android.content.Context
-import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import androidx.recyclerview.widget.GridLayoutManager
+
 import androidx.recyclerview.widget.RecyclerView
+import com.johnsondev.doboshacademyapp.model.Movie
 
 class MoviesAdapter(
-    context: Context,
-    private val clickListener: OnRecyclerItemClicked
+        private val context: Context,
+        private val clickListener: OnRecyclerItemClicked
 ) : RecyclerView.Adapter<MovieViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun getItemCount(): Int = Movie.movies.size
 
-    fun getItem(position: Int): Movie = Movie.movies[position]
+    private fun getItem(position: Int): Movie = Movie.movies[position]
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val itemView = inflater.inflate(R.layout.movie_rv_item, parent, false)
-        return MovieViewHolder(itemView)
+        return MovieViewHolder(itemView, context)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
@@ -36,7 +36,7 @@ class MoviesAdapter(
 
 }
 
-class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class MovieViewHolder(view: View, context: Context) : RecyclerView.ViewHolder(view) {
 
     private val name: TextView = view.findViewById(R.id.movie_name)
     private val genre: TextView = view.findViewById(R.id.movie_genre)
@@ -47,13 +47,17 @@ class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val movieImg: ImageView = view.findViewById(R.id.movie_img)
     private val isFavorite: ImageView = view.findViewById(R.id.is_favorite_red_img)
 
+    private val strReviews: String = context.getString(R.string.reviews)
+    private val strMin: String = context.getString(R.string.min)
+    private val strPlus: String = context.getString(R.string.plus)
+
     fun bind(movie: Movie) {
         name.text = movie.name
         genre.text = movie.genre
-        reviews.text = "${movie.reviews} ${R.string.reviews}"
+        reviews.text = "${movie.reviews} $strReviews"
         rating.progress = movie.rating
-        time.text = "${movie.time} ${R.string.min}"
-        age.text = "${movie.age}${R.string.plus}"
+        time.text = "${movie.time} $strMin"
+        age.text = "${movie.age}$strPlus"
         movieImg.setImageResource(movie.movieImg)
         isFavorite.visibility = if (movie.isFavorite) View.VISIBLE else View.GONE
     }

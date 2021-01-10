@@ -1,6 +1,7 @@
-package com.johnsondev.doboshacademyapp
+package com.johnsondev.doboshacademyapp.model
 
 import androidx.annotation.DrawableRes
+import com.johnsondev.doboshacademyapp.R
 
 data class Movie(
     val id: Int,

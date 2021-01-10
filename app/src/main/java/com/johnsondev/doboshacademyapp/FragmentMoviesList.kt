@@ -5,12 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
+import com.johnsondev.doboshacademyapp.model.Movie
 
 class FragmentMoviesList : Fragment() {
 
@@ -28,7 +27,7 @@ class FragmentMoviesList : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_movies_list, container, false)
 
-        movieList = view.findViewById<RecyclerView>(R.id.movie_list_rv)
+        movieList = view.findViewById(R.id.movie_list_rv)
         movieList?.adapter = MoviesAdapter(view.context, clickListener)
         movieList?.layoutManager = GridLayoutManager(view.context, spanCount!!)
 
@@ -51,7 +50,7 @@ class FragmentMoviesList : Fragment() {
                 }
                 else -> Toast.makeText(
                     view?.context,
-                    "${R.string.inform_about} ${movie.name} ${R.string.missed}",
+                    "${getString(R.string.inform_about)} ${movie.name} ${getString(R.string.missed)}",
                     Toast.LENGTH_SHORT
                 ).show()
             }
