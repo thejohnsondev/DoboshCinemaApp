@@ -11,27 +11,29 @@
         android:layout_height="@dimen/movie_card_height"
         android:background="@drawable/movie_card"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/movie_list_tv" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:id="@+id/movie_img"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_2"
+        android:layout_height="@dimen/image_height"
+        android:scaleType="centerCrop"
+        android:background="@drawable/round_outline"
         android:src="@drawable/movie_avengers_img"
+        android:layout_margin="1dp"
         app:layout_constraintEnd_toEndOf="@+id/movie_card"
         app:layout_constraintStart_toStartOf="@id/movie_card"
         app:layout_constraintTop_toTopOf="@id/movie_card" />
 
     <ImageView
         android:id="@+id/movie_mask"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/movie_card_width"
+        android:layout_height="@dimen/mask_height"
         android:src="@drawable/mask"
-        app:layout_constraintBottom_toBottomOf="@+id/movie_img"
-        app:layout_constraintEnd_toEndOf="@+id/movie_img"
-        app:layout_constraintStart_toStartOf="@+id/movie_img"
-        app:layout_constraintTop_toTopOf="@id/movie_img" />
+        app:layout_constraintBottom_toBottomOf="@id/movie_img"
+        app:layout_constraintEnd_toEndOf="@+id/movie_card"
+        app:layout_constraintStart_toStartOf="@+id/movie_card"
+        app:layout_constraintTop_toTopOf="@id/movie_card" />
 
     <View
         android:id="@+id/age_shape"
@@ -74,15 +76,17 @@
 
     <TextView
         android:id="@+id/movie_genre"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_6"
+        android:layout_marginEnd="@dimen/dp_6"
         android:layout_marginBottom="@dimen/dp_2"
         android:fontFamily="@font/roboto_light"
         android:text="@string/action_adventure_fantasy"
         android:textColor="@color/genre_color_red"
         android:textSize="@dimen/sp_8"
         app:layout_constraintBottom_toTopOf="@+id/movie_rating"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/movie_card" />
 
     <RatingBar
@@ -114,13 +118,18 @@
     <TextView
         android:id="@+id/movie_name"
         style="@style/LightText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_8"
         android:text="@string/avengers_end_game"
         android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"
         app:layout_constraintBottom_toTopOf="@id/movie_time"
-        app:layout_constraintStart_toStartOf="@+id/movie_card" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/movie_card"
+        app:layout_constraintTop_toBottomOf="@+id/movie_img" />
 
     <TextView
         android:id="@+id/movie_time"

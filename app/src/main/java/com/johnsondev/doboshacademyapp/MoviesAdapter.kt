@@ -1,6 +1,7 @@
 package com.johnsondev.doboshacademyapp
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.johnsondev.doboshacademyapp.model.Movie
 
 class MoviesAdapter(
@@ -18,9 +20,9 @@ class MoviesAdapter(
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    override fun getItemCount(): Int = Movie.movies.size
+    override fun getItemCount(): Int = MovieRepository.moviesList.size
 
-    private fun getItem(position: Int): Movie = Movie.movies[position]
+    private fun getItem(position: Int): Movie = MovieRepository.moviesList[position]
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val itemView = inflater.inflate(R.layout.movie_rv_item, parent, false)
@@ -30,10 +32,9 @@ class MoviesAdapter(
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.bind(getItem(position))
         holder.itemView.setOnClickListener() {
-            clickListener.onClick(Movie.movies[position])
+            clickListener.onClick(MovieRepository.moviesList[position])
         }
     }
-
 }
 
 class MovieViewHolder(view: View, context: Context) : RecyclerView.ViewHolder(view) {
@@ -45,23 +46,27 @@ class MovieViewHolder(view: View, context: Context) : RecyclerView.ViewHolder(vi
     private val time: TextView = view.findViewById(R.id.movie_time)
     private val age: TextView = view.findViewById(R.id.movie_age)
     private val movieImg: ImageView = view.findViewById(R.id.movie_img)
-    private val isFavorite: ImageView = view.findViewById(R.id.is_favorite_red_img)
 
     private val strReviews: String = context.getString(R.string.reviews)
     private val strMin: String = context.getString(R.string.min)
     private val strPlus: String = context.getString(R.string.plus)
 
     fun bind(movie: Movie) {
-        name.text = movie.name
-        genre.text = movie.genre
-        reviews.text = "${movie.reviews} $strReviews"
-        rating.progress = movie.rating
-        time.text = "${movie.time} $strMin"
-        age.text = "${movie.age}$strPlus"
-        movieImg.setImageResource(movie.movieImg)
-        isFavorite.visibility = if (movie.isFavorite) View.VISIBLE else View.GONE
-    }
+        name.text = movie.title
+        genre.text = movie.genres.joinToString { it.name }
+        reviews.text = "${movie.reviewCount} $strReviews"
+        rating.progress = movie.rating*2
+        time.text = "${movie.runningTime} $strMin"
+        age.text = "${movie.pgAge}$strPlus"
 
+        Glide.with(itemView)
+            .load(movie.imageUrl)
+            .centerCrop()
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .into(movieImg)
+
+        movieImg.clipToOutline = true
+    }
 }
 
 interface OnRecyclerItemClicked {
