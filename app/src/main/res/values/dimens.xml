@@ -22,5 +22,6 @@
     <dimen name="dp_14">14dp</dimen>
     <dimen name="image_height">248dp</dimen>
     <dimen name="mask_height">249dp</dimen>
+    <dimen name="detail_img_height">298dp</dimen>
 
 </resources>

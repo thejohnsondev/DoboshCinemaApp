@@ -46,7 +46,7 @@
         app:layout_constraintTop_toTopOf="@+id/movie_card" />
 
     <TextView
-        android:id="@+id/movie_age"
+        android:id="@+id/tv_age"
         style="@style/LightText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
         app:layout_constraintTop_toTopOf="@id/is_favorite_img" />
 
     <TextView
-        android:id="@+id/movie_genre"
+        android:id="@+id/movie_genres"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_6"

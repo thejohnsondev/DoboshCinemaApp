@@ -12,13 +12,24 @@
         <ImageView
             android:id="@+id/head_image"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/detail_img_height"
             android:contentDescription="@string/todo"
             android:scaleType="centerCrop"
             android:src="@drawable/orig"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/movie_mask"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/mask"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/head_image"
+            app:layout_constraintEnd_toEndOf="@+id/head_image"
+            app:layout_constraintStart_toStartOf="@+id/head_image"
+            app:layout_constraintTop_toTopOf="@+id/head_image" />
 
         <TextView
             android:id="@+id/back_btn"
@@ -45,7 +56,7 @@
         </View>
 
         <TextView
-            android:id="@+id/movie_age"
+            android:id="@+id/tv_age"
             style="@style/LightText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,7 +84,7 @@
             app:layout_constraintTop_toBottomOf="@+id/head_image" />
 
         <TextView
-            android:id="@+id/movie_genre"
+            android:id="@+id/movie_genres"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_4"
@@ -96,7 +107,7 @@
             android:progressTint="@color/genre_color_red"
             android:secondaryProgressTint="@color/genre_color_red"
             app:layout_constraintStart_toEndOf="@+id/tv_reviews"
-            app:layout_constraintTop_toBottomOf="@+id/movie_genre" />
+            app:layout_constraintTop_toBottomOf="@+id/movie_genres" />
 
         <TextView
             android:id="@+id/tv_reviews"
@@ -106,8 +117,8 @@
             android:layout_marginTop="@dimen/dp_4"
             android:text="@string/_125_reviews"
             android:textColor="@color/gray"
-            app:layout_constraintStart_toStartOf="@+id/movie_genre"
-            app:layout_constraintTop_toBottomOf="@+id/movie_genre" />
+            app:layout_constraintStart_toStartOf="@+id/movie_genres"
+            app:layout_constraintTop_toBottomOf="@+id/movie_genres" />
 
         <TextView
             android:id="@+id/tv_story_line"
@@ -123,9 +134,8 @@
         <TextView
             android:id="@+id/tv_description"
             style="@style/DescriptionText"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_16"
             android:layout_marginTop="@dimen/dp_4"
             android:paddingTop="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_8"

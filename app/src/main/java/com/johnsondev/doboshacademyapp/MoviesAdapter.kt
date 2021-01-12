@@ -1,7 +1,6 @@
 package com.johnsondev.doboshacademyapp
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,11 +39,11 @@ class MoviesAdapter(
 class MovieViewHolder(view: View, context: Context) : RecyclerView.ViewHolder(view) {
 
     private val name: TextView = view.findViewById(R.id.movie_name)
-    private val genre: TextView = view.findViewById(R.id.movie_genre)
+    private val genre: TextView = view.findViewById(R.id.movie_genres)
     private val reviews: TextView = view.findViewById(R.id.movie_reviews)
     private val rating: RatingBar = view.findViewById(R.id.movie_rating)
     private val time: TextView = view.findViewById(R.id.movie_time)
-    private val age: TextView = view.findViewById(R.id.movie_age)
+    private val age: TextView = view.findViewById(R.id.tv_age)
     private val movieImg: ImageView = view.findViewById(R.id.movie_img)
 
     private val strReviews: String = context.getString(R.string.reviews)
@@ -66,6 +65,9 @@ class MovieViewHolder(view: View, context: Context) : RecyclerView.ViewHolder(vi
             .into(movieImg)
 
         movieImg.clipToOutline = true
+    }
+    companion object{
+
     }
 }
 

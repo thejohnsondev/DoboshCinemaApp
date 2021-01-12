@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.johnsondev.doboshacademyapp.FragmentMoviesDetails.Companion.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.data.loadMovies
 import com.johnsondev.doboshacademyapp.model.Movie
 import kotlinx.coroutines.*
@@ -21,9 +22,9 @@ class FragmentMoviesList : Fragment() {
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
@@ -51,31 +52,29 @@ class FragmentMoviesList : Fragment() {
     }
 
     private fun doOnClick(movie: Movie) {
+        val bundleWithMovieId = Bundle()
+        bundleWithMovieId.putInt(MOVIE_KEY, movie.id)
+
+        val fragmentMoviesDetails = FragmentMoviesDetails()
+        fragmentMoviesDetails.arguments = bundleWithMovieId
+
         movieList?.let { _ ->
-            when (movie.id) {
-                1 -> fragmentManager?.beginTransaction()?.apply {
-                    setCustomAnimations(
+            fragmentManager?.beginTransaction()?.apply {
+                setCustomAnimations(
                         R.anim.slide_in,
                         R.anim.fade_out,
                         R.anim.fade_in,
                         R.anim.slide_out
-                    )
-                    addToBackStack(null)
-                    replace(R.id.main_container, FragmentMoviesDetails())
-                    commit()
-                }
-                else -> Toast.makeText(
-                    view?.context,
-                    "${getString(R.string.inform_about)} ${movie.title} ${getString(R.string.missed)}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                )
+                addToBackStack(null)
+                replace(R.id.main_container, fragmentMoviesDetails)
+                commit()
             }
-
         }
     }
 
     private val clickListener = object : OnRecyclerItemClicked {
-        override fun onClick(movie: Movie) { 
+        override fun onClick(movie: Movie) {
             doOnClick(movie)
         }
     }
@@ -83,6 +82,7 @@ class FragmentMoviesList : Fragment() {
     companion object {
         const val HORIZONTAL_SPAN_COUNT = 4
         const val VERTICAL_SPAN_COUNT = 2
+
     }
 }
 
