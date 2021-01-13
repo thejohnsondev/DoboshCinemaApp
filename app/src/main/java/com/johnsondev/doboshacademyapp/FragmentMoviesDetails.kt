@@ -8,13 +8,14 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.johnsondev.doboshacademyapp.model.Movie
 
 class FragmentMoviesDetails : Fragment() {
 
-    private var movieId : Int? = null
-    private var currentMovie : Movie? = null
+    private var movieId: Int? = null
+    private var currentMovie: Movie? = null
 
     private var tvTitle: TextView? = null
     private var tvAge: TextView? = null
@@ -23,6 +24,8 @@ class FragmentMoviesDetails : Fragment() {
     private var movieRating: RatingBar? = null
     private var tvStoryLine: TextView? = null
     private var headImage: ImageView? = null
+
+    private var rvActors: RecyclerView? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -41,6 +44,9 @@ class FragmentMoviesDetails : Fragment() {
         movieRating = view.findViewById(R.id.movie_rating_bar)
         tvStoryLine = view.findViewById(R.id.tv_description)
         headImage = view.findViewById(R.id.head_image)
+
+        rvActors = view.findViewById(R.id.rv_actors)
+        rvActors?.adapter = ActorsAdapter(currentMovie!!, context!!)
 
         tvTitle?.text = currentMovie?.title
         tvAge?.text = "${currentMovie?.pgAge}${getString(R.string.plus)}"
@@ -63,7 +69,7 @@ class FragmentMoviesDetails : Fragment() {
         return view
     }
 
-    companion object{
+    companion object {
         const val MOVIE_KEY = "movie key"
     }
 

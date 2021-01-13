@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg">
@@ -24,8 +25,8 @@
             android:id="@+id/movie_mask"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@drawable/mask"
             android:scaleType="fitXY"
+            android:src="@drawable/mask"
             app:layout_constraintBottom_toBottomOf="@+id/head_image"
             app:layout_constraintEnd_toEndOf="@+id/head_image"
             app:layout_constraintStart_toStartOf="@+id/head_image"
@@ -157,103 +158,16 @@
             app:layout_constraintStart_toStartOf="@+id/tv_reviews"
             app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
-        <ImageView
-            android:id="@+id/cast_2"
-            android:layout_width="@dimen/cast_dimension"
-            android:layout_height="@dimen/cast_dimension"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginTop="@dimen/dp_8"
-            android:contentDescription="@string/todo"
-            android:src="@drawable/chris_evans"
-            app:layout_constraintEnd_toStartOf="@+id/cast_3"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/cast_1"
-            app:layout_constraintTop_toBottomOf="@id/tv_cast" />
-
-        <ImageView
-            android:id="@+id/cast_1"
-            android:layout_width="@dimen/cast_dimension"
-            android:layout_height="@dimen/cast_dimension"
-            android:layout_marginStart="@dimen/dp_16"
-            android:layout_marginTop="@dimen/dp_8"
-            android:contentDescription="@string/todo"
-            android:src="@drawable/robert"
-            app:layout_constraintEnd_toStartOf="@+id/cast_2"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_actors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_cast" />
-
-        <ImageView
-            android:id="@+id/cast_3"
-            android:layout_width="@dimen/cast_dimension"
-            android:layout_height="@dimen/cast_dimension"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginTop="@dimen/dp_8"
-            android:contentDescription="@string/todo"
-            android:src="@drawable/mark"
-            app:layout_constraintEnd_toStartOf="@+id/cast_4"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/cast_2"
-            app:layout_constraintTop_toBottomOf="@id/tv_cast" />
-
-        <ImageView
-            android:id="@+id/cast_4"
-            android:layout_width="@dimen/cast_dimension"
-            android:layout_height="@dimen/cast_dimension"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginTop="@dimen/dp_8"
-            android:layout_marginEnd="@dimen/dp_16"
-            android:contentDescription="@string/todo"
-            android:src="@drawable/chris_hemsworth"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/cast_3"
-            app:layout_constraintTop_toBottomOf="@id/tv_cast" />
-
-        <TextView
-            android:id="@+id/cast_1_desc"
-            style="@style/LightText"
-            android:layout_width="@dimen/cast_dimension"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_6"
-            android:text="@string/robert_downey_jr"
-            android:textSize="@dimen/text_size_12"
-            app:layout_constraintStart_toStartOf="@+id/cast_1"
-            app:layout_constraintTop_toBottomOf="@+id/cast_1" />
-
-        <TextView
-            android:id="@+id/cast_2_desc"
-            style="@style/LightText"
-            android:layout_width="@dimen/cast_dimension"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_6"
-            android:text="@string/chris_evans"
-            android:textSize="@dimen/text_size_12"
-            app:layout_constraintStart_toStartOf="@+id/cast_2"
-            app:layout_constraintTop_toBottomOf="@+id/cast_2" />
-
-        <TextView
-            android:id="@+id/cast_3_desc"
-            style="@style/LightText"
-            android:layout_width="@dimen/cast_dimension"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_6"
-            android:text="@string/mark_ruffalo"
-            android:textSize="@dimen/text_size_12"
-            app:layout_constraintStart_toStartOf="@+id/cast_3"
-            app:layout_constraintTop_toBottomOf="@+id/cast_3" />
-
-        <TextView
-            android:id="@+id/cast_4_desc"
-            style="@style/LightText"
-            android:layout_width="@dimen/cast_dimension"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_6"
-            android:text="@string/chris_hemsworth"
-            android:textSize="@dimen/text_size_12"
-            app:layout_constraintStart_toStartOf="@+id/cast_4"
-            app:layout_constraintTop_toBottomOf="@+id/cast_4" />
+            app:layout_constraintTop_toBottomOf="@id/tv_cast"
+            tools:itemCount="5"
+            tools:listitem="@layout/actors_rv_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

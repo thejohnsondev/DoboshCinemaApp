@@ -54,21 +54,19 @@ class MovieViewHolder(view: View, context: Context) : RecyclerView.ViewHolder(vi
         name.text = movie.title
         genre.text = movie.genres.joinToString { it.name }
         reviews.text = "${movie.reviewCount} $strReviews"
-        rating.progress = movie.rating*2
+        rating.progress = movie.rating * 2
         time.text = "${movie.runningTime} $strMin"
         age.text = "${movie.pgAge}$strPlus"
 
         Glide.with(itemView)
-            .load(movie.imageUrl)
-            .centerCrop()
-            .placeholder(R.drawable.ic_launcher_foreground)
-            .into(movieImg)
+                .load(movie.imageUrl)
+                .centerCrop()
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .into(movieImg)
 
         movieImg.clipToOutline = true
     }
-    companion object{
 
-    }
 }
 
 interface OnRecyclerItemClicked {
