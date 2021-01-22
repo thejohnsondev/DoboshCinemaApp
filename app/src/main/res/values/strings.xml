@@ -1,24 +1,15 @@
 <resources>
     <string name="app_name">DoboshAcademyApp</string>
-    <string name="hello_android_academy">Hello Android Academy!</string>
-    <string name="avengers_end_game">Avengers: End Game</string>
     <string name="_13">13+</string>
-    <string name="action_adventure_fantasy">Action, Adventure, Fantasy</string>
-    <string name="_125_reviews">125 REVIEWS</string>
     <string name="storyline">Storyline</string>
-    <string name="description">After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos actions and restore balance to the universe.</string>
     <string name="cast">Cast</string>
-    <string name="robert_downey_jr">Robert Downey Jr.</string>
-    <string name="chris_evans">Chris Evans</string>
-    <string name="mark_ruffalo">Mark Ruffalo</string>
-    <string name="chris_hemsworth">Chris Hemsworth</string>
     <string name="todo">TODO</string>
     <string name="back">Back</string>
     <string name="movies_list">Movies list</string>
-    <string name="_137_min">137 MIN</string>
     <string name="inform_about">Information about</string>
     <string name="missed">missed</string>
-    <string name="reviews">REVIEWS</string>
-    <string name="min">MIN</string>
-    <string name="plus">+</string>
+    <string name="reviews">%d REVIEWS</string>
+    <string name="running_time">%d MIN</string>
+    <string name="plus">%d+</string>
+    <string name="movie_is_not_loaded">Movie is not loaded</string>
 </resources>

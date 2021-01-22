@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -28,9 +29,9 @@ class FragmentMoviesDetails : Fragment() {
     private var rvActors: RecyclerView? = null
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movies_details, container, false)
 
@@ -45,21 +46,27 @@ class FragmentMoviesDetails : Fragment() {
         tvStoryLine = view.findViewById(R.id.tv_description)
         headImage = view.findViewById(R.id.head_image)
 
-        rvActors = view.findViewById(R.id.rv_actors)
-        rvActors?.adapter = ActorsAdapter(currentMovie!!, context!!)
+        currentMovie?.let { movie ->
 
-        tvTitle?.text = currentMovie?.title
-        tvAge?.text = "${currentMovie?.pgAge}${getString(R.string.plus)}"
-        tvGenres?.text = currentMovie?.genres?.joinToString { it.name }
-        tvReviews?.text = "${currentMovie?.reviewCount} ${getString(R.string.reviews)}"
-        movieRating?.progress = currentMovie?.rating!! * 2
-        tvStoryLine?.text = currentMovie?.storyLine
+            val movieReviews: String = view.context.getString(R.string.reviews, movie.reviewCount)
+            val movieAge: String = view.context.getString(R.string.plus, movie.pgAge)
 
-        Glide.with(context!!)
-                .load(currentMovie!!.detailImageUrl)
+            tvTitle?.text = movie.title
+            tvAge?.text = movieAge
+            tvGenres?.text = movie.genres.joinToString { it.name }
+            tvReviews?.text = movieReviews
+            movieRating?.progress = movie.rating * 2
+            tvStoryLine?.text = movie.storyLine
+
+            rvActors = view.findViewById(R.id.rv_actors)
+            rvActors?.adapter = ActorsAdapter(movie.actors, context!!)
+
+            Glide.with(context!!)
+                .load(movie.detailImageUrl)
                 .centerCrop()
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .into(headImage!!)
+        }
 
         val backBtn: TextView = view.findViewById(R.id.back_btn)
         backBtn.setOnClickListener() {

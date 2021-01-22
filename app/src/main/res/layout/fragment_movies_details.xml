@@ -13,13 +13,13 @@
         <ImageView
             android:id="@+id/head_image"
             android:layout_width="0dp"
-            android:layout_height="@dimen/detail_img_height"
+            android:layout_height="0dp"
             android:contentDescription="@string/todo"
-            android:scaleType="centerCrop"
-            android:src="@drawable/orig"
+            android:scaleType="centerInside"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintDimensionRatio="3:2.2"/>
 
         <ImageView
             android:id="@+id/movie_mask"
@@ -78,11 +78,11 @@
             android:shadowDx="6"
             android:shadowDy="12"
             android:shadowRadius="12"
-            android:text="@string/avengers_end_game"
             android:textSize="@dimen/title_text_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/head_image" />
+            app:layout_constraintTop_toBottomOf="@+id/head_image"
+            tools:text="Movie Name" />
 
         <TextView
             android:id="@+id/movie_genres"
@@ -90,11 +90,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_4"
             android:fontFamily="@font/roboto_light"
-            android:text="@string/action_adventure_fantasy"
             android:textColor="@color/genre_color_red"
             android:textSize="@dimen/text_size_14"
             app:layout_constraintStart_toStartOf="@+id/tv_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            tools:text="@tools:sample/lorem" />
 
         <RatingBar
             android:id="@+id/movie_rating_bar"
@@ -116,10 +116,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_4"
-            android:text="@string/_125_reviews"
             android:textColor="@color/gray"
             app:layout_constraintStart_toStartOf="@+id/movie_genres"
-            app:layout_constraintTop_toBottomOf="@+id/movie_genres" />
+            app:layout_constraintTop_toBottomOf="@+id/movie_genres"
+            tools:text="@tools:sample/lorem" />
 
         <TextView
             android:id="@+id/tv_story_line"
@@ -140,10 +140,10 @@
             android:layout_marginTop="@dimen/dp_4"
             android:paddingTop="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_8"
-            android:text="@string/description"
             app:layout_constraintEnd_toEndOf="@+id/tv_title"
             app:layout_constraintStart_toStartOf="@+id/tv_story_line"
-            app:layout_constraintTop_toBottomOf="@+id/tv_story_line" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_story_line"
+            tools:text="@tools:sample/lorem" />
 
         <TextView
             android:id="@+id/tv_cast"

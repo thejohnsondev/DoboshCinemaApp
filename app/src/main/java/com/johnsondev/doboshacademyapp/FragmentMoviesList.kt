@@ -17,7 +17,6 @@ import kotlinx.coroutines.*
 
 class FragmentMoviesList : Fragment() {
 
-    private var spanCount: Int? = null    //I save it because at initialization it is equal to null (studio prompts to do save)
     private var movieList: RecyclerView? = null
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
@@ -27,14 +26,17 @@ class FragmentMoviesList : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
 
-        spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+        val spanCount: Int = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
             VERTICAL_SPAN_COUNT else HORIZONTAL_SPAN_COUNT
 
         val view = inflater.inflate(R.layout.fragment_movies_list, container, false)
 
         movieList = view.findViewById(R.id.movie_list_rv)
-        movieList?.adapter = MoviesAdapter(view.context, clickListener)
-        movieList?.layoutManager = GridLayoutManager(view.context, spanCount!!)
+
+        movieList?.apply {
+            adapter = MoviesAdapter(view.context, clickListener, MovieRepository.moviesList)
+            layoutManager = GridLayoutManager(view.context, spanCount)
+        }
 
         return view
     }
@@ -42,7 +44,7 @@ class FragmentMoviesList : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         scope.launch {
-            MovieRepository.moviesList = loadMovies(context!!)
+            MovieRepository.loadMoviesToRepository(context!!)
         }
     }
 

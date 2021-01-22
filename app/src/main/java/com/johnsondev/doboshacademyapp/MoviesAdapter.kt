@@ -13,30 +13,30 @@ import com.bumptech.glide.Glide
 import com.johnsondev.doboshacademyapp.model.Movie
 
 class MoviesAdapter(
-        private val context: Context,
-        private val clickListener: OnRecyclerItemClicked
+    private val context: Context,
+    private val clickListener: OnRecyclerItemClicked,
+    private val moviesList: List<Movie>
 ) : RecyclerView.Adapter<MovieViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    override fun getItemCount(): Int = MovieRepository.moviesList.size
-
-    private fun getItem(position: Int): Movie = MovieRepository.moviesList[position]
+    override fun getItemCount(): Int = moviesList.size
+    private fun getItem(position: Int): Movie = moviesList[position]
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val itemView = inflater.inflate(R.layout.movie_rv_item, parent, false)
-        return MovieViewHolder(itemView, context)
+        return MovieViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.bind(getItem(position))
         holder.itemView.setOnClickListener() {
-            clickListener.onClick(MovieRepository.moviesList[position])
+            clickListener.onClick(moviesList[position])
         }
     }
 }
 
-class MovieViewHolder(view: View, context: Context) : RecyclerView.ViewHolder(view) {
+class MovieViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
     private val name: TextView = view.findViewById(R.id.movie_name)
     private val genre: TextView = view.findViewById(R.id.movie_genres)
@@ -46,23 +46,25 @@ class MovieViewHolder(view: View, context: Context) : RecyclerView.ViewHolder(vi
     private val age: TextView = view.findViewById(R.id.tv_age)
     private val movieImg: ImageView = view.findViewById(R.id.movie_img)
 
-    private val strReviews: String = context.getString(R.string.reviews)
-    private val strMin: String = context.getString(R.string.min)
-    private val strPlus: String = context.getString(R.string.plus)
-
     fun bind(movie: Movie) {
+
+        val movieReviews: String = view.context.getString(R.string.reviews, movie.reviewCount)
+        val movieAge: String = view.context.getString(R.string.plus, movie.pgAge)
+        val movieRunningTime: String =
+            view.context.getString(R.string.running_time, movie.runningTime)
+
         name.text = movie.title
         genre.text = movie.genres.joinToString { it.name }
-        reviews.text = "${movie.reviewCount} $strReviews"
+        reviews.text = movieReviews
         rating.progress = movie.rating * 2
-        time.text = "${movie.runningTime} $strMin"
-        age.text = "${movie.pgAge}$strPlus"
+        time.text = movieRunningTime
+        age.text = movieAge
 
         Glide.with(itemView)
-                .load(movie.imageUrl)
-                .centerCrop()
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .into(movieImg)
+            .load(movie.imageUrl)
+            .centerCrop()
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .into(movieImg)
 
         movieImg.clipToOutline = true
     }

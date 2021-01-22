@@ -1,11 +1,15 @@
 package com.johnsondev.doboshacademyapp
 
+import android.content.Context
+import com.johnsondev.doboshacademyapp.data.loadMovies
 import com.johnsondev.doboshacademyapp.model.Movie
 
-class MovieRepository {
+object MovieRepository {
 
-    companion object{
-        var moviesList: List<Movie> = listOf()
+    var moviesList: List<Movie> = listOf()
+
+    suspend fun loadMoviesToRepository(context: Context){
+        moviesList = loadMovies(context)
     }
 
 }

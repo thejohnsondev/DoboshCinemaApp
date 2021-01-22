@@ -8,12 +8,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.johnsondev.doboshacademyapp.model.Actor
 import com.johnsondev.doboshacademyapp.model.Movie
 
 
 class ActorsAdapter(
-        private val movie: Movie,
-        context: Context
+    private val actorsList: List<Actor>,
+    context: Context
 ) : RecyclerView.Adapter<ActorViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -23,12 +24,11 @@ class ActorsAdapter(
         return ActorViewHolder(itemView)
     }
 
-
     override fun onBindViewHolder(holder: ActorViewHolder, position: Int) {
-        holder.bind(movie, position)
+        holder.bind(actorsList, position)
     }
 
-    override fun getItemCount(): Int = movie.actors.size
+    override fun getItemCount(): Int = actorsList.size
 
 }
 
@@ -37,14 +37,14 @@ class ActorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val actorImg: ImageView = view.findViewById(R.id.actor_img)
     private val actorName: TextView = view.findViewById(R.id.tv_actor_name)
 
-    fun bind(movie: Movie, position: Int) {
-        actorName.text = movie.actors[position].name
+    fun bind(actorsList: List<Actor>, position: Int) {
+        actorName.text = actorsList[position].name
 
         Glide.with(itemView)
-                .load(movie.actors[position].imageUrl)
-                .centerCrop()
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .into(actorImg)
+            .load(actorsList[position].imageUrl)
+            .centerCrop()
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .into(actorImg)
 
         actorImg.clipToOutline = true
     }

@@ -11,11 +11,10 @@
         android:layout_height="@dimen/cast_dimension"
         android:layout_marginStart="@dimen/dp_16"
         android:layout_marginTop="@dimen/dp_8"
-        android:layout_marginEnd="@dimen/dp_16"
         android:background="@drawable/pg_shape"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/robert" />
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tv_actor_name"
@@ -27,6 +26,6 @@
         app:layout_constraintEnd_toEndOf="@+id/actor_img"
         app:layout_constraintStart_toStartOf="@+id/actor_img"
         app:layout_constraintTop_toBottomOf="@+id/actor_img"
-        tools:text="Robert Downey Jr." />
+        tools:text="@tools:sample/first_names" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

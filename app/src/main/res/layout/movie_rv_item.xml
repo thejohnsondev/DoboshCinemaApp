@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/dp_12">
@@ -19,7 +20,6 @@
         android:layout_height="@dimen/image_height"
         android:scaleType="centerCrop"
         android:background="@drawable/round_outline"
-        android:src="@drawable/movie_avengers_img"
         android:layout_margin="1dp"
         app:layout_constraintEnd_toEndOf="@+id/movie_card"
         app:layout_constraintStart_toStartOf="@id/movie_card"
@@ -82,12 +82,12 @@
         android:layout_marginEnd="@dimen/dp_6"
         android:layout_marginBottom="@dimen/dp_2"
         android:fontFamily="@font/roboto_light"
-        android:text="@string/action_adventure_fantasy"
         android:textColor="@color/genre_color_red"
         android:textSize="@dimen/sp_8"
         app:layout_constraintBottom_toTopOf="@+id/movie_rating"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/movie_card" />
+        app:layout_constraintStart_toStartOf="@+id/movie_card"
+        tools:text="@tools:sample/lorem" />
 
     <RatingBar
         android:id="@+id/movie_rating"
@@ -108,12 +108,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_6"
-        android:text="@string/_125_reviews"
         android:textColor="@color/gray"
         android:textSize="@dimen/sp_8"
         app:layout_constraintBottom_toBottomOf="@+id/movie_rating"
         app:layout_constraintStart_toEndOf="@+id/movie_rating"
-        app:layout_constraintTop_toTopOf="@+id/movie_rating" />
+        app:layout_constraintTop_toTopOf="@+id/movie_rating"
+        tools:text="@tools:sample/lorem" />
 
     <TextView
         android:id="@+id/movie_name"
@@ -122,14 +122,14 @@
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/dp_8"
         android:layout_marginEnd="@dimen/dp_8"
-        android:text="@string/avengers_end_game"
-        android:textStyle="bold"
-        android:maxLines="1"
         android:ellipsize="end"
+        android:maxLines="1"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/movie_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/movie_card"
-        app:layout_constraintTop_toBottomOf="@+id/movie_img" />
+        app:layout_constraintTop_toBottomOf="@+id/movie_img"
+        tools:text="Movie title" />
 
     <TextView
         android:id="@+id/movie_time"
@@ -138,11 +138,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_8"
         android:layout_marginBottom="@dimen/dp_8"
-        android:text="@string/_137_min"
         android:textColor="@color/gray"
         android:textSize="@dimen/sp_8"
         app:layout_constraintBottom_toBottomOf="@+id/movie_card"
-        app:layout_constraintStart_toStartOf="@+id/movie_card" />
+        app:layout_constraintStart_toStartOf="@+id/movie_card"
+        tools:text="@tools:sample/lorem" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
