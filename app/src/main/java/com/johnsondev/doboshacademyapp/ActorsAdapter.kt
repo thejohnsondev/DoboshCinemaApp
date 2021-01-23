@@ -25,7 +25,7 @@ class ActorsAdapter(
     }
 
     override fun onBindViewHolder(holder: ActorViewHolder, position: Int) {
-        holder.bind(actorsList, position)
+        holder.bind(actorsList[position])
     }
 
     override fun getItemCount(): Int = actorsList.size
@@ -37,11 +37,11 @@ class ActorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val actorImg: ImageView = view.findViewById(R.id.actor_img)
     private val actorName: TextView = view.findViewById(R.id.tv_actor_name)
 
-    fun bind(actorsList: List<Actor>, position: Int) {
-        actorName.text = actorsList[position].name
+    fun bind(actor: Actor) {
+        actorName.text = actor.name
 
         Glide.with(itemView)
-            .load(actorsList[position].imageUrl)
+            .load(actor.imageUrl)
             .centerCrop()
             .placeholder(R.drawable.ic_launcher_foreground)
             .into(actorImg)

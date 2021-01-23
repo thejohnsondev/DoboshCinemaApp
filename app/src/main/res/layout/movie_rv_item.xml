@@ -17,23 +17,25 @@
     <ImageView
         android:id="@+id/movie_img"
         android:layout_width="0dp"
-        android:layout_height="@dimen/image_height"
+        android:layout_height="0dp"
         android:scaleType="centerCrop"
         android:background="@drawable/round_outline"
         android:layout_margin="1dp"
         app:layout_constraintEnd_toEndOf="@+id/movie_card"
         app:layout_constraintStart_toStartOf="@id/movie_card"
-        app:layout_constraintTop_toTopOf="@id/movie_card" />
+        app:layout_constraintTop_toTopOf="@id/movie_card"
+        tools:src="@tools:sample/avatars"
+        app:layout_constraintDimensionRatio="2:3"/>
 
     <ImageView
         android:id="@+id/movie_mask"
-        android:layout_width="@dimen/movie_card_width"
-        android:layout_height="@dimen/mask_height"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:src="@drawable/mask"
-        app:layout_constraintBottom_toBottomOf="@id/movie_img"
-        app:layout_constraintEnd_toEndOf="@+id/movie_card"
-        app:layout_constraintStart_toStartOf="@+id/movie_card"
-        app:layout_constraintTop_toTopOf="@id/movie_card" />
+        app:layout_constraintEnd_toEndOf="@+id/movie_img"
+        app:layout_constraintStart_toStartOf="@+id/movie_img"
+        app:layout_constraintTop_toTopOf="@id/movie_card"
+        app:layout_constraintDimensionRatio="2:3.1"/>
 
     <View
         android:id="@+id/age_shape"

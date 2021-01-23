@@ -20,8 +20,6 @@
     <dimen name="dp_2">2dp</dimen>
     <dimen name="sp_8">8sp</dimen>
     <dimen name="dp_14">14dp</dimen>
-    <dimen name="image_height">248dp</dimen>
-    <dimen name="mask_height">249dp</dimen>
-    <dimen name="detail_img_height">298dp</dimen>
+
 
 </resources>
