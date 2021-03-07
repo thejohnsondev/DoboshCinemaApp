@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.model
+package com.johnsondev.doboshacademyapp.model.entities
 
 import java.io.Serializable
 

@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.data
+package com.johnsondev.doboshacademyapp.model.data
 
 
 import kotlinx.serialization.SerialName

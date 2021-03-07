@@ -1,18 +1,20 @@
-package com.johnsondev.doboshacademyapp
+package com.johnsondev.doboshacademyapp.view.movielist
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.johnsondev.doboshacademyapp.FragmentMoviesDetails.Companion.MOVIE_KEY
-import com.johnsondev.doboshacademyapp.data.loadMovies
-import com.johnsondev.doboshacademyapp.model.Movie
+import com.johnsondev.doboshacademyapp.model.MovieRepository
+import com.johnsondev.doboshacademyapp.MoviesAdapter
+import com.johnsondev.doboshacademyapp.OnRecyclerItemClicked
+import com.johnsondev.doboshacademyapp.R
+import com.johnsondev.doboshacademyapp.view.moviedetails.FragmentMoviesDetails.Companion.MOVIE_KEY
+import com.johnsondev.doboshacademyapp.model.entities.Movie
+import com.johnsondev.doboshacademyapp.view.moviedetails.FragmentMoviesDetails
 import kotlinx.coroutines.*
 
 class FragmentMoviesList : Fragment() {
@@ -63,10 +65,10 @@ class FragmentMoviesList : Fragment() {
         movieList?.let { _ ->
             fragmentManager?.beginTransaction()?.apply {
                 setCustomAnimations(
-                        R.anim.slide_in,
-                        R.anim.fade_out,
-                        R.anim.fade_in,
-                        R.anim.slide_out
+                    R.anim.slide_in,
+                    R.anim.fade_out,
+                    R.anim.fade_in,
+                    R.anim.slide_out
                 )
                 addToBackStack(null)
                 replace(R.id.main_container, fragmentMoviesDetails)

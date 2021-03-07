@@ -1,7 +1,9 @@
-package com.johnsondev.doboshacademyapp
+package com.johnsondev.doboshacademyapp.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.johnsondev.doboshacademyapp.R
+import com.johnsondev.doboshacademyapp.view.movielist.FragmentMoviesList
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
