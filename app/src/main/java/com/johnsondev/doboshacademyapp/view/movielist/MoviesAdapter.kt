@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp
+package com.johnsondev.doboshacademyapp.view.movielist
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,13 +10,15 @@ import android.widget.TextView
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.johnsondev.doboshacademyapp.model.Movie
+import com.johnsondev.doboshacademyapp.R
+import com.johnsondev.doboshacademyapp.model.entities.Movie
 
 class MoviesAdapter(
     private val context: Context,
     private val clickListener: OnRecyclerItemClicked,
-    private val moviesList: List<Movie>
 ) : RecyclerView.Adapter<MovieViewHolder>() {
+
+    private var moviesList: List<Movie> = listOf()
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -33,6 +35,10 @@ class MoviesAdapter(
         holder.itemView.setOnClickListener() {
             clickListener.onClick(moviesList[position])
         }
+    }
+
+    fun setMovies(movies: List<Movie>){
+        moviesList = movies
     }
 }
 
