@@ -1,23 +1,23 @@
 package com.johnsondev.doboshacademyapp.view.moviedetails
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.johnsondev.doboshacademyapp.R
-import com.johnsondev.doboshacademyapp.model.entities.Actor
-
+import com.johnsondev.doboshacademyapp.model.data.Actor
 
 class ActorsAdapter(
-    private val actorsList: List<Actor>,
     context: Context
 ) : RecyclerView.Adapter<ActorViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+    private var actorsList: List<Actor> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActorViewHolder {
         val itemView = inflater.inflate(R.layout.actors_rv_item, parent, false)
@@ -30,6 +30,11 @@ class ActorsAdapter(
 
     override fun getItemCount(): Int = actorsList.size
 
+    fun setActors(actors: List<Actor>) {
+        actorsList = actors
+        Log.d("TAG", "setActors" + actors.size)
+        notifyDataSetChanged()
+    }
 }
 
 class ActorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -40,11 +45,12 @@ class ActorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bind(actor: Actor) {
         actorName.text = actor.name
 
-        Glide.with(itemView)
-            .load(actor.imageUrl)
-            .centerCrop()
-            .placeholder(R.drawable.ic_launcher_foreground)
-            .into(actorImg)
+        actorImg.load(actor.picture) {
+            crossfade(true)
+            placeholder(R.drawable.ic_launcher_foreground)
+            fallback(R.drawable.ic_launcher_foreground)
+            error(R.drawable.ic_baseline_person_24)
+        }
 
         actorImg.clipToOutline = true
     }
