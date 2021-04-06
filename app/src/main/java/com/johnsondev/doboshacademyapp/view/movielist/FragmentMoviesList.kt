@@ -60,20 +60,12 @@ class FragmentMoviesList : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        scope.launch {
-            MoviesRepository.loadTopRatedMovies()
-        }
-        scope.launch {
-            MoviesRepository.loadPopularMovies()
-        }
-        scope.launch {
-            MoviesRepository.loadUpcomingMovies()
-        }
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        scope.cancel()
+
     }
 
     private fun calculateSpanCount(): Int {
