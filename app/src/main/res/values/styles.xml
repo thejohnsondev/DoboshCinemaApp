@@ -13,8 +13,5 @@
         <item name="android:textSize">@dimen/text_size_14</item>
     </style>
 
-
-    <style name="RatingBarMini" parent="Widget.AppCompat.RatingBar.Small">
-
-    </style>
+    <style name="RatingBarMini" parent="Widget.AppCompat.RatingBar.Small"/>
 </resources>

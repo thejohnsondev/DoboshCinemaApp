@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.johnsondev.doboshacademyapp.model.MoviesRepository
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.model.data.Movie
@@ -21,6 +22,7 @@ import kotlinx.coroutines.*
 class FragmentMoviesList : Fragment() {
 
     private lateinit var rvMovie: RecyclerView
+    private lateinit var typeOfMoviesList: MaterialButtonToggleGroup
     private val scope = CoroutineScope(Dispatchers.IO + Job())
     private lateinit var movieViewModel: MovieViewModel
 
@@ -30,18 +32,29 @@ class FragmentMoviesList : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movies_list, container, false)
-        movieViewModel = ViewModelProvider(
-            this,
-            MovieViewModelFactory(activity?.application!!)
-        )[MovieViewModel::class.java]
+        movieViewModel = ViewModelProvider(this, MovieViewModelFactory(activity?.application!!))[MovieViewModel::class.java]
+
+        typeOfMoviesList = view.findViewById(R.id.toggle_group)
+
+        typeOfMoviesList.addOnButtonCheckedListener { _, checkedId, _ ->
+            movieViewModel.changeMoviesList(checkedId)
+        }
+
+        typeOfMoviesList.check(R.id.btn_popular)
 
         rvMovie = view.findViewById(R.id.movie_list_rv)
         rvMovie.layoutManager = GridLayoutManager(view.context, calculateSpanCount())
         val adapter = MoviesAdapter(view.context, clickListener)
         rvMovie.adapter = adapter
-        movieViewModel.getUpcomingMovies().observe(this) { movie ->
+
+        movieViewModel.getPopularMovies().observe(this){
+            adapter.setMovies(it)
+        }
+
+        movieViewModel.getAnotherMovieList().observe(this) { movie ->
             adapter.setMovies(movie)
         }
+
         return view
     }
 

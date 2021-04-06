@@ -1,8 +1,11 @@
 package com.johnsondev.doboshacademyapp.viewmodel
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.model.MoviesRepository
 import com.johnsondev.doboshacademyapp.model.data.Movie
 
@@ -12,13 +15,8 @@ class MovieViewModel(application: Application): AndroidViewModel(application) {
     private var popularMovies: LiveData<List<Movie>>? = null
     private var upcomingMovies: LiveData<List<Movie>>? = null
 
-    fun getTopRatedMovies(): LiveData<List<Movie>>{
-        if(topRatedMovies?.value.isNullOrEmpty()){
-            topRatedMovies = MoviesRepository.getTopRatedMovies()
-        }
-        return topRatedMovies!!
-    }
-    
+    private var movieList = MutableLiveData<List<Movie>>()
+
     fun getPopularMovies(): LiveData<List<Movie>>{
         if (popularMovies?.value.isNullOrEmpty()){
             popularMovies = MoviesRepository.getLatestMovies()
@@ -26,15 +24,33 @@ class MovieViewModel(application: Application): AndroidViewModel(application) {
         return popularMovies!!
     }
 
+    private fun getTopRatedMovies(): LiveData<List<Movie>>{
+        if(topRatedMovies?.value.isNullOrEmpty()){
+            topRatedMovies = MoviesRepository.getTopRatedMovies()
+        }
+        return topRatedMovies!!
+    }
+    
 
-    fun getUpcomingMovies(): LiveData<List<Movie>>{
+    private fun getUpcomingMovies(): LiveData<List<Movie>>{
         if (upcomingMovies?.value.isNullOrEmpty()){
             upcomingMovies = MoviesRepository.getUpcomingMovies()
         }
         return upcomingMovies!!
     }
 
-    // TODO: 05.04.2021 Create switch to latest movies in FragmentMovieList 
+    fun getAnotherMovieList(): LiveData<List<Movie>>{
+        return movieList
+    }
+
+    fun changeMoviesList(checkedBtnId: Int){
+        when(checkedBtnId){
+            R.id.btn_popular -> movieList.value = getPopularMovies().value
+            R.id.btn_top_rated -> movieList.value = getTopRatedMovies().value
+            R.id.btn_upcoming -> movieList.value = getUpcomingMovies().value
+        }
+    }
+
     // TODO: 05.04.2021 handle exception 
 
 }

@@ -14,7 +14,6 @@ import coil.load
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.model.ActorsRepository
 import com.johnsondev.doboshacademyapp.model.data.Movie
-import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailViewModel
 import kotlinx.coroutines.*
 
 class FragmentMoviesDetails : Fragment() {
@@ -30,7 +29,6 @@ class FragmentMoviesDetails : Fragment() {
     private var headImage: ImageView? = null
     private var rvActors: RecyclerView? = null
 
-    private lateinit var movieDetailViewModel: MovieDetailViewModel
     private lateinit var actorsViewModel: ActorsViewModel
 
     private val scope = CoroutineScope(Dispatchers.IO + Job())
@@ -42,7 +40,6 @@ class FragmentMoviesDetails : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movies_details, container, false)
 
-        movieDetailViewModel = ViewModelProvider(this)[MovieDetailViewModel::class.java]
         actorsViewModel = ViewModelProvider(this)[ActorsViewModel::class.java]
 
         tvTitle = view.findViewById(R.id.tv_title)
