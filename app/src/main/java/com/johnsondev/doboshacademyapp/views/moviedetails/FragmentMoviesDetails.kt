@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.viewmodel.ActorsViewModel
 import kotlinx.coroutines.*
 
@@ -34,6 +36,8 @@ class FragmentMoviesDetails : Fragment() {
     private lateinit var actorsViewModel: ActorsViewModel
 
     private val scope = CoroutineScope(Dispatchers.IO + Job())
+
+    private lateinit var checkInternetConnection: InternetConnectionManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,6 +71,8 @@ class FragmentMoviesDetails : Fragment() {
             rvActors?.adapter = adapter
             rvActors?.setHasFixedSize(true)
 
+
+
             actorsViewModel.getActorsForCurrentMovie().observe(this) {
                 adapter.setActors(it)
             }
@@ -90,9 +96,16 @@ class FragmentMoviesDetails : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         currentMovie = arguments?.getParcelable(MOVIE_KEY)
-        scope.launch {
-            ActorsRepository.loadActors(currentMovie?.id!!)
+        checkInternetConnection = InternetConnectionManager(context!!)
+
+        if (checkInternetConnection.isNetworkAvailable()) {
+            scope.launch {
+                ActorsRepository.loadActors(currentMovie?.id!!)
+            }
+        } else {
+            Toast.makeText(context, "Unable to load cast", Toast.LENGTH_LONG).show()
         }
+
     }
 
     companion object {
