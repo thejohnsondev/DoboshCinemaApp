@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.model.dto
+package com.johnsondev.doboshacademyapp.data.dto
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

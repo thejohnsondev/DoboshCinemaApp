@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.view.movielist
+package com.johnsondev.doboshacademyapp.views.movielist
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -10,11 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButtonToggleGroup
-import com.johnsondev.doboshacademyapp.model.MoviesRepository
 import com.johnsondev.doboshacademyapp.R
-import com.johnsondev.doboshacademyapp.model.data.Movie
-import com.johnsondev.doboshacademyapp.view.moviedetails.FragmentMoviesDetails.Companion.MOVIE_KEY
-import com.johnsondev.doboshacademyapp.view.moviedetails.FragmentMoviesDetails
+import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
+import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
+import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails.Companion.MOVIE_KEY
+import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModel
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModelFactory
 import kotlinx.coroutines.*

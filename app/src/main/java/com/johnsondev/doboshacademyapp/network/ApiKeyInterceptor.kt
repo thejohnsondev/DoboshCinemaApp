@@ -1,6 +1,6 @@
 package com.johnsondev.doboshacademyapp.network
 
-import com.johnsondev.doboshacademyapp.tools.Constants.API_KEY
+import com.johnsondev.doboshacademyapp.utilities.Constants.API_KEY
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Response

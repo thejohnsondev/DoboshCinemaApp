@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.view.moviedetails
+package com.johnsondev.doboshacademyapp.views.moviedetails
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,8 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.johnsondev.doboshacademyapp.R
-import com.johnsondev.doboshacademyapp.model.ActorsRepository
-import com.johnsondev.doboshacademyapp.model.data.Movie
+import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
+import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
+import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.viewmodel.ActorsViewModel
 import kotlinx.coroutines.*
 
 class FragmentMoviesDetails : Fragment() {

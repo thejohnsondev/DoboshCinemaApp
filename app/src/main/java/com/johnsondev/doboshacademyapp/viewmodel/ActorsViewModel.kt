@@ -1,11 +1,11 @@
-package com.johnsondev.doboshacademyapp.view.moviedetails
+package com.johnsondev.doboshacademyapp.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.johnsondev.doboshacademyapp.model.ActorsRepository
-import com.johnsondev.doboshacademyapp.model.data.Actor
+import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
+import com.johnsondev.doboshacademyapp.data.models.Actor
 import kotlinx.coroutines.launch
 
 class ActorsViewModel : ViewModel() {

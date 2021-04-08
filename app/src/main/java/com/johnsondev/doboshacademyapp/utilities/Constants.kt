@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.tools
+package com.johnsondev.doboshacademyapp.utilities
 
 object Constants {
 

@@ -1,13 +1,12 @@
 package com.johnsondev.doboshacademyapp.viewmodel
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.johnsondev.doboshacademyapp.R
-import com.johnsondev.doboshacademyapp.model.MoviesRepository
-import com.johnsondev.doboshacademyapp.model.data.Movie
+import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
+import com.johnsondev.doboshacademyapp.data.models.Movie
 
 class MovieViewModel(application: Application): AndroidViewModel(application) {
 
@@ -52,5 +51,6 @@ class MovieViewModel(application: Application): AndroidViewModel(application) {
     }
 
     // TODO: 05.04.2021 handle exception 
+    // TODO: 06.04.2021 refactor packages 
 
 }

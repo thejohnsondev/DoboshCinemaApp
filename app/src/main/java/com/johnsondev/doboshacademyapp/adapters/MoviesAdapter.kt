@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.view.movielist
+package com.johnsondev.doboshacademyapp.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.johnsondev.doboshacademyapp.R
-import com.johnsondev.doboshacademyapp.model.data.Movie
+import com.johnsondev.doboshacademyapp.data.models.Movie
 
 class MoviesAdapter(
     private val context: Context,

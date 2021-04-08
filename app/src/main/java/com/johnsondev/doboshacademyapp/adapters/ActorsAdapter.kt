@@ -1,7 +1,6 @@
-package com.johnsondev.doboshacademyapp.view.moviedetails
+package com.johnsondev.doboshacademyapp.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.johnsondev.doboshacademyapp.R
-import com.johnsondev.doboshacademyapp.model.data.Actor
+import com.johnsondev.doboshacademyapp.data.models.Actor
 
 class ActorsAdapter(
     context: Context
@@ -32,7 +31,6 @@ class ActorsAdapter(
 
     fun setActors(actors: List<Actor>) {
         actorsList = actors
-        Log.d("TAG", "setActors" + actors.size)
         notifyDataSetChanged()
     }
 }
