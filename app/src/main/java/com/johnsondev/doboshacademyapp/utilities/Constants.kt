@@ -7,4 +7,7 @@ object Constants {
     const val ACTOR_IMG_PATH = "https://image.tmdb.org/t/p/w92"
     const val API_KEY = "1b0650e51715aa7a2b1ee65207c30c8d"
 
+    const val CONNECTION_ERROR_EXTRA = "connection_error_extra"
+    const val CONNECTION_ERROR_ARG = "connection_error_arg"
+
 }

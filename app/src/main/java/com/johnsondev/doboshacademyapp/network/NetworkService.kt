@@ -2,6 +2,7 @@ package com.johnsondev.doboshacademyapp.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.johnsondev.doboshacademyapp.network.api.MovieApi
+import com.johnsondev.doboshacademyapp.network.interceptors.ApiKeyInterceptor
 import com.johnsondev.doboshacademyapp.utilities.Constants.BASE_URL
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType

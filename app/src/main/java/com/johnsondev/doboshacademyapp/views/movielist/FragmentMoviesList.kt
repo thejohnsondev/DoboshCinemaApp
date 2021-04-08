@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,6 +15,7 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails.Companion.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModel
@@ -24,7 +26,6 @@ class FragmentMoviesList : Fragment() {
 
     private lateinit var rvMovie: RecyclerView
     private lateinit var typeOfMoviesList: MaterialButtonToggleGroup
-    private val scope = CoroutineScope(Dispatchers.IO + Job())
     private lateinit var movieViewModel: MovieViewModel
 
     override fun onCreateView(
@@ -33,12 +34,23 @@ class FragmentMoviesList : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movies_list, container, false)
-        movieViewModel = ViewModelProvider(this, MovieViewModelFactory(activity?.application!!))[MovieViewModel::class.java]
+        movieViewModel = ViewModelProvider(
+            this,
+            MovieViewModelFactory(activity?.application!!)
+        )[MovieViewModel::class.java]
+
+        val isConnectionError = arguments?.getBoolean(Constants.CONNECTION_ERROR_ARG)
+
+        if (isConnectionError == true) {
+            Toast.makeText(context, "Internet connection error", Toast.LENGTH_SHORT).show()
+        }
 
         typeOfMoviesList = view.findViewById(R.id.toggle_group)
 
         typeOfMoviesList.addOnButtonCheckedListener { _, checkedId, _ ->
-            movieViewModel.changeMoviesList(checkedId)
+            if (isConnectionError == true) {
+                Toast.makeText(context, "Internet connection error", Toast.LENGTH_SHORT).show()
+            } else movieViewModel.changeMoviesList(checkedId)
         }
 
         typeOfMoviesList.check(R.id.btn_popular)
@@ -48,7 +60,7 @@ class FragmentMoviesList : Fragment() {
         val adapter = MoviesAdapter(view.context, clickListener)
         rvMovie.adapter = adapter
 
-        movieViewModel.getPopularMovies().observe(this){
+        movieViewModel.getPopularMovies().observe(this) {
             adapter.setMovies(it)
         }
 
@@ -59,15 +71,6 @@ class FragmentMoviesList : Fragment() {
         return view
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-    }
 
     private fun calculateSpanCount(): Int {
         return if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
