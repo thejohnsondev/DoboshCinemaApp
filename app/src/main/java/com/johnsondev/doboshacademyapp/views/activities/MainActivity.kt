@@ -14,8 +14,10 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             val bundle = Bundle()
 
-            bundle.putBoolean(Constants.CONNECTION_ERROR_ARG,
-                intent.getBooleanExtra(Constants.CONNECTION_ERROR_EXTRA, true))
+            bundle.putBoolean(
+                Constants.CONNECTION_ERROR_ARG,
+                intent.getBooleanExtra(Constants.CONNECTION_ERROR_EXTRA, true)
+            )
 
             val fragmentMoviesList = FragmentMoviesList()
             fragmentMoviesList.arguments = bundle

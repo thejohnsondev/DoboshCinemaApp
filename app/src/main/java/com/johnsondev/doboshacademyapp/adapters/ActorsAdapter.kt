@@ -45,8 +45,8 @@ class ActorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         actorImg.load(actor.picture) {
             crossfade(true)
-            placeholder(R.drawable.ic_launcher_foreground)
-            fallback(R.drawable.ic_launcher_foreground)
+            placeholder(R.drawable.ic_baseline_person_24)
+            fallback(R.drawable.ic_baseline_person_24)
             error(R.drawable.ic_baseline_person_24)
         }
 

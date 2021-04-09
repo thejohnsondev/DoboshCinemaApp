@@ -25,7 +25,7 @@ class MoviesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val itemView = inflater.inflate(R.layout.movie_rv_item, parent, false)
-        return MovieViewHolder(itemView, context)
+        return MovieViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
@@ -41,7 +41,7 @@ class MoviesAdapter(
     }
 }
 
-class MovieViewHolder(private val view: View, val context: Context) :
+class MovieViewHolder(private val view: View) :
     RecyclerView.ViewHolder(view) {
 
     private val name: TextView = view.findViewById(R.id.movie_name)

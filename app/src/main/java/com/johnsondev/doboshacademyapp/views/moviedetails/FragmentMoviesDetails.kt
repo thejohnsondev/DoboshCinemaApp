@@ -16,6 +16,7 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.viewmodel.ActorsViewModel
 import kotlinx.coroutines.*
@@ -48,13 +49,7 @@ class FragmentMoviesDetails : Fragment() {
 
         actorsViewModel = ViewModelProvider(this)[ActorsViewModel::class.java]
 
-        tvTitle = view.findViewById(R.id.tv_title)
-        tvAge = view.findViewById(R.id.tv_age)
-        tvGenres = view.findViewById(R.id.movie_genres)
-        tvReviews = view.findViewById(R.id.tv_reviews)
-        movieRating = view.findViewById(R.id.movie_rating_bar)
-        tvStoryLine = view.findViewById(R.id.tv_description)
-        headImage = view.findViewById(R.id.head_image)
+        initViews(view)
 
         currentMovie?.let { movie ->
             val movieReviews: String =
@@ -71,8 +66,6 @@ class FragmentMoviesDetails : Fragment() {
             rvActors?.adapter = adapter
             rvActors?.setHasFixedSize(true)
 
-
-
             actorsViewModel.getActorsForCurrentMovie().observe(this) {
                 adapter.setActors(it)
             }
@@ -84,11 +77,12 @@ class FragmentMoviesDetails : Fragment() {
                 error(R.drawable.target_img)
             }
 
-        }
 
-        val backBtn: TextView = view.findViewById(R.id.back_btn)
-        backBtn.setOnClickListener() {
-            fragmentManager?.popBackStack()
+            val backBtn: TextView = view.findViewById(R.id.back_btn)
+            backBtn.setOnClickListener() {
+                fragmentManager?.popBackStack()
+            }
+
         }
         return view
     }
@@ -103,13 +97,22 @@ class FragmentMoviesDetails : Fragment() {
                 ActorsRepository.loadActors(currentMovie?.id!!)
             }
         } else {
-            Toast.makeText(context, "Unable to load cast", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, getString(R.string.unable_load_cast), Toast.LENGTH_LONG)
+                .show()
         }
-
     }
 
-    companion object {
-        const val MOVIE_KEY = "movie key"
+    private fun initViews(view: View) {
+
+        tvTitle = view.findViewById(R.id.tv_title)
+        tvAge = view.findViewById(R.id.tv_age)
+        tvGenres = view.findViewById(R.id.movie_genres)
+        tvReviews = view.findViewById(R.id.tv_reviews)
+        movieRating = view.findViewById(R.id.movie_rating_bar)
+        tvStoryLine = view.findViewById(R.id.tv_description)
+        headImage = view.findViewById(R.id.head_image)
+
     }
 
 }
+

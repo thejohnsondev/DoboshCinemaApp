@@ -62,14 +62,12 @@ object MoviesRepository {
         return topRatedMovies
     }
 
-    fun getLatestMovies(): LiveData<List<Movie>> {
+    fun getPopularMovies(): LiveData<List<Movie>> {
         return popularMovies
     }
 
     fun getUpcomingMovies(): LiveData<List<Movie>> {
         return upcomingMovies
     }
-
-
 
 }

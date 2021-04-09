@@ -19,7 +19,9 @@ import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.Constants
-import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails.Companion.MOVIE_KEY
+import com.johnsondev.doboshacademyapp.utilities.Constants.HORIZONTAL_SPAN_COUNT
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
+import com.johnsondev.doboshacademyapp.utilities.Constants.VERTICAL_SPAN_COUNT
 import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModel
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModelFactory
@@ -28,74 +30,62 @@ import kotlinx.coroutines.*
 class FragmentMoviesList : Fragment() {
 
     private lateinit var rvMovie: RecyclerView
+    private lateinit var adapter: MoviesAdapter
     private lateinit var swipeToRefresh: SwipeRefreshLayout
     private lateinit var typeOfMoviesList: MaterialButtonToggleGroup
     private lateinit var movieViewModel: MovieViewModel
-
     private val scope = CoroutineScope(Dispatchers.IO + Job())
-
     private lateinit var checkInternetConnection: InternetConnectionManager
-
-
+    private var isConnectionErrorFromBundle: Boolean? = null
+    
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val view = inflater.inflate(R.layout.fragment_movies_list, container, false)
+
         movieViewModel = ViewModelProvider(
             this,
             MovieViewModelFactory(activity?.application!!)
         )[MovieViewModel::class.java]
 
-        checkInternetConnection = InternetConnectionManager(context!!)
+        initViews(view)
 
-
-        val isConnectionErrorFromBundle = arguments?.getBoolean(Constants.CONNECTION_ERROR_ARG)
-
-        if (isConnectionErrorFromBundle == true && !checkInternetConnection.isNetworkAvailable()) {
-            Toast.makeText(context, "Internet connection error", Toast.LENGTH_SHORT).show()
+        if (isConnectionErrorFromBundle == true && !movieViewModel.isInternetConnectionAvailable()) {
+            Toast.makeText(
+                context,
+                getString(R.string.internet_connection_error),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
-
-        typeOfMoviesList = view.findViewById(R.id.toggle_group)
-
         typeOfMoviesList.addOnButtonCheckedListener { _, checkedId, _ ->
-            if (!checkInternetConnection.isNetworkAvailable()) {
-                Toast.makeText(context, "Internet connection error", Toast.LENGTH_SHORT).show()
+            if (!movieViewModel.isInternetConnectionAvailable()) {
+                Toast.makeText(
+                    context,
+                    getString(R.string.internet_connection_error),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else movieViewModel.changeMoviesList(checkedId)
         }
 
-        swipeToRefresh = view.findViewById(R.id.swipe_layout)
         swipeToRefresh.setOnRefreshListener {
-            if (!checkInternetConnection.isNetworkAvailable()){
-                Toast.makeText(context, "Check internet connection", Toast.LENGTH_SHORT).show()
+            if (!checkInternetConnection.isNetworkAvailable()) {
+                Toast.makeText(
+                    context,
+                    getString(R.string.internet_connection_error),
+                    Toast.LENGTH_SHORT
+                ).show()
                 swipeToRefresh.isRefreshing = false
-            }else{
+            } else {
                 scope.launch {
-                    val job1 = scope.launch {
-                        MoviesRepository.loadPopularMovies()
-                    }
-                    val job2 = scope.launch {
-                        MoviesRepository.loadTopRatedMovies()
-                    }
-                    val job3 = scope.launch {
-                        MoviesRepository.loadUpcomingMovies()
-                    }
-                    job1.join()
-                    job2.join()
-                    job3.join()
+                    movieViewModel.loadMoviesFromNetwork()
                     swipeToRefresh.isRefreshing = false
                 }
             }
         }
-
-        typeOfMoviesList.check(R.id.btn_popular)
-
-        rvMovie = view.findViewById(R.id.movie_list_rv)
-        rvMovie.layoutManager = GridLayoutManager(view.context, calculateSpanCount())
-        val adapter = MoviesAdapter(view.context, clickListener)
-        rvMovie.adapter = adapter
 
         movieViewModel.getPopularMovies().observe(this) {
             adapter.setMovies(it)
@@ -108,6 +98,22 @@ class FragmentMoviesList : Fragment() {
         return view
     }
 
+    private fun initViews(view: View) {
+
+        typeOfMoviesList = view.findViewById(R.id.toggle_group)
+        swipeToRefresh = view.findViewById(R.id.swipe_layout)
+        typeOfMoviesList.check(R.id.btn_popular)
+
+        rvMovie = view.findViewById(R.id.movie_list_rv)
+        rvMovie.layoutManager = GridLayoutManager(view.context, calculateSpanCount())
+        adapter = MoviesAdapter(view.context, clickListener)
+        rvMovie.adapter = adapter
+
+
+        isConnectionErrorFromBundle = arguments?.getBoolean(Constants.CONNECTION_ERROR_ARG) == true
+        checkInternetConnection = InternetConnectionManager(context!!)
+
+    }
 
     private fun calculateSpanCount(): Int {
         return if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
@@ -142,9 +148,5 @@ class FragmentMoviesList : Fragment() {
         }
     }
 
-    companion object {
-        const val HORIZONTAL_SPAN_COUNT = 4
-        const val VERTICAL_SPAN_COUNT = 2
-    }
 }
 

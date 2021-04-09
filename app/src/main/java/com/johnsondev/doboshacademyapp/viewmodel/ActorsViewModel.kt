@@ -17,7 +17,7 @@ class ActorsViewModel : ViewModel() {
             try {
                 mutableActorList = ActorsRepository.getActorsForCurrentMovie()
             } catch (e: Exception) {
-                Log.d("TAG", "error " + e.stackTrace)
+                Log.e("TAG", e.stackTrace.toString())
             }
         }
         return mutableActorList
