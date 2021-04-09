@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.view.movielist
+package com.johnsondev.doboshacademyapp.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.johnsondev.doboshacademyapp.R
-import com.johnsondev.doboshacademyapp.model.entities.Movie
+import com.johnsondev.doboshacademyapp.data.models.Movie
 
 class MoviesAdapter(
     private val context: Context,
@@ -19,7 +18,6 @@ class MoviesAdapter(
 ) : RecyclerView.Adapter<MovieViewHolder>() {
 
     private var moviesList: List<Movie> = listOf()
-
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun getItemCount(): Int = moviesList.size
@@ -37,12 +35,14 @@ class MoviesAdapter(
         }
     }
 
-    fun setMovies(movies: List<Movie>){
+    fun setMovies(movies: List<Movie>) {
         moviesList = movies
+        notifyDataSetChanged()
     }
 }
 
-class MovieViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+class MovieViewHolder(private val view: View) :
+    RecyclerView.ViewHolder(view) {
 
     private val name: TextView = view.findViewById(R.id.movie_name)
     private val genre: TextView = view.findViewById(R.id.movie_genres)
@@ -54,24 +54,24 @@ class MovieViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(movie: Movie) {
 
-        val movieReviews: String = view.context.getString(R.string.reviews, movie.reviewCount)
-        val movieAge: String = view.context.getString(R.string.plus, movie.pgAge)
+        val movieReviews: String = view.context.getString(R.string.reviews, movie.numberOfRatings)
+        val movieAge: String = view.context.getString(R.string.plus, movie.minimumAge)
         val movieRunningTime: String =
-            view.context.getString(R.string.running_time, movie.runningTime)
+            view.context.getString(R.string.running_time, movie.runtime)
 
         name.text = movie.title
-        genre.text = movie.genres.joinToString { it.name }
+        genre.text = movie.genres?.joinToString { it.name }
         reviews.text = movieReviews
-        rating.progress = movie.rating * 2
+        rating.progress = (movie.ratings * 2).toInt()
         time.text = movieRunningTime
         age.text = movieAge
 
-        Glide.with(itemView)
-            .load(movie.imageUrl)
-            .centerCrop()
-            .placeholder(R.drawable.ic_launcher_foreground)
-            .into(movieImg)
-
+        movieImg.load(movie.poster) {
+            crossfade(true)
+            placeholder(R.drawable.ic_launcher_foreground)
+            fallback(R.drawable.ic_launcher_foreground)
+            error(R.drawable.target_img)
+        }
         movieImg.clipToOutline = true
     }
 
