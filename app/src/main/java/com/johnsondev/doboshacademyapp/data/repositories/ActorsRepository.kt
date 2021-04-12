@@ -2,8 +2,8 @@ package com.johnsondev.doboshacademyapp.data.repositories
 
 import androidx.lifecycle.MutableLiveData
 import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.dto.ActorDto
-import com.johnsondev.doboshacademyapp.network.NetworkService
+import com.johnsondev.doboshacademyapp.data.network.dto.ActorDto
+import com.johnsondev.doboshacademyapp.data.network.NetworkService
 import com.johnsondev.doboshacademyapp.utilities.DtoMapper
 
 object ActorsRepository {

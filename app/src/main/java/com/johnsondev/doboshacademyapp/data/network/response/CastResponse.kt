@@ -1,6 +1,6 @@
-package com.johnsondev.doboshacademyapp.data.response
+package com.johnsondev.doboshacademyapp.data.network.response
 
-import com.johnsondev.doboshacademyapp.data.dto.ActorDto
+import com.johnsondev.doboshacademyapp.data.network.dto.ActorDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

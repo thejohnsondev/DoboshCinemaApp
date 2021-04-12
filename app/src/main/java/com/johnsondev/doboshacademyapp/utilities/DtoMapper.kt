@@ -3,9 +3,9 @@ package com.johnsondev.doboshacademyapp.utilities
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.data.dto.ActorDto
-import com.johnsondev.doboshacademyapp.data.dto.GenreDto
-import com.johnsondev.doboshacademyapp.data.dto.MovieDto
+import com.johnsondev.doboshacademyapp.data.network.dto.ActorDto
+import com.johnsondev.doboshacademyapp.data.network.dto.GenreDto
+import com.johnsondev.doboshacademyapp.data.network.dto.MovieDto
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_IMG_PATH
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 

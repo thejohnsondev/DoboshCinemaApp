@@ -3,8 +3,8 @@ package com.johnsondev.doboshacademyapp.data.repositories
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.data.dto.MovieDto
-import com.johnsondev.doboshacademyapp.network.NetworkService
+import com.johnsondev.doboshacademyapp.data.network.dto.MovieDto
+import com.johnsondev.doboshacademyapp.data.network.NetworkService
 import com.johnsondev.doboshacademyapp.utilities.DtoMapper
 
 object MoviesRepository {
