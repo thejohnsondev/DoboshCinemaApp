@@ -2,11 +2,8 @@ package com.johnsondev.doboshacademyapp.data.db.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.johnsondev.doboshacademyapp.data.db.MoviesContract
-import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.Genre
 
-@Entity(tableName = MoviesContract.MoviesColumns.TABLE_NAME)
+@Entity(tableName = "movies")
 data class MovieEntity(
 
     @PrimaryKey(autoGenerate = true)
@@ -18,8 +15,6 @@ data class MovieEntity(
     val ratings: Float,
     val numberOfRatings: Int,
     val minimumAge: Int,
-    val runtime: Int?,
-    val genres: List<Genre>? = emptyList(),
-    val actors: List<Actor> = emptyList()
+    val runtime: Int?
 
 )
