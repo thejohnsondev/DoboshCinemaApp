@@ -5,9 +5,11 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.Constants
+import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModel
 import kotlinx.coroutines.*
 
 

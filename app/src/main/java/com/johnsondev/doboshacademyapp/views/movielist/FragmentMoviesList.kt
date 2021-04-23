@@ -2,6 +2,7 @@ package com.johnsondev.doboshacademyapp.views.movielist
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
@@ -69,6 +71,10 @@ class FragmentMoviesList : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else movieViewModel.changeMoviesList(checkedId)
+            val database = App.getInstance().getDatabase()
+            GlobalScope.launch {
+                Log.d("TAG", database.movieDao().getAllMovies().joinToString { it.genresId })
+            }
         }
 
         swipeToRefresh.setOnRefreshListener {
