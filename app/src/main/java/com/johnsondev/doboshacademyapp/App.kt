@@ -12,10 +12,8 @@ class App : Application() {
 
     private lateinit var database: MoviesDb
 
-
     override fun onCreate() {
         super.onCreate()
-//        context = applicationContext
         appInstance = this
         database = Room.databaseBuilder(
             this,
@@ -29,12 +27,7 @@ class App : Application() {
     companion object {
 
         private lateinit var appInstance: App
-
         fun getInstance(): App = appInstance
-
-
-        //        private var context: Context? = null
-//        fun getContext(): Context = context ?: throw IllegalStateException()
 
     }
 }

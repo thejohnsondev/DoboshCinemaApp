@@ -87,14 +87,16 @@ class FragmentMoviesList : Fragment() {
                 swipeToRefresh.isRefreshing = false
             } else {
                 scope.launch {
-                    movieViewModel.loadMoviesFromNetwork().apply {
+                    movieViewModel.loadPopularMoviesFromNet().apply {
                         swipeToRefresh.isRefreshing = false
                     }
                 }
             }
         }
 
-        movieViewModel.getPopularMovies().observe(this) {
+        movieViewModel.getPopularMovies()
+
+        movieViewModel.popularMoviesList.observe(this) {
             adapter.setMovies(it)
         }
 

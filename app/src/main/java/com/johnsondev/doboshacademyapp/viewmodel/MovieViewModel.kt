@@ -6,23 +6,29 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class MovieViewModel(application: Application) : AndroidViewModel(application) {
 
     private var topRatedMovies: LiveData<List<Movie>>? = null
-    private var popularMovies: LiveData<List<Movie>>? = null
+
+    private var popularMovies = MutableLiveData<List<Movie>>()
+    val popularMoviesList: LiveData<List<Movie>> get() = popularMovies
+
     private var upcomingMovies: LiveData<List<Movie>>? = null
 
     private var checkInternetConnection: InternetConnectionManager? = null
 
     private var movieList = MutableLiveData<List<Movie>>()
 
-    fun getPopularMovies(): LiveData<List<Movie>> {
-        if (popularMovies?.value.isNullOrEmpty()) {
-            popularMovies = MoviesRepository.getPopularMovies()
+    fun getPopularMovies() {
+        if (popularMovies.value.isNullOrEmpty()) {
+            viewModelScope.launch {
+                popularMovies.postValue(MoviesRepository.getPopularMovies())
+            }
         }
-        return popularMovies!!
     }
 
     private fun getTopRatedMovies(): LiveData<List<Movie>> {
@@ -46,7 +52,7 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
 
     fun changeMoviesList(checkedBtnId: Int) {
         when (checkedBtnId) {
-            R.id.btn_popular -> movieList.value = getPopularMovies().value
+            R.id.btn_popular -> movieList.value = popularMoviesList.value
             R.id.btn_top_rated -> movieList.value = getTopRatedMovies().value
             R.id.btn_upcoming -> movieList.value = getUpcomingMovies().value
         }
@@ -63,7 +69,7 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     suspend fun loadMoviesFromNetwork() {
         viewModelScope.launch {
             val job1 = viewModelScope.launch {
-                MoviesRepository.loadPopularMovies()
+                MoviesRepository.loadPopularMoviesFromNet()
             }
             val job2 = viewModelScope.launch {
                 MoviesRepository.loadTopRatedMovies()
@@ -76,6 +82,14 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
             job3.join()
         }.join()
     }
+
+    suspend fun loadPopularMoviesFromNet(){
+        viewModelScope.launch {
+            MoviesRepository.loadPopularMoviesFromNet()
+            popularMovies.postValue(MoviesRepository.getPopularMovies())
+        }.join()
+    }
+
 
 
 }
