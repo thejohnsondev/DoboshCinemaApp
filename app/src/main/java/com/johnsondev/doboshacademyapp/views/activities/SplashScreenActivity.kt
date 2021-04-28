@@ -29,10 +29,15 @@ class SplashScreenActivity : AppCompatActivity() {
 
         checkInternetConnection = InternetConnectionManager(this)
         scope.launch {
-            if (database.movieDao().getAllMovies().isNotEmpty()) {
+            if (database.popularMoviesDao().getAllMovies().isNotEmpty()
+                && database.topRatedMoviesDao().getAllMovies().isNotEmpty()
+                && database.upcomingMoviesDao().getAllMovies().isNotEmpty()
+            ) {
 
                 scope.launch {
                     MoviesRepository.loadPopularMoviesFromDb()
+                    MoviesRepository.loadTopRatedMoviesFromDb()
+                    MoviesRepository.loadUpcomingMoviesFromDb()
                 }.join()
 
                 intent.putExtra(Constants.CONNECTION_ERROR_EXTRA, true)
@@ -42,23 +47,19 @@ class SplashScreenActivity : AppCompatActivity() {
                 if (checkInternetConnection.isNetworkAvailable()) {
                     scope.launch {
                         MoviesRepository.loadPopularMoviesFromNet()
+                        MoviesRepository.loadTopRatedMoviesFromNet()
+                        MoviesRepository.loadUpcomingMoviesFromNet()
                     }.join()
 
                     intent.putExtra(Constants.CONNECTION_ERROR_EXTRA, true)
                     startActivity(intent)
                     finish()
-
                 } else {
-
-                    MoviesRepository.loadPopularMoviesFromDb()
-
                     intent.putExtra(Constants.CONNECTION_ERROR_EXTRA, true)
                     startActivity(intent)
                     finish()
-
                 }
             }
-
         }
     }
 

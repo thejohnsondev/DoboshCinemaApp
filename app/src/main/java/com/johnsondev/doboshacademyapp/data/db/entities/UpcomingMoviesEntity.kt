@@ -3,8 +3,8 @@ package com.johnsondev.doboshacademyapp.data.db.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "movies")
-data class MovieEntity(
+@Entity(tableName = "upcomingMovies")
+data class UpcomingMoviesEntity(
 
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,

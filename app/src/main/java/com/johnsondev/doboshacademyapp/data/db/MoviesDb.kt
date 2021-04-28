@@ -7,14 +7,18 @@ import com.johnsondev.doboshacademyapp.data.db.entities.*
 
 @Database(
     entities = [
-        MovieEntity::class,
+        PopularMoviesEntity::class,
+        TopRatedMoviesEntity::class,
+        UpcomingMoviesEntity::class,
         ActorEntity::class,
         GenreEntity::class
     ], version = 1
 )
 abstract class MoviesDb : RoomDatabase() {
 
-    abstract fun movieDao(): MovieDao
+    abstract fun popularMoviesDao(): PopularMoviesDao
+    abstract fun topRatedMoviesDao(): TopRatedMoviesDao
+    abstract fun upcomingMoviesDao(): UpcomingMoviesDao
     abstract fun actorDao(): ActorDao
     abstract fun genreDao(): GenreDao
 

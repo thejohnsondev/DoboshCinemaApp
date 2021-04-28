@@ -18,7 +18,6 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
 import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.HORIZONTAL_SPAN_COUNT
@@ -64,17 +63,7 @@ class FragmentMoviesList : Fragment() {
         }
 
         typeOfMoviesList.addOnButtonCheckedListener { _, checkedId, _ ->
-            if (!movieViewModel.isInternetConnectionAvailable()) {
-                Toast.makeText(
-                    context,
-                    getString(R.string.internet_connection_error),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else movieViewModel.changeMoviesList(checkedId)
-            val database = App.getInstance().getDatabase()
-            GlobalScope.launch {
-                Log.d("TAG", database.movieDao().getAllMovies().joinToString { it.genresId })
-            }
+                movieViewModel.changeMoviesList(checkedId)
         }
 
         swipeToRefresh.setOnRefreshListener {
@@ -87,7 +76,9 @@ class FragmentMoviesList : Fragment() {
                 swipeToRefresh.isRefreshing = false
             } else {
                 scope.launch {
-                    movieViewModel.loadPopularMoviesFromNet().apply {
+                    movieViewModel.loadPopularMoviesFromNet()
+                    movieViewModel.loadTopRatedMoviesFromNet()
+                    movieViewModel.loadUpcomingMoviesFromNet().apply {
                         swipeToRefresh.isRefreshing = false
                     }
                 }
@@ -95,6 +86,8 @@ class FragmentMoviesList : Fragment() {
         }
 
         movieViewModel.getPopularMovies()
+        movieViewModel.getTopRatedMovies()
+        movieViewModel.getUpcomingMovies()
 
         movieViewModel.popularMoviesList.observe(this) {
             adapter.setMovies(it)
