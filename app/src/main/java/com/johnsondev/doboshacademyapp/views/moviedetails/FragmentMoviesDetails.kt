@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
+import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
@@ -33,6 +34,7 @@ class FragmentMoviesDetails : Fragment() {
     private var tvStoryLine: TextView? = null
     private var headImage: ImageView? = null
     private var rvActors: RecyclerView? = null
+    private var adapter: ActorsAdapter? = null
 
     private lateinit var actorsViewModel: ActorsViewModel
 
@@ -51,6 +53,7 @@ class FragmentMoviesDetails : Fragment() {
 
         initViews(view)
 
+
         currentMovie?.let { movie ->
             val movieReviews: String =
                 view.context.getString(R.string.reviews, movie.numberOfRatings)
@@ -61,25 +64,23 @@ class FragmentMoviesDetails : Fragment() {
             tvReviews?.text = movieReviews
             movieRating?.progress = (movie.ratings * 2).toInt()
             tvStoryLine?.text = movie.overview
-            val adapter = ActorsAdapter(context!!)
-            rvActors = view.findViewById(R.id.rv_actors)
-            rvActors?.adapter = adapter
-            rvActors?.setHasFixedSize(true)
 
-            actorsViewModel.getActorsForCurrentMovie().observe(this) {
-                adapter.setActors(it)
+            actorsViewModel.getActorsForCurrentMovie()
+
+            actorsViewModel.mutableActorList.observe(this) {
+                adapter?.setActors(it)
             }
 
             headImage?.load(movie.poster) {
                 crossfade(true)
-                placeholder(R.drawable.ic_launcher_foreground)
-                fallback(R.drawable.ic_launcher_foreground)
-                error(R.drawable.target_img)
+                placeholder(R.drawable.movie_placeholder)
+                fallback(R.drawable.movie_placeholder)
+                error(R.drawable.movie_placeholder)
             }
 
 
             val backBtn: TextView = view.findViewById(R.id.back_btn)
-            backBtn.setOnClickListener() {
+            backBtn.setOnClickListener {
                 fragmentManager?.popBackStack()
             }
 
@@ -89,17 +90,28 @@ class FragmentMoviesDetails : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         currentMovie = arguments?.getParcelable(MOVIE_KEY)
         checkInternetConnection = InternetConnectionManager(context!!)
 
         if (checkInternetConnection.isNetworkAvailable()) {
             scope.launch {
                 ActorsRepository.loadActors(currentMovie?.id!!)
+
             }
         } else {
             Toast.makeText(context, getString(R.string.unable_load_cast), Toast.LENGTH_LONG)
                 .show()
         }
+
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+
+        actorsViewModel.clearActorList()
+
     }
 
     private fun initViews(view: View) {
@@ -111,6 +123,11 @@ class FragmentMoviesDetails : Fragment() {
         movieRating = view.findViewById(R.id.movie_rating_bar)
         tvStoryLine = view.findViewById(R.id.tv_description)
         headImage = view.findViewById(R.id.head_image)
+
+        adapter = ActorsAdapter(context!!)
+        rvActors = view.findViewById(R.id.rv_actors)
+        rvActors?.adapter = adapter
+        rvActors?.setHasFixedSize(true)
 
     }
 

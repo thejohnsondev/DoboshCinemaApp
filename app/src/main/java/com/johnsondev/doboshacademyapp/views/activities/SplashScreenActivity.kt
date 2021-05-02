@@ -40,7 +40,6 @@ class SplashScreenActivity : AppCompatActivity() {
                     MoviesRepository.loadUpcomingMoviesFromDb()
                 }.join()
 
-                intent.putExtra(Constants.CONNECTION_ERROR_EXTRA, true)
                 startActivity(intent)
                 finish()
             } else {

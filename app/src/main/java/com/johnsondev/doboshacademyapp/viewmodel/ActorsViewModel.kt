@@ -1,6 +1,7 @@
 package com.johnsondev.doboshacademyapp.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,17 +11,22 @@ import kotlinx.coroutines.launch
 
 class ActorsViewModel : ViewModel() {
 
-    private var mutableActorList = MutableLiveData<List<Actor>>()
+    private var _mutableActorList = MutableLiveData<List<Actor>>()
+    val mutableActorList: LiveData<List<Actor>> get() =_mutableActorList
 
-    fun getActorsForCurrentMovie(): MutableLiveData<List<Actor>> {
+    fun getActorsForCurrentMovie(){
         viewModelScope.launch {
             try {
-                mutableActorList = ActorsRepository.getActorsForCurrentMovie()
+                _mutableActorList = ActorsRepository.getActorsForCurrentMovie()
             } catch (e: Exception) {
                 Log.e("TAG", e.stackTrace.toString())
             }
         }
-        return mutableActorList
+    }
+
+    fun clearActorList(){
+        _mutableActorList.value = listOf()
+        Log.d("TAG", "clearList")
     }
 
 }
