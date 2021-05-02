@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.data.dto
+package com.johnsondev.doboshacademyapp.data.network.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

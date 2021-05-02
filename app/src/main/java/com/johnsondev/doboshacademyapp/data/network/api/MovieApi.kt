@@ -1,7 +1,7 @@
-package com.johnsondev.doboshacademyapp.network.api
+package com.johnsondev.doboshacademyapp.data.network.api
 
-import com.johnsondev.doboshacademyapp.data.dto.MovieDto
-import com.johnsondev.doboshacademyapp.data.response.*
+import com.johnsondev.doboshacademyapp.data.network.dto.MovieDto
+import com.johnsondev.doboshacademyapp.data.network.response.*
 import retrofit2.http.GET
 import retrofit2.http.Path
 

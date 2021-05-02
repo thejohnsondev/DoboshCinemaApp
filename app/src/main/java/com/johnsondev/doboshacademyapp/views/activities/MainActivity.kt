@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
             bundle.putBoolean(
                 Constants.CONNECTION_ERROR_ARG,
-                intent.getBooleanExtra(Constants.CONNECTION_ERROR_EXTRA, true)
+                intent.getBooleanExtra(Constants.CONNECTION_ERROR_EXTRA, false)
             )
 
             val fragmentMoviesList = FragmentMoviesList()

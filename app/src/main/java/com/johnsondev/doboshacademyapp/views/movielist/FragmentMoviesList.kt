@@ -2,6 +2,7 @@ package com.johnsondev.doboshacademyapp.views.movielist
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +13,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
 import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.HORIZONTAL_SPAN_COUNT
@@ -62,13 +63,7 @@ class FragmentMoviesList : Fragment() {
         }
 
         typeOfMoviesList.addOnButtonCheckedListener { _, checkedId, _ ->
-            if (!movieViewModel.isInternetConnectionAvailable()) {
-                Toast.makeText(
-                    context,
-                    getString(R.string.internet_connection_error),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else movieViewModel.changeMoviesList(checkedId)
+                movieViewModel.changeMoviesList(checkedId)
         }
 
         swipeToRefresh.setOnRefreshListener {
@@ -81,13 +76,20 @@ class FragmentMoviesList : Fragment() {
                 swipeToRefresh.isRefreshing = false
             } else {
                 scope.launch {
-                    movieViewModel.loadMoviesFromNetwork()
-                    swipeToRefresh.isRefreshing = false
+                    movieViewModel.loadPopularMoviesFromNet()
+                    movieViewModel.loadTopRatedMoviesFromNet()
+                    movieViewModel.loadUpcomingMoviesFromNet().apply {
+                        swipeToRefresh.isRefreshing = false
+                    }
                 }
             }
         }
 
-        movieViewModel.getPopularMovies().observe(this) {
+        movieViewModel.getPopularMovies()
+        movieViewModel.getTopRatedMovies()
+        movieViewModel.getUpcomingMovies()
+
+        movieViewModel.popularMoviesList.observe(this) {
             adapter.setMovies(it)
         }
 

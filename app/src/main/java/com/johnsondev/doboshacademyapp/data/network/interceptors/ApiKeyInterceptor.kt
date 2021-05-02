@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.network.interceptors
+package com.johnsondev.doboshacademyapp.data.network.interceptors
 
 import com.johnsondev.doboshacademyapp.utilities.Constants.API_KEY
 import okhttp3.HttpUrl

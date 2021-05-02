@@ -1,6 +1,7 @@
 package com.johnsondev.doboshacademyapp.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
@@ -10,34 +11,41 @@ import kotlinx.coroutines.launch
 
 class MovieViewModel(application: Application) : AndroidViewModel(application) {
 
-    private var topRatedMovies: LiveData<List<Movie>>? = null
-    private var popularMovies: LiveData<List<Movie>>? = null
-    private var upcomingMovies: LiveData<List<Movie>>? = null
+    private var popularMovies = MutableLiveData<List<Movie>>()
+    val popularMoviesList: LiveData<List<Movie>> get() = popularMovies
+
+    private var topRatedMovies = MutableLiveData<List<Movie>>()
+    private val topRatedMoviesList: LiveData<List<Movie>> get() = topRatedMovies
+
+    private var upcomingMovies = MutableLiveData<List<Movie>>()
+    private val upcomingMoviesList: LiveData<List<Movie>> get() = upcomingMovies
 
     private var checkInternetConnection: InternetConnectionManager? = null
 
     private var movieList = MutableLiveData<List<Movie>>()
 
-    fun getPopularMovies(): LiveData<List<Movie>> {
-        if (popularMovies?.value.isNullOrEmpty()) {
-            popularMovies = MoviesRepository.getPopularMovies()
+    fun getPopularMovies() {
+        if (popularMovies.value.isNullOrEmpty()) {
+            viewModelScope.launch {
+                popularMovies.postValue(MoviesRepository.getPopularMovies())
+            }
         }
-        return popularMovies!!
     }
 
-    private fun getTopRatedMovies(): LiveData<List<Movie>> {
-        if (topRatedMovies?.value.isNullOrEmpty()) {
-            topRatedMovies = MoviesRepository.getTopRatedMovies()
+    fun getTopRatedMovies() {
+        if (topRatedMovies.value.isNullOrEmpty()) {
+            viewModelScope.launch {
+                topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
+            }
         }
-        return topRatedMovies!!
     }
 
-
-    private fun getUpcomingMovies(): LiveData<List<Movie>> {
-        if (upcomingMovies?.value.isNullOrEmpty()) {
-            upcomingMovies = MoviesRepository.getUpcomingMovies()
+    fun getUpcomingMovies() {
+        if (upcomingMovies.value.isNullOrEmpty()) {
+            viewModelScope.launch {
+                upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
+            }
         }
-        return upcomingMovies!!
     }
 
     fun getAnotherMovieList(): LiveData<List<Movie>> {
@@ -46,9 +54,9 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
 
     fun changeMoviesList(checkedBtnId: Int) {
         when (checkedBtnId) {
-            R.id.btn_popular -> movieList.value = getPopularMovies().value
-            R.id.btn_top_rated -> movieList.value = getTopRatedMovies().value
-            R.id.btn_upcoming -> movieList.value = getUpcomingMovies().value
+            R.id.btn_popular -> movieList.value = popularMoviesList.value
+            R.id.btn_top_rated -> movieList.value = topRatedMoviesList.value
+            R.id.btn_upcoming -> movieList.value = upcomingMoviesList.value
         }
     }
 
@@ -60,22 +68,25 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-    suspend fun loadMoviesFromNetwork() {
+    suspend fun loadPopularMoviesFromNet(){
         viewModelScope.launch {
-            val job1 = viewModelScope.launch {
-                MoviesRepository.loadPopularMovies()
-            }
-            val job2 = viewModelScope.launch {
-                MoviesRepository.loadTopRatedMovies()
-            }
-            val job3 = viewModelScope.launch {
-                MoviesRepository.loadUpcomingMovies()
-            }
-            job1.join()
-            job2.join()
-            job3.join()
-        }.join()
+            MoviesRepository.loadPopularMoviesFromNet()
+            popularMovies.postValue(MoviesRepository.getPopularMovies())
+        }
     }
 
+    suspend fun loadTopRatedMoviesFromNet(){
+        viewModelScope.launch {
+            MoviesRepository.loadTopRatedMoviesFromNet()
+            topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
+        }
+    }
+
+    suspend fun loadUpcomingMoviesFromNet(){
+        viewModelScope.launch {
+            MoviesRepository.loadUpcomingMoviesFromNet()
+            upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
+        }.join()
+    }
 
 }

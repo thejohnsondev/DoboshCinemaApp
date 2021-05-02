@@ -68,9 +68,9 @@ class MovieViewHolder(private val view: View) :
 
         movieImg.load(movie.poster) {
             crossfade(true)
-            placeholder(R.drawable.ic_launcher_foreground)
-            fallback(R.drawable.ic_launcher_foreground)
-            error(R.drawable.target_img)
+            placeholder(R.drawable.movie_placeholder)
+            fallback(R.drawable.movie_placeholder)
+            error(R.drawable.movie_placeholder)
         }
         movieImg.clipToOutline = true
     }
