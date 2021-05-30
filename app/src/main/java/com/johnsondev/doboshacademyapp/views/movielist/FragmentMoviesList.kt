@@ -12,12 +12,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.services.MovieDbUpdateWorker
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.HORIZONTAL_SPAN_COUNT
@@ -27,6 +32,7 @@ import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModel
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModelFactory
 import kotlinx.coroutines.*
+import java.util.concurrent.TimeUnit
 
 class FragmentMoviesList : Fragment() {
 
@@ -53,6 +59,7 @@ class FragmentMoviesList : Fragment() {
         )[MovieViewModel::class.java]
 
         initViews(view)
+        initWorkManager()
 
         if (isConnectionErrorFromBundle == true && !movieViewModel.isInternetConnectionAvailable()) {
             Toast.makeText(
@@ -114,6 +121,21 @@ class FragmentMoviesList : Fragment() {
 
         isConnectionErrorFromBundle = arguments?.getBoolean(Constants.CONNECTION_ERROR_ARG) == true
         checkInternetConnection = InternetConnectionManager(context!!)
+
+    }
+
+    private fun initWorkManager(){
+
+        val constraints =Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresCharging(true)
+            .build()
+
+        val updateWorkRequest = PeriodicWorkRequest.Builder(MovieDbUpdateWorker::class.java, 8, TimeUnit.HOURS)
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(context!!).enqueue(updateWorkRequest)
 
     }
 

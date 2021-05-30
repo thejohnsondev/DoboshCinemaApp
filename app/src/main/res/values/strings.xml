@@ -14,4 +14,8 @@
     <string name="movie_is_not_loaded">Movie is not loaded</string>
     <string name="internet_connection_error">Internet connection error</string>
     <string name="unable_load_cast">Unable to load cast</string>
+    <string name="last_update">Last Update: </string>
+    <string name="top_rated">Top rated</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="popular">Popular</string>
 </resources>
