@@ -20,14 +20,7 @@ object MoviesRepository {
     private var popularMoviesList: List<Movie> = listOf()
     private var topRatedMoviesList: List<Movie> = listOf()
     private var upcomingMoviesList: List<Movie> = listOf()
-
-//
-//    fun getLastUpdateTime(context: Context): String {
-//        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-//        val lastUpdateTimeRaw = sharedPref.getString(PREF_UPDATE_TIME, "")
-//        return "${lastUpdateTimeRaw?.substring(4, 19)}"
-//    }
-
+    
 
     suspend fun loadPopularMoviesFromNet() {
         popularMoviesList = movieApi.getPopular().results.distinct().map {
@@ -127,6 +120,9 @@ object MoviesRepository {
     fun getUpcomingMovies(): List<Movie> {
         return upcomingMoviesList
     }
+
+    // TODO: 31.05.2021 change db schema, make 1 table with all movies, and 1 table with movies category and movie id
+    // TODO: 31.05.2021 change toggle button group to viewpager 2 
 
 
 }

@@ -62,8 +62,6 @@ class FragmentMoviesList : Fragment() {
         initWorkManager()
         initListenersAndObservers(view)
 
-
-
         return view
     }
 
@@ -78,7 +76,6 @@ class FragmentMoviesList : Fragment() {
         rvMovie.layoutManager = GridLayoutManager(view.context, calculateSpanCount())
         adapter = MoviesAdapter(view.context, clickListener)
         rvMovie.adapter = adapter
-
 
         isConnectionErrorFromBundle = arguments?.getBoolean(Constants.CONNECTION_ERROR_ARG) == true
         checkInternetConnection = InternetConnectionManager(requireContext())
@@ -172,7 +169,7 @@ class FragmentMoviesList : Fragment() {
         fragmentMoviesDetails.arguments = bundleWithMovie
 
         rvMovie.let { _ ->
-            fragmentManager?.beginTransaction()?.apply {
+            parentFragmentManager.beginTransaction().apply {
                 setCustomAnimations(
                     R.anim.slide_in,
                     R.anim.fade_out,
