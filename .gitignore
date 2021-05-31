@@ -13,11 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
-.idea/codeStyles/codeStyleConfig.xml
-.idea/codeStyles/Project.xml
-.idea/inspectionProfiles/Project_Default.xml
-.idea/markdown-navigator-enh.xml
-.idea/markdown-navigator.xml
-.idea/misc.xml
-.idea/runConfigurations.xml
-.idea/compiler.xml
+.idea

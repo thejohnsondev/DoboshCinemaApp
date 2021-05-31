@@ -12,6 +12,8 @@ object Constants {
 
     const val CONNECTION_ERROR_EXTRA = "connection_error_extra"
     const val CONNECTION_ERROR_ARG = "connection_error_arg"
-    const val MOVIE_KEY = "movie key"
+    const val MOVIE_KEY = "movie_key"
+    const val PREF_UPDATE_TIME = "pref_update_time"
+    const val PERIODIC_UPDATE_WORK = "periodic_update_work"
 
 }

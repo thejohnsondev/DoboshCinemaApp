@@ -1,9 +1,12 @@
 package com.johnsondev.doboshacademyapp.data.repositories
 
+import android.content.Context
+import androidx.preference.PreferenceManager
 import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.NetworkService
+import com.johnsondev.doboshacademyapp.utilities.Constants.PREF_UPDATE_TIME
 import com.johnsondev.doboshacademyapp.utilities.Converter
 import com.johnsondev.doboshacademyapp.utilities.DtoMapper
 
@@ -17,6 +20,13 @@ object MoviesRepository {
     private var popularMoviesList: List<Movie> = listOf()
     private var topRatedMoviesList: List<Movie> = listOf()
     private var upcomingMoviesList: List<Movie> = listOf()
+
+//
+//    fun getLastUpdateTime(context: Context): String {
+//        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+//        val lastUpdateTimeRaw = sharedPref.getString(PREF_UPDATE_TIME, "")
+//        return "${lastUpdateTimeRaw?.substring(4, 19)}"
+//    }
 
 
     suspend fun loadPopularMoviesFromNet() {
@@ -69,7 +79,6 @@ object MoviesRepository {
             Converter.convertUpcomingMovieEntityToMovie(it, allGenresList!!)
         }
     }
-
 
     private suspend fun savePopularMoviesToDb(movies: List<Movie>?) {
         if (movies != null) {
