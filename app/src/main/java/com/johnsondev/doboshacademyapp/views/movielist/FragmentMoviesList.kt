@@ -44,7 +44,7 @@ class FragmentMoviesList : Fragment() {
     private val scope = CoroutineScope(Dispatchers.IO + Job())
     private lateinit var checkInternetConnection: InternetConnectionManager
     private var isConnectionErrorFromBundle: Boolean? = null
-    
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -70,7 +70,8 @@ class FragmentMoviesList : Fragment() {
         }
 
         typeOfMoviesList.addOnButtonCheckedListener { _, checkedId, _ ->
-                movieViewModel.changeMoviesList(checkedId)
+            rvMovie.scrollToPosition(0)
+            movieViewModel.changeMoviesList(checkedId)
         }
 
         swipeToRefresh.setOnRefreshListener {
@@ -124,16 +125,17 @@ class FragmentMoviesList : Fragment() {
 
     }
 
-    private fun initWorkManager(){
+    private fun initWorkManager() {
 
-        val constraints =Constraints.Builder()
+        val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresCharging(true)
             .build()
 
-        val updateWorkRequest = PeriodicWorkRequest.Builder(MovieDbUpdateWorker::class.java, 8, TimeUnit.HOURS)
-            .setConstraints(constraints)
-            .build()
+        val updateWorkRequest =
+            PeriodicWorkRequest.Builder(MovieDbUpdateWorker::class.java, 8, TimeUnit.HOURS)
+                .setConstraints(constraints)
+                .build()
 
         WorkManager.getInstance(context!!).enqueue(updateWorkRequest)
 

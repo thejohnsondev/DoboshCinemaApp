@@ -18,4 +18,7 @@ interface TopRatedMoviesDao {
     @Query("SELECT * FROM topRatedMovies")
     suspend fun getAllMovies(): List<TopRatedMoviesEntity>
 
+    @Query("DELETE FROM topRatedMovies")
+    suspend fun deleteAllMovies()
+
 }

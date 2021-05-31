@@ -53,10 +53,12 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun changeMoviesList(checkedBtnId: Int) {
-        when (checkedBtnId) {
-            R.id.btn_popular -> movieList.value = popularMoviesList.value
-            R.id.btn_top_rated -> movieList.value = topRatedMoviesList.value
-            R.id.btn_upcoming -> movieList.value = upcomingMoviesList.value
+        viewModelScope.launch {
+            when (checkedBtnId) {
+                R.id.btn_popular -> movieList.value = popularMoviesList.value
+                R.id.btn_top_rated -> movieList.value = topRatedMoviesList.value
+                R.id.btn_upcoming -> movieList.value = upcomingMoviesList.value
+            }
         }
     }
 

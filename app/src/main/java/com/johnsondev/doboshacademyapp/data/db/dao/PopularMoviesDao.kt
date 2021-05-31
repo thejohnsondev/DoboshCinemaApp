@@ -18,4 +18,7 @@ interface PopularMoviesDao {
     @Query("SELECT * FROM popularMovies")
     suspend fun getAllMovies(): List<PopularMoviesEntity>
 
+    @Query("DELETE FROM popularMovies")
+    suspend fun deleteAllMovies()
+
 }

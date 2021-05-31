@@ -1,8 +1,5 @@
 package com.johnsondev.doboshacademyapp.data.repositories
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
@@ -76,6 +73,7 @@ object MoviesRepository {
 
     private suspend fun savePopularMoviesToDb(movies: List<Movie>?) {
         if (movies != null) {
+            database.popularMoviesDao().deleteAllMovies()
             database.popularMoviesDao()
                 .insertAll(movies.map { Converter.convertMovieToPopularMovieEntity(it) })
         }
@@ -83,6 +81,7 @@ object MoviesRepository {
 
     private suspend fun saveTopRatedMoviesToDb(movies: List<Movie>?) {
         if (movies != null) {
+            database.topRatedMoviesDao().deleteAllMovies()
             database.topRatedMoviesDao()
                 .insertAll(movies.map { Converter.convertMovieToTopRatedMovieEntity(it) })
         }
@@ -90,6 +89,7 @@ object MoviesRepository {
 
     private suspend fun saveUpcomingMoviesToDb(movies: List<Movie>?) {
         if (movies != null) {
+            database.upcomingMoviesDao().deleteAllMovies()
             database.upcomingMoviesDao()
                 .insertAll(movies.map { Converter.convertMovieToUpcomingMovieEntity(it) })
         }

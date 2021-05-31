@@ -18,4 +18,7 @@ interface UpcomingMoviesDao {
 
     @Query("SELECT * FROM upcomingMovies")
     suspend fun getAllMovies(): List<UpcomingMoviesEntity>
+
+    @Query("DELETE FROM upcomingMovies")
+    suspend fun deleteAllMovies()
 }
