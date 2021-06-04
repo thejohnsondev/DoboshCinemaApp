@@ -18,7 +18,6 @@ class SplashScreenActivity : AppCompatActivity() {
 
     private lateinit var checkInternetConnection: InternetConnectionManager
 
-    private val database = App.getInstance().getDatabase()
     private val moviesDatabase = App.getInstance().getMovieDatabase()
 
 

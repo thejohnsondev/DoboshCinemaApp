@@ -109,9 +109,7 @@ class FragmentMoviesDetails : Fragment() {
 
     override fun onPause() {
         super.onPause()
-
         actorsViewModel.clearActorList()
-
     }
 
     private fun initViews(view: View) {

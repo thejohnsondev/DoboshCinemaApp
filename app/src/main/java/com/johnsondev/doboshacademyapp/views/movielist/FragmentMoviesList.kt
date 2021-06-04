@@ -166,7 +166,7 @@ class FragmentMoviesList : Fragment() {
         val fragmentMoviesDetails = FragmentMoviesDetails()
         fragmentMoviesDetails.arguments = bundleWithMovie
 
-        rvMovie.let { _ ->
+        rvMovie.let {
             parentFragmentManager.beginTransaction().apply {
                 setCustomAnimations(
                     R.anim.slide_in,

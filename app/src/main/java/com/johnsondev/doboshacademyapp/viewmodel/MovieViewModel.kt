@@ -13,9 +13,6 @@ import kotlinx.coroutines.launch
 
 class MovieViewModel(application: Application) : AndroidViewModel(application) {
 
-//    private var movies = MutableLiveData<List<Movie>>()
-//    val moviesList: LiveData<List<Movie>> get() = movies
-
     private var popularMovies = MutableLiveData<List<Movie>>()
     val popularMoviesList: LiveData<List<Movie>> get() = popularMovies
 

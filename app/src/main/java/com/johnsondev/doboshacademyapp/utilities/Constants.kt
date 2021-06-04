@@ -22,4 +22,6 @@ object Constants {
     const val TOP_RATED_MOVIES_TYPE: String = "topRated"
     const val UPCOMING_MOVIES_TYPE: String = "upcoming"
 
+    const val MOVIES_DB_NAME = "moviesdatabase.db"
+
 }
