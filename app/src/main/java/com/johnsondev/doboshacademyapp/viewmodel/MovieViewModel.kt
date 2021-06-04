@@ -13,8 +13,8 @@ import kotlinx.coroutines.launch
 
 class MovieViewModel(application: Application) : AndroidViewModel(application) {
 
-    private var movies = MutableLiveData<List<Movie>>()
-    val moviesList: LiveData<List<Movie>> get() = movies
+//    private var movies = MutableLiveData<List<Movie>>()
+//    val moviesList: LiveData<List<Movie>> get() = movies
 
     private var popularMovies = MutableLiveData<List<Movie>>()
     val popularMoviesList: LiveData<List<Movie>> get() = popularMovies
@@ -40,7 +40,6 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
         return lastUpdateTime
     }
 
-
     fun getPopularMovies() {
         if (popularMovies.value.isNullOrEmpty()) {
             viewModelScope.launch {
@@ -48,14 +47,6 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-//
-//    fun getPopularMovies() {
-//        if (popularMovies.value.isNullOrEmpty()) {
-//            viewModelScope.launch {
-//                popularMovies.postValue(MoviesRepository.getPopularMovies())
-//            }
-//        }
-//    }
 
     fun getTopRatedMovies() {
         if (topRatedMovies.value.isNullOrEmpty()) {
@@ -95,26 +86,6 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-//    suspend fun loadPopularMoviesFromNet(){
-//        viewModelScope.launch {
-//            MoviesRepository.loadPopularMoviesFromNet()
-//            popularMovies.postValue(MoviesRepository.getPopularMovies())
-//        }
-//    }
-
-//    suspend fun loadTopRatedMoviesFromNet(){
-//        viewModelScope.launch {
-//            MoviesRepository.loadTopRatedMoviesFromNet()
-//            topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
-//        }
-//    }
-//
-//    suspend fun loadUpcomingMoviesFromNet(){
-//        viewModelScope.launch {
-//            MoviesRepository.loadUpcomingMoviesFromNet()
-//            upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
-//        }.join()
-//    }
 
     suspend fun loadMoviesFromNet(){
         viewModelScope.launch {
@@ -122,7 +93,7 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
             popularMovies.postValue(MoviesRepository.getPopularMovies())
             topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
             upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
-        }
+        }.join()
         // TODO: 04.06.2021 change repository to return livedata with movies
     }
 

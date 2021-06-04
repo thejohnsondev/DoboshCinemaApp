@@ -7,7 +7,6 @@ import androidx.room.PrimaryKey
 data class MovieIdsEntity(
     @PrimaryKey
     var _id: Int = -1,
-    val popularMoviesId: String?,
-    val topRatedMoviesId: String?,
-    val upcomingMoviesId: String?
+    val listType: String?,
+    val movieIdsList: String?
 )

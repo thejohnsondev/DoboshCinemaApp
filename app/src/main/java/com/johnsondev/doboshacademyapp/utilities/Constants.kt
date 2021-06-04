@@ -1,7 +1,6 @@
 package com.johnsondev.doboshacademyapp.utilities
 
 import com.johnsondev.doboshacademyapp.BuildConfig
-import com.johnsondev.doboshacademyapp.utilities.Constants.API_KEY
 
 object Constants {
 
@@ -18,5 +17,9 @@ object Constants {
     const val MOVIE_KEY = "movie_key"
     const val PREF_UPDATE_TIME = "pref_update_time"
     const val PERIODIC_UPDATE_WORK = "periodic_update_work"
+
+    const val POPULAR_MOVIES_TYPE: String = "popular"
+    const val TOP_RATED_MOVIES_TYPE: String = "topRated"
+    const val UPCOMING_MOVIES_TYPE: String = "upcoming"
 
 }

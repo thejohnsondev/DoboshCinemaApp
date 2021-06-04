@@ -126,7 +126,6 @@ class FragmentMoviesList : Fragment() {
                 swipeToRefresh.isRefreshing = false
             } else {
                 scope.launch {
-//                    movieViewModel.loadPopularMoviesFromNet()
                    movieViewModel.loadMoviesFromNet().apply {
                         swipeToRefresh.isRefreshing = false
                     }
