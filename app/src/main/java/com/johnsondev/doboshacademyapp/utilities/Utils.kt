@@ -18,5 +18,11 @@ fun saveUpdateTime(context: Context) {
 fun getUpdateTime(context: Context): String {
     val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
     val lastUpdateTimeRaw = sharedPref.getString(Constants.PREF_UPDATE_TIME, "")
-    return "${lastUpdateTimeRaw?.substring(4, 19)}"
+    return if(lastUpdateTimeRaw?.length != 0){
+        lastUpdateTimeRaw!!.substring(4, 19)
+    }else{
+        ""
+    }
+
+
 }

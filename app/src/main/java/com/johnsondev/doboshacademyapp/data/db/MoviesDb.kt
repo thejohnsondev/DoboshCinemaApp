@@ -11,7 +11,7 @@ import com.johnsondev.doboshacademyapp.data.db.entities.*
         TopRatedMoviesEntity::class,
         UpcomingMoviesEntity::class,
         GenreEntity::class
-    ], version = 1
+    ], version = 1, exportSchema = false
 )
 abstract class MoviesDb : RoomDatabase() {
 

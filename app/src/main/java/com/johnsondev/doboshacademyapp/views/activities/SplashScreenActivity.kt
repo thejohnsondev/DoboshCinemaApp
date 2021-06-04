@@ -19,6 +19,7 @@ class SplashScreenActivity : AppCompatActivity() {
     private lateinit var checkInternetConnection: InternetConnectionManager
 
     private val database = App.getInstance().getDatabase()
+    private val moviesDatabase = App.getInstance().getMovieDatabase()
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -29,10 +30,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
         checkInternetConnection = InternetConnectionManager(this)
         scope.launch {
-            if (database.popularMoviesDao().getAllMovies().isNotEmpty()
-                && database.topRatedMoviesDao().getAllMovies().isNotEmpty()
-                && database.upcomingMoviesDao().getAllMovies().isNotEmpty()
-            ) {
+            if (moviesDatabase.movieDao().getAllMovies().isNotEmpty()) {
 
                 scope.launch {
                     MoviesRepository.loadPopularMoviesFromDb()
@@ -45,9 +43,7 @@ class SplashScreenActivity : AppCompatActivity() {
             } else {
                 if (checkInternetConnection.isNetworkAvailable()) {
                     scope.launch {
-                        MoviesRepository.loadPopularMoviesFromNet()
-                        MoviesRepository.loadTopRatedMoviesFromNet()
-                        MoviesRepository.loadUpcomingMoviesFromNet()
+                        MoviesRepository.loadMoviesFromNet()
                     }.join()
 
                     intent.putExtra(Constants.CONNECTION_ERROR_EXTRA, true)

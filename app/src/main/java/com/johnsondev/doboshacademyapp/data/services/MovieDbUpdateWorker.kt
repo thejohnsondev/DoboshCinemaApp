@@ -25,9 +25,10 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
             saveUpdateTime(context)
             
             scope.launch {
-                MoviesRepository.loadPopularMoviesFromNet()
-                MoviesRepository.loadTopRatedMoviesFromNet()
-                MoviesRepository.loadUpcomingMoviesFromNet()
+//                MoviesRepository.loadPopularMoviesFromNet()
+//                MoviesRepository.loadTopRatedMoviesFromNet()
+//                MoviesRepository.loadUpcomingMoviesFromNet()
+                MoviesRepository.loadMoviesFromNet()
             }
 
             Result.success()

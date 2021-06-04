@@ -86,7 +86,6 @@ class FragmentMoviesList : Fragment() {
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresCharging(true)
             .build()
 
         val updateWorkRequest =
@@ -127,9 +126,8 @@ class FragmentMoviesList : Fragment() {
                 swipeToRefresh.isRefreshing = false
             } else {
                 scope.launch {
-                    movieViewModel.loadPopularMoviesFromNet()
-                    movieViewModel.loadTopRatedMoviesFromNet()
-                    movieViewModel.loadUpcomingMoviesFromNet().apply {
+//                    movieViewModel.loadPopularMoviesFromNet()
+                   movieViewModel.loadMoviesFromNet().apply {
                         swipeToRefresh.isRefreshing = false
                     }
                 }
@@ -142,6 +140,7 @@ class FragmentMoviesList : Fragment() {
         movieViewModel.getPopularMovies()
         movieViewModel.getTopRatedMovies()
         movieViewModel.getUpcomingMovies()
+
 
         movieViewModel.popularMoviesList.observe(viewLifecycleOwner) {
             adapter.setMovies(it)
