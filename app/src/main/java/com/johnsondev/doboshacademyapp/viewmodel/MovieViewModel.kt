@@ -1,12 +1,14 @@
 package com.johnsondev.doboshacademyapp.viewmodel
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
+import com.johnsondev.doboshacademyapp.utilities.getUpdateTime
 import kotlinx.coroutines.launch
 
 class MovieViewModel(application: Application) : AndroidViewModel(application) {
@@ -20,9 +22,20 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     private var upcomingMovies = MutableLiveData<List<Movie>>()
     private val upcomingMoviesList: LiveData<List<Movie>> get() = upcomingMovies
 
+    private var lastUpdateTime = MutableLiveData<String>()
+
     private var checkInternetConnection: InternetConnectionManager? = null
 
     private var movieList = MutableLiveData<List<Movie>>()
+
+    fun getLastUpdateTime(context: Context): LiveData<String> {
+        if (lastUpdateTime.value.isNullOrEmpty()){
+            viewModelScope.launch {
+                lastUpdateTime.postValue(getUpdateTime(context))
+            }
+        }
+        return lastUpdateTime
+    }
 
     fun getPopularMovies() {
         if (popularMovies.value.isNullOrEmpty()) {
@@ -53,10 +66,12 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun changeMoviesList(checkedBtnId: Int) {
-        when (checkedBtnId) {
-            R.id.btn_popular -> movieList.value = popularMoviesList.value
-            R.id.btn_top_rated -> movieList.value = topRatedMoviesList.value
-            R.id.btn_upcoming -> movieList.value = upcomingMoviesList.value
+        viewModelScope.launch {
+            when (checkedBtnId) {
+                R.id.btn_popular -> movieList.value = popularMoviesList.value
+                R.id.btn_top_rated -> movieList.value = topRatedMoviesList.value
+                R.id.btn_upcoming -> movieList.value = upcomingMoviesList.value
+            }
         }
     }
 
@@ -68,25 +83,15 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-    suspend fun loadPopularMoviesFromNet(){
+
+    suspend fun loadMoviesFromNet(){
         viewModelScope.launch {
-            MoviesRepository.loadPopularMoviesFromNet()
+            MoviesRepository.loadMoviesFromNet()
             popularMovies.postValue(MoviesRepository.getPopularMovies())
-        }
-    }
-
-    suspend fun loadTopRatedMoviesFromNet(){
-        viewModelScope.launch {
-            MoviesRepository.loadTopRatedMoviesFromNet()
             topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
-        }
-    }
-
-    suspend fun loadUpcomingMoviesFromNet(){
-        viewModelScope.launch {
-            MoviesRepository.loadUpcomingMoviesFromNet()
             upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
         }.join()
+        // TODO: 04.06.2021 change repository to return livedata with movies
     }
 
 }

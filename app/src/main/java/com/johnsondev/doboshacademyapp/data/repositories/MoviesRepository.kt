@@ -1,12 +1,12 @@
 package com.johnsondev.doboshacademyapp.data.repositories
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.NetworkService
+import com.johnsondev.doboshacademyapp.utilities.Constants.POPULAR_MOVIES_TYPE
+import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_MOVIES_TYPE
+import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_MOVIES_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Converter
 import com.johnsondev.doboshacademyapp.utilities.DtoMapper
 
@@ -15,94 +15,129 @@ object MoviesRepository {
     private var allGenresList: List<Genre>? = null
 
     private val movieApi = NetworkService.MOVIE_API
-    private val database = App.getInstance().getDatabase()
+    private val moviesDatabase = App.getInstance().getMovieDatabase()
 
     private var popularMoviesList: List<Movie> = listOf()
     private var topRatedMoviesList: List<Movie> = listOf()
     private var upcomingMoviesList: List<Movie> = listOf()
 
+    private var moviesList: MutableList<Movie> = mutableListOf()
 
-    suspend fun loadPopularMoviesFromNet() {
-        popularMoviesList = movieApi.getPopular().results.distinct().map {
-            DtoMapper.convertMovieFromDto(
-                movieApi.getMovieById(it.id)
-            )
+    suspend fun loadMoviesFromNet() {
+        moviesList.apply {
+            popularMoviesList = movieApi.getPopular().results.distinct().map {
+                DtoMapper.convertMovieFromDto(
+                    movieApi.getMovieById(it.id)
+                )
+            }
+            savePopularMoviesIdToDb(popularMoviesList)
+            addAll(popularMoviesList)
+
+            topRatedMoviesList =
+                movieApi.getTopRated().results.distinct().map {
+                    DtoMapper.convertMovieFromDto(
+                        movieApi.getMovieById(it.id)
+                    )
+                }
+            saveTopRatedMoviesIdToDb(topRatedMoviesList)
+            addAll(topRatedMoviesList)
+
+            upcomingMoviesList = movieApi.getUpcoming().results.distinct().map {
+                DtoMapper.convertMovieFromDto(
+                    movieApi.getMovieById(it.id)
+                )
+            }
+            saveUpcomingMoviesIdToDb(upcomingMoviesList)
+            addAll(upcomingMoviesList)
         }
-        savePopularMoviesToDb(popularMoviesList)
-        popularMoviesList.forEach { saveGenresToDb(it.genres) }
+        saveAllMoviesToDb(moviesList)
+        moviesList.forEach { saveGenresToDb(it.genres) }
+
     }
 
-    suspend fun loadTopRatedMoviesFromNet() {
-        topRatedMoviesList = movieApi.getTopRated().results.distinct().map {
-            DtoMapper.convertMovieFromDto(
-                movieApi.getMovieById(it.id)
-            )
-        }
-        saveTopRatedMoviesToDb(topRatedMoviesList)
-        topRatedMoviesList.forEach { saveGenresToDb(it.genres) }
+    private suspend fun saveAllMoviesToDb(moviesList: List<Movie>) {
+            moviesDatabase.movieDao().deleteAllMovies()
+            moviesDatabase.movieDao()
+                .insertAllMovies(moviesList.map { Converter.convertMovieToMovieEntity(it) })
     }
 
-    suspend fun loadUpcomingMoviesFromNet() {
-        upcomingMoviesList = movieApi.getUpcoming().results.distinct().map {
-            DtoMapper.convertMovieFromDto(
-                movieApi.getMovieById(it.id)
-            )
-        }
-        saveUpcomingMoviesToDb(upcomingMoviesList)
-        upcomingMoviesList.forEach { saveGenresToDb(it.genres) }
+    private suspend fun savePopularMoviesIdToDb(moviesList: List<Movie>) {
+            moviesDatabase.movieIdsDao().deleteMovieIdsList(POPULAR_MOVIES_TYPE)
+            moviesDatabase.movieIdsDao()
+                .insertMovieIdsList(POPULAR_MOVIES_TYPE, Converter.fromListOfStrings(moviesList.map { it.id.toString() }))
+    }
+
+    private suspend fun saveTopRatedMoviesIdToDb(moviesList: List<Movie>) {
+            moviesDatabase.movieIdsDao().deleteMovieIdsList(TOP_RATED_MOVIES_TYPE)
+            moviesDatabase.movieIdsDao()
+                .insertMovieIdsList(TOP_RATED_MOVIES_TYPE,Converter.fromListOfStrings(moviesList.map { it.id.toString() }))
+    }
+
+    private suspend fun saveUpcomingMoviesIdToDb(moviesList: List<Movie>) {
+            moviesDatabase.movieIdsDao().deleteMovieIdsList(UPCOMING_MOVIES_TYPE)
+            moviesDatabase.movieIdsDao()
+                .insertMovieIdsList(UPCOMING_MOVIES_TYPE,Converter.fromListOfStrings(moviesList.map { it.id.toString() }))
     }
 
     suspend fun loadPopularMoviesFromDb() {
-        loadGenresFromDb()
-        popularMoviesList = database.popularMoviesDao().getAllMovies().map {
-            Converter.convertPopularMovieEntityToMovie(it, allGenresList!!)
+        loadGenresAndMoviesFromDb()
+        val popularMoviesIdList =
+            Converter.toListOfStrings(moviesDatabase.movieIdsDao().getMovieIdsList(POPULAR_MOVIES_TYPE))
+        val tempResultList: MutableList<Movie> = mutableListOf()
+        moviesList.forEach {
+            if (popularMoviesIdList.contains(it.id.toString())) {
+                tempResultList.add(it)
+            }
         }
+        popularMoviesList = tempResultList
     }
 
     suspend fun loadTopRatedMoviesFromDb() {
-        loadGenresFromDb()
-        topRatedMoviesList = database.topRatedMoviesDao().getAllMovies().map {
-            Converter.convertTopRatedMovieEntityToMovie(it, allGenresList!!)
+        loadGenresAndMoviesFromDb()
+        val topRatedMoviesIdList =
+            Converter.toListOfStrings(moviesDatabase.movieIdsDao().getMovieIdsList(TOP_RATED_MOVIES_TYPE))
+        val tempResultList: MutableList<Movie> = mutableListOf()
+        moviesList.forEach {
+            if (topRatedMoviesIdList.contains(it.id.toString())) {
+                tempResultList.add(it)
+            }
         }
+        topRatedMoviesList = tempResultList
     }
 
     suspend fun loadUpcomingMoviesFromDb() {
-        loadGenresFromDb()
-        upcomingMoviesList = database.upcomingMoviesDao().getAllMovies().map {
-            Converter.convertUpcomingMovieEntityToMovie(it, allGenresList!!)
+        loadGenresAndMoviesFromDb()
+        val upcomingMoviesIdList =
+            Converter.toListOfStrings(moviesDatabase.movieIdsDao().getMovieIdsList(UPCOMING_MOVIES_TYPE))
+        val tempResultList: MutableList<Movie> = mutableListOf()
+        moviesList.forEach {
+            if (upcomingMoviesIdList.contains(it.id.toString())) {
+                tempResultList.add(it)
+            }
         }
+        upcomingMoviesList = tempResultList
     }
 
-
-    private suspend fun savePopularMoviesToDb(movies: List<Movie>?) {
-        if (movies != null) {
-            database.popularMoviesDao()
-                .insertAll(movies.map { Converter.convertMovieToPopularMovieEntity(it) })
+    private suspend fun loadGenresAndMoviesFromDb(){
+        if (allGenresList.isNullOrEmpty()) {
+            loadGenresFromDb()
         }
-    }
-
-    private suspend fun saveTopRatedMoviesToDb(movies: List<Movie>?) {
-        if (movies != null) {
-            database.topRatedMoviesDao()
-                .insertAll(movies.map { Converter.convertMovieToTopRatedMovieEntity(it) })
-        }
-    }
-
-    private suspend fun saveUpcomingMoviesToDb(movies: List<Movie>?) {
-        if (movies != null) {
-            database.upcomingMoviesDao()
-                .insertAll(movies.map { Converter.convertMovieToUpcomingMovieEntity(it) })
+        if (moviesList.isNullOrEmpty()) {
+            moviesList.clear()
+            moviesList.addAll(moviesDatabase.movieDao().getAllMovies().map {
+                Converter.convertMovieEntityToMovie(it, allGenresList!!)
+            })
         }
     }
 
     private suspend fun saveGenresToDb(genres: List<Genre>?) {
         if (genres != null) {
-            database.genreDao().insertAll(genres.map { Converter.convertToGenreEntity(it) })
+            moviesDatabase.genreDao().insertAll(genres.map { Converter.convertToGenreEntity(it) })
         }
     }
 
     private suspend fun loadGenresFromDb() {
-        allGenresList = database.genreDao().selectAllGenres().map {
+        allGenresList = moviesDatabase.genreDao().selectAllGenres().map {
             Converter.convertGenreEntityToGenre(it)
         }
     }
@@ -118,6 +153,8 @@ object MoviesRepository {
     fun getUpcomingMovies(): List<Movie> {
         return upcomingMoviesList
     }
+
+    // TODO: 31.05.2021 change toggle button group to viewpager 2
 
 
 }

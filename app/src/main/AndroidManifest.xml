@@ -12,7 +12,9 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/cinema"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DoboshAcademyApp">
+        android:theme="@style/Theme.DoboshAcademyApp"
+        android:sharedUserId="android.uid.system">
+
         <activity android:name=".views.activities.MainActivity"/>
 
         <activity android:name=".views.activities.SplashScreenActivity"

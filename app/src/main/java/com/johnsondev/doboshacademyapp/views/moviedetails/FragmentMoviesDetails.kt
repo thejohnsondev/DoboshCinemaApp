@@ -67,7 +67,7 @@ class FragmentMoviesDetails : Fragment() {
 
             actorsViewModel.getActorsForCurrentMovie()
 
-            actorsViewModel.mutableActorList.observe(this) {
+            actorsViewModel.mutableActorList.observe(viewLifecycleOwner) {
                 adapter?.setActors(it)
             }
 
@@ -92,7 +92,7 @@ class FragmentMoviesDetails : Fragment() {
         super.onCreate(savedInstanceState)
 
         currentMovie = arguments?.getParcelable(MOVIE_KEY)
-        checkInternetConnection = InternetConnectionManager(context!!)
+        checkInternetConnection = InternetConnectionManager(requireContext())
 
         if (checkInternetConnection.isNetworkAvailable()) {
             scope.launch {
@@ -109,9 +109,7 @@ class FragmentMoviesDetails : Fragment() {
 
     override fun onPause() {
         super.onPause()
-
         actorsViewModel.clearActorList()
-
     }
 
     private fun initViews(view: View) {
@@ -124,7 +122,7 @@ class FragmentMoviesDetails : Fragment() {
         tvStoryLine = view.findViewById(R.id.tv_description)
         headImage = view.findViewById(R.id.head_image)
 
-        adapter = ActorsAdapter(context!!)
+        adapter = ActorsAdapter(requireContext())
         rvActors = view.findViewById(R.id.rv_actors)
         rvActors?.adapter = adapter
         rvActors?.setHasFixedSize(true)

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg"
-    android:id="@+id/swipe_layout">
+    android:background="@drawable/bg">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,39 +16,39 @@
             android:id="@+id/toggle_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_12"
             app:checkedButton="@+id/btn_popular"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/type_of_list_tv"
-            android:layout_marginTop="@dimen/dp_12"
             app:singleSelection="true">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_popular"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Popular"
-                android:textSize="12sp"
+                android:text="@string/popular"
                 android:textColor="@color/white"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                android:textSize="12sp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_top_rated"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Top rated"
-                android:textSize="12sp"
+                android:text="@string/top_rated"
                 android:textColor="@color/white"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                android:textSize="12sp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_upcoming"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Upcoming"
-                android:textSize="12sp"
+                android:text="@string/upcoming"
                 android:textColor="@color/white"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                android:textSize="12sp" />
 
 
         </com.google.android.material.button.MaterialButtonToggleGroup>
@@ -75,12 +74,23 @@
             app:layout_constraintStart_toEndOf="@id/target_img"
             app:layout_constraintTop_toTopOf="@+id/target_img" />
 
+        <TextView
+            android:id="@+id/last_update_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/last_update"
+            android:textAppearance="@style/LightText"
+            android:textColor="@color/gray"
+            android:layout_marginEnd="@dimen/dp_18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/type_of_list_tv" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/movie_list_rv"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/dp_2"
-            android:padding="8dp"
+            android:padding="@dimen/dp_8"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

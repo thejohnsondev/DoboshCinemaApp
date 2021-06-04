@@ -12,21 +12,20 @@ import kotlinx.coroutines.launch
 class ActorsViewModel : ViewModel() {
 
     private var _mutableActorList = MutableLiveData<List<Actor>>()
-    val mutableActorList: LiveData<List<Actor>> get() =_mutableActorList
+    val mutableActorList: LiveData<List<Actor>> get() = _mutableActorList
 
-    fun getActorsForCurrentMovie(){
+    fun getActorsForCurrentMovie() {
         viewModelScope.launch {
             try {
                 _mutableActorList = ActorsRepository.getActorsForCurrentMovie()
             } catch (e: Exception) {
-                Log.e("TAG", e.stackTrace.toString())
+                e.printStackTrace()
             }
         }
     }
 
-    fun clearActorList(){
+    fun clearActorList() {
         _mutableActorList.value = listOf()
-        Log.d("TAG", "clearList")
     }
 
 }
