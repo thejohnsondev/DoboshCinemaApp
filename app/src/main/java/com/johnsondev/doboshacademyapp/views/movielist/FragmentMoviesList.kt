@@ -65,6 +65,7 @@ class FragmentMoviesList : Fragment() {
         return view
     }
 
+
     private fun initViews(view: View) {
 
         tvLastUpdateTime = view.findViewById(R.id.last_update_tv)

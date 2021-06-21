@@ -6,9 +6,13 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.johnsondev.doboshacademyapp.App
+import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.Constants
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
+import com.johnsondev.doboshacademyapp.utilities.Constants.OPEN_MOVIE_TYPE
+import com.johnsondev.doboshacademyapp.views.movielist.FragmentMoviesList
 import kotlinx.coroutines.*
 
 
@@ -20,12 +24,15 @@ class SplashScreenActivity : AppCompatActivity() {
 
     private val moviesDatabase = App.getInstance().getMovieDatabase()
 
+    private var movieId: Int? = null
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-        val intent = Intent(this, MainActivity::class.java)
+        val mainActivityIntent = Intent(this, MainActivity::class.java)
 
         checkInternetConnection = InternetConnectionManager(this)
         scope.launch {
@@ -37,20 +44,30 @@ class SplashScreenActivity : AppCompatActivity() {
                     MoviesRepository.loadUpcomingMoviesFromDb()
                 }.join()
 
-                startActivity(intent)
-                finish()
+                if (intent != null) {
+
+                    handleIntent(intent)
+                    mainActivityIntent.putExtra(MOVIE_ID, movieId)
+                    startActivity(mainActivityIntent)
+                    finish()
+
+                }else{
+                    startActivity(mainActivityIntent)
+                    finish()
+                }
+
             } else {
                 if (checkInternetConnection.isNetworkAvailable()) {
                     scope.launch {
                         MoviesRepository.loadMoviesFromNet()
                     }.join()
 
-                    intent.putExtra(Constants.CONNECTION_ERROR_EXTRA, true)
-                    startActivity(intent)
+                    mainActivityIntent.putExtra(Constants.CONNECTION_ERROR_EXTRA, true)
+                    startActivity(mainActivityIntent)
                     finish()
                 } else {
-                    intent.putExtra(Constants.CONNECTION_ERROR_EXTRA, true)
-                    startActivity(intent)
+                    mainActivityIntent.putExtra(Constants.CONNECTION_ERROR_EXTRA, true)
+                    startActivity(mainActivityIntent)
                     finish()
                 }
             }
@@ -61,5 +78,15 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onDestroy()
         scope.cancel()
     }
+
+    private fun handleIntent(intent: Intent) {
+        when (intent.action) {
+            Intent.ACTION_VIEW -> {
+                movieId = intent.data?.lastPathSegment?.toIntOrNull()
+            }
+        }
+    }
+
+
 
 }

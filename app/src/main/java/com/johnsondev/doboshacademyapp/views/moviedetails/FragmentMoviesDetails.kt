@@ -17,9 +17,13 @@ import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.viewmodel.ActorsViewModel
+import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
+import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModel
+import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModelFactory
 import kotlinx.coroutines.*
 
 class FragmentMoviesDetails : Fragment() {
@@ -37,7 +41,7 @@ class FragmentMoviesDetails : Fragment() {
     private var adapter: ActorsAdapter? = null
 
     private lateinit var actorsViewModel: ActorsViewModel
-
+    private lateinit var detailsViewModel: MovieDetailsViewModel
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
     private lateinit var checkInternetConnection: InternetConnectionManager
@@ -91,12 +95,23 @@ class FragmentMoviesDetails : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        currentMovie = arguments?.getParcelable(MOVIE_KEY)
+        detailsViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
+        val movieId = arguments?.getInt(MOVIE_ID)
+
+        currentMovie = if (movieId != 0) {
+            detailsViewModel.getMovieById(movieId!!)
+        } else {
+            arguments?.getParcelable(MOVIE_KEY)
+        }
+
         checkInternetConnection = InternetConnectionManager(requireContext())
 
         if (checkInternetConnection.isNetworkAvailable()) {
             scope.launch {
                 ActorsRepository.loadActors(currentMovie?.id!!)
+                // TODO: 21.06.2021 move it to viewModel
+                // TODO: 21.06.2021 handle the unknown movie id
+                 
 
             }
         } else {

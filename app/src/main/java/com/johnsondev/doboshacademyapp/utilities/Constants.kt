@@ -18,6 +18,9 @@ object Constants {
     const val PREF_UPDATE_TIME = "pref_update_time"
     const val PERIODIC_UPDATE_WORK = "periodic_update_work"
 
+    const val OPEN_MOVIE_TYPE = "open_movie_type"
+    const val MOVIE_ID = "movie_id"
+
     const val POPULAR_MOVIES_TYPE: String = "popular"
     const val TOP_RATED_MOVIES_TYPE: String = "topRated"
     const val UPCOMING_MOVIES_TYPE: String = "upcoming"
