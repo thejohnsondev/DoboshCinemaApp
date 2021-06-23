@@ -14,15 +14,21 @@ import kotlinx.coroutines.launch
 class MovieDetailsViewModel : ViewModel() {
 
     private var _mutableActorList = MutableLiveData<List<Actor>>()
-    val mutableActorList: LiveData<List<Actor>> get() = _mutableActorList
 
-    fun getActorsForCurrentMovie() {
+    fun getActorsForCurrentMovie(): LiveData<List<Actor>> {
         viewModelScope.launch {
             try {
                 _mutableActorList = ActorsRepository.getActorsForCurrentMovie()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+        return _mutableActorList
+    }
+
+    fun loadActorsForMovieById(movieId: Int){
+        viewModelScope.launch {
+            ActorsRepository.loadActors(movieId)
         }
     }
 

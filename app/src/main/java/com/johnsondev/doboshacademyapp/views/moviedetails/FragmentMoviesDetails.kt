@@ -52,7 +52,7 @@ class FragmentMoviesDetails : Fragment() {
 
         initViews(view)
 
-        if(currentMovie?.id!! == 0){
+        if (currentMovie?.id!! == 0) {
             tvReviews?.isVisible = false
             movieRating?.isVisible = false
             tvStoryLine?.isVisible = false
@@ -70,9 +70,7 @@ class FragmentMoviesDetails : Fragment() {
             movieRating?.progress = (movie.ratings * 2).toInt()
             tvStoryLine?.text = movie.overview
 
-            detailsViewModel.getActorsForCurrentMovie()
-
-            detailsViewModel.mutableActorList.observe(viewLifecycleOwner) {
+            detailsViewModel.getActorsForCurrentMovie().observe(viewLifecycleOwner) {
                 adapter?.setActors(it)
             }
 
@@ -82,7 +80,6 @@ class FragmentMoviesDetails : Fragment() {
                 fallback(R.drawable.movie_placeholder)
                 error(R.drawable.movie_placeholder)
             }
-
 
             val backBtn: TextView = view.findViewById(R.id.back_btn)
             backBtn.setOnClickListener {
@@ -109,19 +106,14 @@ class FragmentMoviesDetails : Fragment() {
 
         if (checkInternetConnection.isNetworkAvailable()) {
             scope.launch {
-                if(currentMovie?.id!! != 0){
-                    ActorsRepository.loadActors(currentMovie?.id!!)
+                if (currentMovie?.id!! != 0) {
+                    detailsViewModel.loadActorsForMovieById(currentMovie?.id!!)
                 }
-                // TODO: 21.06.2021 move it to viewModel
-
-                 
-
             }
         } else {
             Toast.makeText(context, getString(R.string.unable_load_cast), Toast.LENGTH_LONG)
                 .show()
         }
-
     }
 
 

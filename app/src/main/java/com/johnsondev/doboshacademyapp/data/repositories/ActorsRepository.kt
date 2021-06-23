@@ -1,5 +1,6 @@
 package com.johnsondev.doboshacademyapp.data.repositories
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDto
@@ -13,12 +14,11 @@ object ActorsRepository {
     private var actors = MutableLiveData<List<Actor>>()
     private var actorsList: List<ActorDto> = listOf()
 
-    suspend fun loadActors(movieId: Int): MutableLiveData<List<Actor>> {
+    suspend fun loadActors(movieId: Int) {
         actorsList = movieApi.getActors(movieId).cast
         actors.postValue(actorsList.distinct().map {
             DtoMapper.convertActorFromDto(it)
         })
-        return actors
     }
 
     fun getActorsForCurrentMovie(): MutableLiveData<List<Actor>> {
