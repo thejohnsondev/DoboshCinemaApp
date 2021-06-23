@@ -45,12 +45,10 @@ class SplashScreenActivity : AppCompatActivity() {
                 }.join()
 
                 if (intent != null) {
-
                     handleIntent(intent)
                     mainActivityIntent.putExtra(MOVIE_ID, movieId)
                     startActivity(mainActivityIntent)
                     finish()
-
                 }else{
                     startActivity(mainActivityIntent)
                     finish()
@@ -61,14 +59,9 @@ class SplashScreenActivity : AppCompatActivity() {
                     scope.launch {
                         MoviesRepository.loadMoviesFromNet()
                     }.join()
-
-                    mainActivityIntent.putExtra(Constants.CONNECTION_ERROR_EXTRA, true)
-                    startActivity(mainActivityIntent)
-                    finish()
+                    openNextActivity(mainActivityIntent)
                 } else {
-                    mainActivityIntent.putExtra(Constants.CONNECTION_ERROR_EXTRA, true)
-                    startActivity(mainActivityIntent)
-                    finish()
+                    openNextActivity(mainActivityIntent)
                 }
             }
         }
@@ -85,6 +78,12 @@ class SplashScreenActivity : AppCompatActivity() {
                 movieId = intent.data?.lastPathSegment?.toIntOrNull()
             }
         }
+    }
+
+    private fun openNextActivity(intent: Intent){
+        intent.putExtra(Constants.CONNECTION_ERROR_EXTRA, true)
+        startActivity(intent)
+        finish()
     }
 
 

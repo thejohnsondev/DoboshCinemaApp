@@ -8,22 +8,19 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
-import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
-import com.johnsondev.doboshacademyapp.viewmodel.ActorsViewModel
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
-import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModel
-import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModelFactory
 import kotlinx.coroutines.*
 
 class FragmentMoviesDetails : Fragment() {
@@ -36,11 +33,11 @@ class FragmentMoviesDetails : Fragment() {
     private var tvReviews: TextView? = null
     private var movieRating: RatingBar? = null
     private var tvStoryLine: TextView? = null
+    private var tvCast: TextView? = null
     private var headImage: ImageView? = null
     private var rvActors: RecyclerView? = null
     private var adapter: ActorsAdapter? = null
 
-    private lateinit var actorsViewModel: ActorsViewModel
     private lateinit var detailsViewModel: MovieDetailsViewModel
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
@@ -53,10 +50,14 @@ class FragmentMoviesDetails : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movies_details, container, false)
 
-        actorsViewModel = ViewModelProvider(this)[ActorsViewModel::class.java]
-
         initViews(view)
 
+        if(currentMovie?.id!! == 0){
+            tvReviews?.isVisible = false
+            movieRating?.isVisible = false
+            tvStoryLine?.isVisible = false
+            tvCast?.isVisible = false
+        }
 
         currentMovie?.let { movie ->
             val movieReviews: String =
@@ -69,9 +70,9 @@ class FragmentMoviesDetails : Fragment() {
             movieRating?.progress = (movie.ratings * 2).toInt()
             tvStoryLine?.text = movie.overview
 
-            actorsViewModel.getActorsForCurrentMovie()
+            detailsViewModel.getActorsForCurrentMovie()
 
-            actorsViewModel.mutableActorList.observe(viewLifecycleOwner) {
+            detailsViewModel.mutableActorList.observe(viewLifecycleOwner) {
                 adapter?.setActors(it)
             }
 
@@ -108,9 +109,11 @@ class FragmentMoviesDetails : Fragment() {
 
         if (checkInternetConnection.isNetworkAvailable()) {
             scope.launch {
-                ActorsRepository.loadActors(currentMovie?.id!!)
+                if(currentMovie?.id!! != 0){
+                    ActorsRepository.loadActors(currentMovie?.id!!)
+                }
                 // TODO: 21.06.2021 move it to viewModel
-                // TODO: 21.06.2021 handle the unknown movie id
+
                  
 
             }
@@ -124,7 +127,7 @@ class FragmentMoviesDetails : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        actorsViewModel.clearActorList()
+        detailsViewModel.clearActorList()
     }
 
     private fun initViews(view: View) {
@@ -135,6 +138,7 @@ class FragmentMoviesDetails : Fragment() {
         tvReviews = view.findViewById(R.id.tv_reviews)
         movieRating = view.findViewById(R.id.movie_rating_bar)
         tvStoryLine = view.findViewById(R.id.tv_description)
+        tvCast = view.findViewById(R.id.tv_cast)
         headImage = view.findViewById(R.id.head_image)
 
         adapter = ActorsAdapter(requireContext())

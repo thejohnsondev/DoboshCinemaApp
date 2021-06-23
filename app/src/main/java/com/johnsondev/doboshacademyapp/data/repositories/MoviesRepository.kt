@@ -118,8 +118,14 @@ object MoviesRepository {
         upcomingMoviesList = tempResultList
     }
 
-    fun getMovieByIdFromDb(id: Int): Movie {
-        return allMoviesList.find { it.id == id }!!
+    fun getMovieByIdFromDb(movieId: Int): Movie {
+        val movieById = allMoviesList.find { it.id == movieId } ?: Movie()
+
+        return if(allMoviesList.any { it.id == movieId }){
+            movieById
+        } else{
+            Movie(title = "Unknown movie")
+        }
     }
 
     private suspend fun loadGenresAndMoviesFromDb(){

@@ -11,21 +11,21 @@ data class MovieDto(
     @SerialName("id")
     val id: Int,
     @SerialName("title")
-    val title: String,
+    val title: String?,
     @SerialName("poster_path")
-    val poster: String,
+    val poster: String?,
     @SerialName("backdrop_path")
-    val backdropImg: String,
+    val backdropImg: String?,
     @SerialName("runtime")
     var runtime: Int? = null,
     @SerialName("genres")
     var genres: @RawValue List<GenreDto>? = null,
     @SerialName("vote_average")
-    val rating: Float,
+    val rating: Float?,
     @SerialName("vote_count")
-    val voteCount: Int,
+    val voteCount: Int?,
     @SerialName("overview")
-    val overview: String,
+    val overview: String?,
     @SerialName("adult")
-    val adult: Boolean
+    val adult: Boolean?
 ) : Parcelable

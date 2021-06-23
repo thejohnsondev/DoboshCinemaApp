@@ -21,7 +21,7 @@ object Converter {
         title = movie.title,
         overview = movie.overview,
         poster = movie.poster,
-        backdrop = movie.backdrop,
+        backdrop = movie.backdrop ?: "",
         ratings = movie.ratings,
         numberOfRatings = movie.numberOfRatings,
         minimumAge = movie.minimumAge,
