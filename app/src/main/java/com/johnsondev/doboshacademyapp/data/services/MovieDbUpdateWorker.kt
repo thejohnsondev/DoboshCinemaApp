@@ -1,17 +1,36 @@
 package com.johnsondev.doboshacademyapp.data.services
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings.Global.getString
 import android.util.Log
+import androidx.core.app.NotificationChannelCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.net.toUri
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.saveUpdateTime
+import com.johnsondev.doboshacademyapp.views.activities.SplashScreenActivity
 import kotlinx.coroutines.*
-import java.util.*
 
 class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
+
+    private val CHANNEL_ID = "MOVIE_CHANNEL_ID"
+    private val REQUEST_CONTENT = 1
+    private val notificationManagerCompat = NotificationManagerCompat.from(context)
+
+    private var isNewMovie = false
+
 
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
@@ -31,6 +50,25 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
                 }
                 val newMovie =
                     findNewMovie(oldMovieList, newMovieList).sortedBy { it.ratings }.last()
+
+                if (notificationManagerCompat.getNotificationChannel(CHANNEL_ID) == null) {
+                    notificationManagerCompat.createNotificationChannel(
+                        NotificationChannelCompat.Builder(
+                            CHANNEL_ID,
+                            NotificationManagerCompat.IMPORTANCE_HIGH
+                        )
+                            .setName(context.getString(R.string.channel_name))
+                            .build()
+                    )
+                }
+
+                notificationManagerCompat.notify(
+                    "newMovies",
+                    newMovie.id,
+                    buildNotification(newMovie).build()
+                )
+
+                Log.d("TAG", "notif ")
                 saveUpdateTime(context)
 
             }
@@ -49,10 +87,41 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
             }
         }
         return if (newMovie.isNullOrEmpty()) {
+            isNewMovie = false
             newMovie.add(oldMovieList.sortedByDescending { it.ratings }[0])
             newMovie
         } else {
+            isNewMovie = true
             newMovie
         }
     }
+
+    private fun buildNotification(movie: Movie): NotificationCompat.Builder {
+        val uri = "${context.getString(R.string.base_deep_link)}${movie.id}".toUri()
+
+        val contentTitle =
+            if (isNewMovie) context.getString(R.string.new_movie) else context.getString(
+                R.string.movie_with_highest_rating
+            )
+
+        return NotificationCompat.Builder(context, CHANNEL_ID).apply {
+            setContentTitle(contentTitle)
+            setContentText(movie.title)
+            setSmallIcon(R.drawable.ic_baseline_videocam_24)
+            priority = NotificationCompat.PRIORITY_DEFAULT
+            setOnlyAlertOnce(true)
+            setContentIntent(
+                PendingIntent.getActivity(
+                    context,
+                    REQUEST_CONTENT,
+                    Intent(context, SplashScreenActivity::class.java)
+                        .setAction(Intent.ACTION_VIEW)
+                        .setData(uri),
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            )
+            setAutoCancel(true)
+        }
+    }
+
 }

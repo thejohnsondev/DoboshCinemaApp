@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -100,9 +101,11 @@ class FragmentMoviesList : Fragment() {
             updateWorkRequest
         )
 
+//        WorkManager.getInstance(requireContext()).enqueue(updateWorkRequest)
+
     }
 
-    private fun initListenersAndObservers(view: View){
+    private fun initListenersAndObservers(view: View) {
 
         if (isConnectionErrorFromBundle == true && !listViewModel.isInternetConnectionAvailable()) {
             Toast.makeText(
