@@ -15,12 +15,12 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
-import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
+import kotlinx.android.synthetic.main.fragment_movies_details.*
 import kotlinx.coroutines.*
 
 class FragmentMoviesDetails : Fragment() {
@@ -32,6 +32,7 @@ class FragmentMoviesDetails : Fragment() {
     private var tvGenres: TextView? = null
     private var tvReviews: TextView? = null
     private var movieRating: RatingBar? = null
+    private var tvDescription: TextView? = null
     private var tvStoryLine: TextView? = null
     private var tvCast: TextView? = null
     private var headImage: ImageView? = null
@@ -55,6 +56,7 @@ class FragmentMoviesDetails : Fragment() {
         if (currentMovie?.id!! == 0) {
             tvReviews?.isVisible = false
             movieRating?.isVisible = false
+            tvDescription?.isVisible = false
             tvStoryLine?.isVisible = false
             tvCast?.isVisible = false
         }
@@ -68,7 +70,7 @@ class FragmentMoviesDetails : Fragment() {
             tvGenres?.text = movie.genres?.joinToString { it.name }
             tvReviews?.text = movieReviews
             movieRating?.progress = (movie.ratings * 2).toInt()
-            tvStoryLine?.text = movie.overview
+            tvDescription?.text = movie.overview
 
             detailsViewModel.getActorsForCurrentMovie().observe(viewLifecycleOwner) {
                 adapter?.setActors(it)
@@ -129,7 +131,8 @@ class FragmentMoviesDetails : Fragment() {
         tvGenres = view.findViewById(R.id.movie_genres)
         tvReviews = view.findViewById(R.id.tv_reviews)
         movieRating = view.findViewById(R.id.movie_rating_bar)
-        tvStoryLine = view.findViewById(R.id.tv_description)
+        tvDescription = view.findViewById(R.id.tv_description)
+        tvStoryLine = view.findViewById(R.id.tv_story_line)
         tvCast = view.findViewById(R.id.tv_cast)
         headImage = view.findViewById(R.id.head_image)
 
