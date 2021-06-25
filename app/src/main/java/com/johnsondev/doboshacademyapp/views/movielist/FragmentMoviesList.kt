@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -28,7 +29,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.VERTICAL_SPAN_COUNT
 import com.johnsondev.doboshacademyapp.utilities.getUpdateTime
 import com.johnsondev.doboshacademyapp.utilities.saveUpdateTime
 import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails
-import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModel
+import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModelFactory
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
@@ -39,7 +40,7 @@ class FragmentMoviesList : Fragment() {
     private lateinit var adapter: MoviesAdapter
     private lateinit var swipeToRefresh: SwipeRefreshLayout
     private lateinit var typeOfMoviesList: MaterialButtonToggleGroup
-    private lateinit var movieViewModel: MovieViewModel
+    private lateinit var listViewModel: MoviesListViewModel
     private lateinit var tvLastUpdateTime: TextView
     private val scope = CoroutineScope(Dispatchers.IO + Job())
     private lateinit var checkInternetConnection: InternetConnectionManager
@@ -53,10 +54,10 @@ class FragmentMoviesList : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_movies_list, container, false)
 
-        movieViewModel = ViewModelProvider(
+        listViewModel = ViewModelProvider(
             this,
             MovieViewModelFactory(activity?.application!!)
-        )[MovieViewModel::class.java]
+        )[MoviesListViewModel::class.java]
 
         initViews(view)
         initWorkManager()
@@ -64,6 +65,7 @@ class FragmentMoviesList : Fragment() {
 
         return view
     }
+
 
     private fun initViews(view: View) {
 
@@ -99,11 +101,13 @@ class FragmentMoviesList : Fragment() {
             updateWorkRequest
         )
 
+//        WorkManager.getInstance(requireContext()).enqueue(updateWorkRequest)
+
     }
 
-    private fun initListenersAndObservers(view: View){
+    private fun initListenersAndObservers(view: View) {
 
-        if (isConnectionErrorFromBundle == true && !movieViewModel.isInternetConnectionAvailable()) {
+        if (isConnectionErrorFromBundle == true && !listViewModel.isInternetConnectionAvailable()) {
             Toast.makeText(
                 context,
                 getString(R.string.internet_connection_error),
@@ -113,7 +117,7 @@ class FragmentMoviesList : Fragment() {
 
         typeOfMoviesList.addOnButtonCheckedListener { _, checkedId, _ ->
             rvMovie.scrollToPosition(0)
-            movieViewModel.changeMoviesList(checkedId)
+            listViewModel.changeMoviesList(checkedId)
         }
 
         swipeToRefresh.setOnRefreshListener {
@@ -126,7 +130,7 @@ class FragmentMoviesList : Fragment() {
                 swipeToRefresh.isRefreshing = false
             } else {
                 scope.launch {
-                   movieViewModel.loadMoviesFromNet().apply {
+                   listViewModel.loadMoviesFromNet().apply {
                         swipeToRefresh.isRefreshing = false
                     }
                 }
@@ -136,20 +140,20 @@ class FragmentMoviesList : Fragment() {
             }
         }
 
-        movieViewModel.getPopularMovies()
-        movieViewModel.getTopRatedMovies()
-        movieViewModel.getUpcomingMovies()
+        listViewModel.getPopularMovies()
+        listViewModel.getTopRatedMovies()
+        listViewModel.getUpcomingMovies()
 
 
-        movieViewModel.popularMoviesList.observe(viewLifecycleOwner) {
+        listViewModel.popularMoviesList.observe(viewLifecycleOwner) {
             adapter.setMovies(it)
         }
 
-        movieViewModel.getAnotherMovieList().observe(viewLifecycleOwner) { movie ->
+        listViewModel.getAnotherMovieList().observe(viewLifecycleOwner) { movie ->
             adapter.setMovies(movie)
         }
 
-        movieViewModel.getLastUpdateTime(requireContext()).observe(viewLifecycleOwner) { time ->
+        listViewModel.getLastUpdateTime(requireContext()).observe(viewLifecycleOwner) { time ->
             tvLastUpdateTime.text = view.context.getString(R.string.last_update, time)
         }
     }

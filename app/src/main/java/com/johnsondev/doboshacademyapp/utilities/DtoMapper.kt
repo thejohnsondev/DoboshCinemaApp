@@ -14,13 +14,13 @@ object DtoMapper {
     fun convertMovieFromDto(movieDto: MovieDto): Movie {
         return Movie(
             id = movieDto.id,
-            title = movieDto.title,
+            title = movieDto.title ?: "missing title",
             poster = "${POSTER_PATH}${movieDto.poster}",
-            overview = movieDto.overview,
+            overview = movieDto.overview ?: "overview missing",
             backdrop = "${POSTER_PATH}${movieDto.backdropImg}",
-            ratings = movieDto.rating / 2,
-            numberOfRatings = movieDto.voteCount,
-            minimumAge = if (movieDto.adult) 16 else 13,
+            ratings = (movieDto.rating ?: 1f).div(2),
+            numberOfRatings = movieDto.voteCount ?: 0,
+            minimumAge = if (movieDto.adult == true) 16 else 13,
             runtime = movieDto.runtime,
             genres = movieDto.genres?.map { convertGenreFromDto(it) },
             actors = emptyList()

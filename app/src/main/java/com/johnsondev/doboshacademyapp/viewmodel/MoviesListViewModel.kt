@@ -11,7 +11,7 @@ import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.getUpdateTime
 import kotlinx.coroutines.launch
 
-class MovieViewModel(application: Application) : AndroidViewModel(application) {
+class MoviesListViewModel(application: Application) : AndroidViewModel(application) {
 
     private var popularMovies = MutableLiveData<List<Movie>>()
     val popularMoviesList: LiveData<List<Movie>> get() = popularMovies

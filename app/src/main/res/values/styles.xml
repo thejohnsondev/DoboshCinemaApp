@@ -22,4 +22,16 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
+    <style name="RoundedCornerStyle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/dp_12</item>
+
+    </style>
+
+    <style name="ActionInMovieDetailsButton" parent="Widget.MaterialComponents.Button">
+        <item name="shapeAppearanceOverlay">@style/RoundedCornerStyle</item>
+        <item name="backgroundTint">@color/genre_color_red</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>

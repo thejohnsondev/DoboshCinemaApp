@@ -18,6 +18,8 @@ object NetworkService {
 
     private val json = Json {
         ignoreUnknownKeys = true
+        coerceInputValues = true
+
     }
 
     private val retrofit: Retrofit = Retrofit.Builder()

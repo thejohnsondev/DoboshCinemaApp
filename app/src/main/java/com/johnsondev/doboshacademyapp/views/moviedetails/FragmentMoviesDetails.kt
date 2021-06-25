@@ -4,23 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
-import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
-import com.johnsondev.doboshacademyapp.viewmodel.ActorsViewModel
+import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 import kotlinx.coroutines.*
+import java.util.*
 
 class FragmentMoviesDetails : Fragment() {
 
@@ -31,13 +29,18 @@ class FragmentMoviesDetails : Fragment() {
     private var tvGenres: TextView? = null
     private var tvReviews: TextView? = null
     private var movieRating: RatingBar? = null
+    private var tvDescription: TextView? = null
     private var tvStoryLine: TextView? = null
+    private var tvCast: TextView? = null
     private var headImage: ImageView? = null
     private var rvActors: RecyclerView? = null
     private var adapter: ActorsAdapter? = null
+    private var addToCalendarBtn: Button? = null
+    private var backBtn: TextView? = null
 
-    private lateinit var actorsViewModel: ActorsViewModel
+    private var date: Calendar? = null
 
+    private lateinit var detailsViewModel: MovieDetailsViewModel
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
     private lateinit var checkInternetConnection: InternetConnectionManager
@@ -48,11 +51,19 @@ class FragmentMoviesDetails : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movies_details, container, false)
-
-        actorsViewModel = ViewModelProvider(this)[ActorsViewModel::class.java]
+        date = Calendar.getInstance()
 
         initViews(view)
+        initListeners()
 
+        if (currentMovie?.id!! == 0) {
+            tvReviews?.isVisible = false
+            movieRating?.isVisible = false
+            tvDescription?.isVisible = false
+            tvStoryLine?.isVisible = false
+            tvCast?.isVisible = false
+            addToCalendarBtn?.isVisible = false
+        }
 
         currentMovie?.let { movie ->
             val movieReviews: String =
@@ -63,11 +74,11 @@ class FragmentMoviesDetails : Fragment() {
             tvGenres?.text = movie.genres?.joinToString { it.name }
             tvReviews?.text = movieReviews
             movieRating?.progress = (movie.ratings * 2).toInt()
-            tvStoryLine?.text = movie.overview
+            tvDescription?.text = movie.overview
 
-            actorsViewModel.getActorsForCurrentMovie()
+            detailsViewModel.getActorsForCurrentMovie()
 
-            actorsViewModel.mutableActorList.observe(viewLifecycleOwner) {
+            detailsViewModel.actorsList.observe(viewLifecycleOwner) {
                 adapter?.setActors(it)
             }
 
@@ -77,13 +88,6 @@ class FragmentMoviesDetails : Fragment() {
                 fallback(R.drawable.movie_placeholder)
                 error(R.drawable.movie_placeholder)
             }
-
-
-            val backBtn: TextView = view.findViewById(R.id.back_btn)
-            backBtn.setOnClickListener {
-                fragmentManager?.popBackStack()
-            }
-
         }
         return view
     }
@@ -91,27 +95,29 @@ class FragmentMoviesDetails : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        currentMovie = arguments?.getParcelable(MOVIE_KEY)
+        detailsViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
+        val movieId = arguments?.getInt(MOVIE_ID)
+
+        currentMovie = if (movieId != 0) {
+            detailsViewModel.getMovieById(movieId!!)
+        } else {
+            arguments?.getParcelable(MOVIE_KEY)
+        }
+
         checkInternetConnection = InternetConnectionManager(requireContext())
 
         if (checkInternetConnection.isNetworkAvailable()) {
             scope.launch {
-                ActorsRepository.loadActors(currentMovie?.id!!)
-
+                if (currentMovie?.id!! != 0) {
+                    detailsViewModel.loadActorsForMovieById(currentMovie?.id!!)
+                }
             }
         } else {
             Toast.makeText(context, getString(R.string.unable_load_cast), Toast.LENGTH_LONG)
                 .show()
         }
-
     }
-
-
-    override fun onPause() {
-        super.onPause()
-        actorsViewModel.clearActorList()
-    }
-
+    
     private fun initViews(view: View) {
 
         tvTitle = view.findViewById(R.id.tv_title)
@@ -119,8 +125,12 @@ class FragmentMoviesDetails : Fragment() {
         tvGenres = view.findViewById(R.id.movie_genres)
         tvReviews = view.findViewById(R.id.tv_reviews)
         movieRating = view.findViewById(R.id.movie_rating_bar)
-        tvStoryLine = view.findViewById(R.id.tv_description)
+        tvDescription = view.findViewById(R.id.tv_description)
+        tvStoryLine = view.findViewById(R.id.tv_story_line)
+        tvCast = view.findViewById(R.id.tv_cast)
         headImage = view.findViewById(R.id.head_image)
+        addToCalendarBtn = view.findViewById(R.id.add_to_calendar_btn)
+        backBtn = view.findViewById(R.id.back_btn)
 
         adapter = ActorsAdapter(requireContext())
         rvActors = view.findViewById(R.id.rv_actors)
@@ -129,5 +139,14 @@ class FragmentMoviesDetails : Fragment() {
 
     }
 
+    private fun initListeners() {
+        addToCalendarBtn?.setOnClickListener {
+            detailsViewModel.callDatePicker(requireContext(), date!!, currentMovie!!)
+        }
+
+        backBtn?.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+    }
 }
 
