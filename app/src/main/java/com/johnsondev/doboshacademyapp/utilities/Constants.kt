@@ -9,6 +9,12 @@ object Constants {
     const val ACTOR_IMG_PATH = "https://image.tmdb.org/t/p/w92"
     const val API_KEY = BuildConfig.API_KEY
 
+    const val CALENDAR_PATH = "vnd.android.cursor.item/event"
+    const val CALENDAR_VAL_BEGIN_TIME = "beginTime"
+    const val CALENDAR_VAL_ALL_DAY = "allDay"
+    const val CALENDAR_VAL_END_TIME = "endTime"
+    const val CALENDAR_CAL_TITLE = "title"
+
     const val HORIZONTAL_SPAN_COUNT = 4
     const val VERTICAL_SPAN_COUNT = 2
 
@@ -18,7 +24,6 @@ object Constants {
     const val PREF_UPDATE_TIME = "pref_update_time"
     const val PERIODIC_UPDATE_WORK = "periodic_update_work"
 
-    const val OPEN_MOVIE_TYPE = "open_movie_type"
     const val MOVIE_ID = "movie_id"
 
     const val POPULAR_MOVIES_TYPE: String = "popular"

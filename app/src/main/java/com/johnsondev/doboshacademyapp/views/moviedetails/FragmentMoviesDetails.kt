@@ -1,8 +1,5 @@
 package com.johnsondev.doboshacademyapp.views.moviedetails
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,9 +36,10 @@ class FragmentMoviesDetails : Fragment() {
     private var rvActors: RecyclerView? = null
     private var adapter: ActorsAdapter? = null
     private var addToCalendarBtn: Button? = null
+    private var backBtn: TextView? = null
 
     private var date: Calendar? = null
-    
+
     private lateinit var detailsViewModel: MovieDetailsViewModel
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
@@ -78,7 +76,9 @@ class FragmentMoviesDetails : Fragment() {
             movieRating?.progress = (movie.ratings * 2).toInt()
             tvDescription?.text = movie.overview
 
-            detailsViewModel.getActorsForCurrentMovie().observe(viewLifecycleOwner) {
+            detailsViewModel.getActorsForCurrentMovie()
+
+            detailsViewModel.actorsList.observe(viewLifecycleOwner) {
                 adapter?.setActors(it)
             }
 
@@ -88,12 +88,6 @@ class FragmentMoviesDetails : Fragment() {
                 fallback(R.drawable.movie_placeholder)
                 error(R.drawable.movie_placeholder)
             }
-
-            val backBtn: TextView = view.findViewById(R.id.back_btn)
-            backBtn.setOnClickListener {
-                parentFragmentManager.popBackStack()
-            }
-
         }
         return view
     }
@@ -123,12 +117,7 @@ class FragmentMoviesDetails : Fragment() {
                 .show()
         }
     }
-
-    override fun onStop() {
-        super.onStop()
-        detailsViewModel.clearActorList()
-    }
-
+    
     private fun initViews(view: View) {
 
         tvTitle = view.findViewById(R.id.tv_title)
@@ -141,6 +130,7 @@ class FragmentMoviesDetails : Fragment() {
         tvCast = view.findViewById(R.id.tv_cast)
         headImage = view.findViewById(R.id.head_image)
         addToCalendarBtn = view.findViewById(R.id.add_to_calendar_btn)
+        backBtn = view.findViewById(R.id.back_btn)
 
         adapter = ActorsAdapter(requireContext())
         rvActors = view.findViewById(R.id.rv_actors)
@@ -150,60 +140,13 @@ class FragmentMoviesDetails : Fragment() {
     }
 
     private fun initListeners() {
-
         addToCalendarBtn?.setOnClickListener {
-            callDatePicker()
+            detailsViewModel.callDatePicker(requireContext(), date!!, currentMovie!!)
         }
 
-    }
-
-    private fun callDatePicker() {
-
-        var year: Int
-        var month: Int
-        var day: Int
-        var hour: Int
-        var minute: Int
-
-        Calendar.getInstance().apply {
-            year = get(Calendar.YEAR)
-            month = get(Calendar.MONTH)
-            day = get(Calendar.DAY_OF_MONTH)
-            hour = get(Calendar.HOUR)
-            minute = get(Calendar.MINUTE)
+        backBtn?.setOnClickListener {
+            parentFragmentManager.popBackStack()
         }
-
-        DatePickerDialog(
-            requireContext(),
-            { _, yearDate, monthDate, dayOfMonth ->
-                TimePickerDialog(
-                    requireContext(),
-                    { _, hourOfDay, minute ->
-                        date?.set(yearDate, monthDate, dayOfMonth, hourOfDay, minute)
-                        saveToCalendar(date!!)
-                    },
-                    hour,
-                    minute,
-                    true
-                ).show()
-            },
-            year,
-            month,
-            day
-        ).show()
-
     }
-
-    private fun saveToCalendar(date: Calendar) {
-        val intent = Intent(Intent.ACTION_EDIT).apply {
-            type = "vnd.android.cursor.item/event"
-            putExtra("beginTime", date.timeInMillis)
-            putExtra("allDay", false)
-            putExtra("endTime", date.timeInMillis + 60 * 60 * 1000)
-            putExtra("title", "${getString(R.string.watch_the_movie)} ${currentMovie?.title}")
-        }
-        startActivity(intent)
-    }
-
 }
 
