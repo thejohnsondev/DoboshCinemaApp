@@ -1,13 +1,13 @@
 package com.johnsondev.doboshacademyapp.views.moviedetails
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -20,8 +20,8 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
-import kotlinx.android.synthetic.main.fragment_movies_details.*
 import kotlinx.coroutines.*
+import java.util.*
 
 class FragmentMoviesDetails : Fragment() {
 
@@ -38,7 +38,10 @@ class FragmentMoviesDetails : Fragment() {
     private var headImage: ImageView? = null
     private var rvActors: RecyclerView? = null
     private var adapter: ActorsAdapter? = null
+    private var addToCalendarBtn: Button? = null
 
+    private var date: Calendar? = null
+    
     private lateinit var detailsViewModel: MovieDetailsViewModel
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
@@ -50,8 +53,10 @@ class FragmentMoviesDetails : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movies_details, container, false)
+        date = Calendar.getInstance()
 
         initViews(view)
+        initListeners()
 
         if (currentMovie?.id!! == 0) {
             tvReviews?.isVisible = false
@@ -59,6 +64,7 @@ class FragmentMoviesDetails : Fragment() {
             tvDescription?.isVisible = false
             tvStoryLine?.isVisible = false
             tvCast?.isVisible = false
+            addToCalendarBtn?.isVisible = false
         }
 
         currentMovie?.let { movie ->
@@ -85,7 +91,7 @@ class FragmentMoviesDetails : Fragment() {
 
             val backBtn: TextView = view.findViewById(R.id.back_btn)
             backBtn.setOnClickListener {
-                fragmentManager?.popBackStack()
+                parentFragmentManager.popBackStack()
             }
 
         }
@@ -118,9 +124,8 @@ class FragmentMoviesDetails : Fragment() {
         }
     }
 
-
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         detailsViewModel.clearActorList()
     }
 
@@ -135,12 +140,69 @@ class FragmentMoviesDetails : Fragment() {
         tvStoryLine = view.findViewById(R.id.tv_story_line)
         tvCast = view.findViewById(R.id.tv_cast)
         headImage = view.findViewById(R.id.head_image)
+        addToCalendarBtn = view.findViewById(R.id.add_to_calendar_btn)
 
         adapter = ActorsAdapter(requireContext())
         rvActors = view.findViewById(R.id.rv_actors)
         rvActors?.adapter = adapter
         rvActors?.setHasFixedSize(true)
 
+    }
+
+    private fun initListeners() {
+
+        addToCalendarBtn?.setOnClickListener {
+            callDatePicker()
+        }
+
+    }
+
+    private fun callDatePicker() {
+
+        var year: Int
+        var month: Int
+        var day: Int
+        var hour: Int
+        var minute: Int
+
+        Calendar.getInstance().apply {
+            year = get(Calendar.YEAR)
+            month = get(Calendar.MONTH)
+            day = get(Calendar.DAY_OF_MONTH)
+            hour = get(Calendar.HOUR)
+            minute = get(Calendar.MINUTE)
+        }
+
+        DatePickerDialog(
+            requireContext(),
+            { _, yearDate, monthDate, dayOfMonth ->
+                TimePickerDialog(
+                    requireContext(),
+                    { _, hourOfDay, minute ->
+                        date?.set(yearDate, monthDate, dayOfMonth, hourOfDay, minute)
+                        saveToCalendar(date!!)
+                    },
+                    hour,
+                    minute,
+                    true
+                ).show()
+            },
+            year,
+            month,
+            day
+        ).show()
+
+    }
+
+    private fun saveToCalendar(date: Calendar) {
+        val intent = Intent(Intent.ACTION_EDIT).apply {
+            type = "vnd.android.cursor.item/event"
+            putExtra("beginTime", date.timeInMillis)
+            putExtra("allDay", false)
+            putExtra("endTime", date.timeInMillis + 60 * 60 * 1000)
+            putExtra("title", "${getString(R.string.watch_the_movie)} ${currentMovie?.title}")
+        }
+        startActivity(intent)
     }
 
 }

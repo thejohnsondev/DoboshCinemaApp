@@ -1,17 +1,11 @@
 package com.johnsondev.doboshacademyapp.data.services
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.provider.Settings.Global.getString
-import android.util.Log
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.net.toUri
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -25,13 +19,14 @@ import kotlinx.coroutines.*
 class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
 
-    private val CHANNEL_ID = "MOVIE_CHANNEL_ID"
-    private val REQUEST_CONTENT = 1
+    companion object {
+        private const val CHANNEL_ID = "MOVIE_CHANNEL_ID"
+        private const val REQUEST_CONTENT = 1
+        private const val NOTIFICATION_TAG = "newMovies"
+    }
+
     private val notificationManagerCompat = NotificationManagerCompat.from(context)
-
     private var isNewMovie = false
-
-
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
     override suspend fun doWork(): Result {
@@ -51,24 +46,13 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
                 val newMovie =
                     findNewMovie(oldMovieList, newMovieList).sortedBy { it.ratings }.last()
 
-                if (notificationManagerCompat.getNotificationChannel(CHANNEL_ID) == null) {
-                    notificationManagerCompat.createNotificationChannel(
-                        NotificationChannelCompat.Builder(
-                            CHANNEL_ID,
-                            NotificationManagerCompat.IMPORTANCE_HIGH
-                        )
-                            .setName(context.getString(R.string.channel_name))
-                            .build()
-                    )
-                }
+                buildNotificationChannel()
 
                 notificationManagerCompat.notify(
-                    "newMovies",
+                    NOTIFICATION_TAG,
                     newMovie.id,
                     buildNotification(newMovie).build()
                 )
-
-                Log.d("TAG", "notif ")
                 saveUpdateTime(context)
 
             }
@@ -121,6 +105,19 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
                 )
             )
             setAutoCancel(true)
+        }
+    }
+
+    private fun buildNotificationChannel() {
+        if (notificationManagerCompat.getNotificationChannel(CHANNEL_ID) == null) {
+            notificationManagerCompat.createNotificationChannel(
+                NotificationChannelCompat.Builder(
+                    CHANNEL_ID,
+                    NotificationManagerCompat.IMPORTANCE_HIGH
+                )
+                    .setName(context.getString(R.string.channel_name))
+                    .build()
+            )
         }
     }
 

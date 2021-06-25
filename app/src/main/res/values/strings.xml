@@ -22,4 +22,6 @@
     <string name="channel_name">New Movies</string>
     <string name="movie_with_highest_rating">Movie with highest rating</string>
     <string name="base_deep_link">https://doboshacademyapp.johnsondev.com/</string>
+    <string name="add_to_calendar">Add to calendar</string>
+    <string name="watch_the_movie">Watch the movie: </string>
 </resources>
