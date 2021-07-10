@@ -107,6 +107,7 @@ class FragmentMoviesList : Fragment() {
             updateWorkRequest
         )
 
+//        it`s for tests
 //        WorkManager.getInstance(requireContext()).enqueue(updateWorkRequest)
 
     }

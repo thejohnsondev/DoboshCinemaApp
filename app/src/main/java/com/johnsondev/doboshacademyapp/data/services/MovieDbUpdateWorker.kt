@@ -70,19 +70,12 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
     private fun findNewMovie(oldMovieList: List<Movie>, newMovieList: List<Movie>): Movie {
         var newMovie: Movie? = null
         newMovieList.forEach { new ->
-            if (!oldMovieList.contains(new)) {
+            val isNewMovieExisting = !oldMovieList.any { it.id == new.id }
+            if (isNewMovieExisting) {
                 newMovie = new
                 return@forEach
             }
         }
-//        return if (newMovie.isNullOrEmpty()) {
-//            isNewMovie = false
-//            newMovie.add(oldMovieList.sortedByDescending { it.ratings }[0])
-//            newMovie
-//        } else {
-//            isNewMovie = true
-//            newMovie
-//        }
         return newMovie ?: Movie(id = 0)
     }
 
