@@ -24,4 +24,8 @@
     <string name="base_deep_link">https://doboshacademyapp.johnsondev.com/</string>
     <string name="add_to_calendar">Add to calendar</string>
     <string name="watch_the_movie">Watch the movie: </string>
+    <string name="open_movie_details">\"Open movie details: \"</string>
+    <string name="movie_db_ref">Movies Database refreshed!</string>
+    <string name="shared_element_container_with_id">shared_element_container_$1%s</string>
+    <string name="transition_name">trans_name</string>
 </resources>

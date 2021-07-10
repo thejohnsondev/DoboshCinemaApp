@@ -13,7 +13,8 @@ object Constants {
     const val CALENDAR_VAL_BEGIN_TIME = "beginTime"
     const val CALENDAR_VAL_ALL_DAY = "allDay"
     const val CALENDAR_VAL_END_TIME = "endTime"
-    const val CALENDAR_CAL_TITLE = "title"
+    const val CALENDAR_VAL_TITLE = "title"
+    const val CALENDAR_VAL_DESCRIPTION = "description"
 
     const val HORIZONTAL_SPAN_COUNT = 4
     const val VERTICAL_SPAN_COUNT = 2
