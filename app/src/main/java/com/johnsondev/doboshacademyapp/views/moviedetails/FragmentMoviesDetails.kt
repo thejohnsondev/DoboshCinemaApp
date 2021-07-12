@@ -5,17 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.google.android.material.transition.MaterialContainerTransform
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
+import com.johnsondev.doboshacademyapp.utilities.themeColor
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 import kotlinx.coroutines.*
 import java.util.*
@@ -52,6 +55,20 @@ class FragmentMoviesDetails : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movies_details, container, false)
         date = Calendar.getInstance()
+
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            drawingViewId = R.id.main_container
+            duration = resources.getInteger(R.integer.shared_element_transition_duration).toLong()
+            scrimColor = ContextCompat.getColor(requireContext(), R.color.main_color)
+            setAllContainerColors(requireContext().themeColor(R.attr.colorSurface))
+        }
+
+//        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+//            duration = resources.getInteger(R.integer.shared_element_transition_duration).toLong()
+//        }
+//        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+//            duration = resources.getInteger(R.integer.shared_element_transition_duration).toLong()
+//        }
 
         initViews(view)
         initListeners()
@@ -117,7 +134,7 @@ class FragmentMoviesDetails : Fragment() {
                 .show()
         }
     }
-    
+
     private fun initViews(view: View) {
 
         tvTitle = view.findViewById(R.id.tv_title)

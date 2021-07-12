@@ -43,18 +43,22 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
                         newMovieList = MoviesRepository.getAllMoviesFromNet()
                     }
                 }
-                val newMovie =
-                    findNewMovie(oldMovieList, newMovieList).sortedBy { it.ratings }.last()
+//                val newMovie =
+//                    findNewMovie(oldMovieList, newMovieList).sortedBy { it.ratings }.last()
+
+                val newMovie = findNewMovie(oldMovieList, newMovieList)
 
                 buildNotificationChannel()
 
-                notificationManagerCompat.notify(
-                    NOTIFICATION_TAG,
-                    newMovie.id,
-                    buildNotification(newMovie).build()
-                )
+                if (newMovie.id != 0) {
+                    notificationManagerCompat.notify(
+                        NOTIFICATION_TAG,
+                        newMovie.id,
+                        buildNotification(newMovie).build()
+                    )
+                }
+                isNewMovie = false
                 saveUpdateTime(context)
-
             }
             Result.success()
         } catch (throwable: Throwable) {
@@ -63,30 +67,23 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
 
     }
 
-    private fun findNewMovie(oldMovieList: List<Movie>, newMovieList: List<Movie>): List<Movie> {
-        val newMovie = mutableListOf<Movie>()
+    private fun findNewMovie(oldMovieList: List<Movie>, newMovieList: List<Movie>): Movie {
+        var newMovie: Movie? = null
         newMovieList.forEach { new ->
-            if (!oldMovieList.contains(new)) {
-                newMovie.add(new)
+            val isNewMovieExisting = !oldMovieList.any { it.id == new.id }
+            if (isNewMovieExisting) {
+                newMovie = new
+                return@forEach
             }
         }
-        return if (newMovie.isNullOrEmpty()) {
-            isNewMovie = false
-            newMovie.add(oldMovieList.sortedByDescending { it.ratings }[0])
-            newMovie
-        } else {
-            isNewMovie = true
-            newMovie
-        }
+        return newMovie ?: Movie(id = 0)
     }
 
     private fun buildNotification(movie: Movie): NotificationCompat.Builder {
         val uri = "${context.getString(R.string.base_deep_link)}${movie.id}".toUri()
 
         val contentTitle =
-            if (isNewMovie) context.getString(R.string.new_movie) else context.getString(
-                R.string.movie_with_highest_rating
-            )
+            context.getString(R.string.new_movie)
 
         return NotificationCompat.Builder(context, CHANNEL_ID).apply {
             setContentTitle(contentTitle)

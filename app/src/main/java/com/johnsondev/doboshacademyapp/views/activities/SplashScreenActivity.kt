@@ -11,10 +11,7 @@ import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
-import com.johnsondev.doboshacademyapp.utilities.Constants.OPEN_MOVIE_TYPE
-import com.johnsondev.doboshacademyapp.views.movielist.FragmentMoviesList
 import kotlinx.coroutines.*
-
 
 class SplashScreenActivity : AppCompatActivity() {
 

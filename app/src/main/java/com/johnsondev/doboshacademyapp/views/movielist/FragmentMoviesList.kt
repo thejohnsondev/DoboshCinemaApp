@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.NotificationCompat
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -66,6 +66,12 @@ class FragmentMoviesList : Fragment() {
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+    }
+
 
     private fun initViews(view: View) {
 
@@ -101,6 +107,7 @@ class FragmentMoviesList : Fragment() {
             updateWorkRequest
         )
 
+//        it`s for tests
 //        WorkManager.getInstance(requireContext()).enqueue(updateWorkRequest)
 
     }
@@ -116,7 +123,6 @@ class FragmentMoviesList : Fragment() {
         }
 
         typeOfMoviesList.addOnButtonCheckedListener { _, checkedId, _ ->
-            rvMovie.scrollToPosition(0)
             listViewModel.changeMoviesList(checkedId)
         }
 
@@ -163,7 +169,25 @@ class FragmentMoviesList : Fragment() {
             VERTICAL_SPAN_COUNT else HORIZONTAL_SPAN_COUNT
     }
 
-    private fun doOnClick(movie: Movie) {
+    private fun doOnClick(movie: Movie, view: View) {
+
+//        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+//            duration = resources.getInteger(R.integer.shared_element_transition_duration).toLong()
+//        }
+//        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+//            duration = resources.getInteger(R.integer.shared_element_transition_duration).toLong()
+//        }
+
+//        exitTransition = MaterialElevationScale(false).apply {
+//            duration = resources.getInteger(R.integer.shared_element_transition_duration).toLong()
+//        }
+//
+//        reenterTransition = MaterialElevationScale(true).apply {
+//            duration = resources.getInteger(R.integer.shared_element_transition_duration).toLong()
+//        }
+
+
+
         val bundleWithMovie = Bundle()
         bundleWithMovie.putParcelable(MOVIE_KEY, movie)
 
@@ -172,12 +196,7 @@ class FragmentMoviesList : Fragment() {
 
         rvMovie.let {
             parentFragmentManager.beginTransaction().apply {
-                setCustomAnimations(
-                    R.anim.slide_in,
-                    R.anim.fade_out,
-                    R.anim.fade_in,
-                    R.anim.slide_out
-                )
+                addSharedElement(view,getString(R.string.transition_name))
                 addToBackStack(null)
                 replace(R.id.main_container, fragmentMoviesDetails)
                 commit()
@@ -186,8 +205,8 @@ class FragmentMoviesList : Fragment() {
     }
 
     private val clickListener = object : OnRecyclerItemClicked {
-        override fun onClick(movie: Movie) {
-            doOnClick(movie)
+        override fun onClick(movie: Movie, view: View) {
+            doOnClick(movie, view)
         }
     }
 

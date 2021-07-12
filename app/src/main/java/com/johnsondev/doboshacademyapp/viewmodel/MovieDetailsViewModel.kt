@@ -14,10 +14,11 @@ import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
-import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_CAL_TITLE
+import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_TITLE
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_PATH
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_ALL_DAY
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_BEGIN_TIME
+import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_DESCRIPTION
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_END_TIME
 import kotlinx.coroutines.launch
 import java.util.*
@@ -91,8 +92,12 @@ class MovieDetailsViewModel : ViewModel() {
             putExtra(CALENDAR_VAL_ALL_DAY, false)
             putExtra(CALENDAR_VAL_END_TIME, date.timeInMillis + 60 * 60 * 1000)
             putExtra(
-                CALENDAR_CAL_TITLE,
+                CALENDAR_VAL_TITLE,
                 "${App.getInstance().getString(R.string.watch_the_movie)} ${currentMovie.title}"
+            )
+            putExtra(
+                CALENDAR_VAL_DESCRIPTION,
+                "${context.getString(R.string.open_movie_details)}${context.getString(R.string.base_deep_link)}${currentMovie.id}"
             )
         }
         context.startActivity(intent)
