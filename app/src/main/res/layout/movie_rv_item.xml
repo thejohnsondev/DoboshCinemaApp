@@ -27,7 +27,8 @@
         app:layout_constraintEnd_toEndOf="@+id/movie_card"
         app:layout_constraintStart_toStartOf="@id/movie_card"
         app:layout_constraintTop_toTopOf="@id/movie_card"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@tools:sample/avatars"
+        android:contentDescription="TODO" />
 
     <ImageView
         android:id="@+id/movie_mask"
@@ -37,7 +38,8 @@
         app:layout_constraintDimensionRatio="2:3.1"
         app:layout_constraintEnd_toEndOf="@+id/movie_img"
         app:layout_constraintStart_toStartOf="@+id/movie_img"
-        app:layout_constraintTop_toTopOf="@id/movie_card" />
+        app:layout_constraintTop_toTopOf="@id/movie_card"
+        android:contentDescription="TODO" />
 
     <View
         android:id="@+id/age_shape"
@@ -68,7 +70,8 @@
         android:layout_marginEnd="@dimen/dp_6"
         android:src="@drawable/like"
         app:layout_constraintEnd_toEndOf="@+id/movie_img"
-        app:layout_constraintTop_toTopOf="@+id/movie_card" />
+        app:layout_constraintTop_toTopOf="@+id/movie_card"
+        android:contentDescription="TODO" />
 
     <ImageView
         android:id="@+id/is_favorite_red_img"
@@ -76,7 +79,8 @@
         android:layout_height="wrap_content"
         android:src="@drawable/like_red"
         app:layout_constraintStart_toStartOf="@id/is_favorite_img"
-        app:layout_constraintTop_toTopOf="@id/is_favorite_img" />
+        app:layout_constraintTop_toTopOf="@id/is_favorite_img"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/movie_genres"

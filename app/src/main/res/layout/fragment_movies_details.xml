@@ -31,7 +31,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/head_image"
             app:layout_constraintEnd_toEndOf="@+id/head_image"
             app:layout_constraintStart_toStartOf="@+id/head_image"
-            app:layout_constraintTop_toTopOf="@+id/head_image" />
+            app:layout_constraintTop_toTopOf="@+id/head_image"
+            android:contentDescription="TODO" />
 
         <TextView
             android:id="@+id/back_btn"

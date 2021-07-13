@@ -29,7 +29,8 @@
             app:layout_constraintEnd_toStartOf="@+id/spec_list_type_tv"
             app:layout_constraintTop_toTopOf="@+id/spec_list_type_tv"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="@dimen/dp_16"/>
+            android:layout_marginStart="@dimen/dp_16"
+            android:contentDescription="TODO" />
 
         <TextView
             android:id="@+id/spec_list_type_tv"

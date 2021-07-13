@@ -31,8 +31,8 @@ class MoviesAdapter(
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.bind(getItem(position))
-        holder.itemView.setOnClickListener() {
-            clickListener.onClick(moviesList[position], holder.itemView)
+        holder.itemView.setOnClickListener {
+            clickListener.onClick(moviesList[position])
         }
     }
 
@@ -54,7 +54,8 @@ class MovieViewHolder(private val view: View, private val context: Context) :
     private val movieImg: ImageView = view.findViewById(R.id.movie_img)
 
     fun bind(movie: Movie) {
-        itemView.transitionName = context.getString(R.string.shared_element_container_with_id, movie.id.toString())
+        itemView.transitionName =
+            context.getString(R.string.shared_element_container_with_id, movie.id.toString())
 
         val movieReviews: String = view.context.getString(R.string.reviews, movie.numberOfRatings)
         val movieAge: String = view.context.getString(R.string.plus, movie.minimumAge)
@@ -80,6 +81,6 @@ class MovieViewHolder(private val view: View, private val context: Context) :
 }
 
 interface OnRecyclerItemClicked {
-    fun onClick(movie: Movie, view: View)
+    fun onClick(movie: Movie)
 }
 

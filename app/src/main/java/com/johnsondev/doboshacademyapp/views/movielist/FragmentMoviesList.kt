@@ -1,21 +1,17 @@
 package com.johnsondev.doboshacademyapp.views.movielist
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.ViewCompat
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.*
-import com.google.android.material.transition.MaterialElevationScale
-import com.google.android.material.transition.MaterialSharedAxis
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
@@ -23,14 +19,12 @@ import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.services.MovieDbUpdateWorker
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.Constants
-import com.johnsondev.doboshacademyapp.utilities.Constants.HORIZONTAL_SPAN_COUNT
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.PERIODIC_UPDATE_WORK
 import com.johnsondev.doboshacademyapp.utilities.Constants.POPULAR_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
-import com.johnsondev.doboshacademyapp.utilities.Constants.VERTICAL_SPAN_COUNT
 import com.johnsondev.doboshacademyapp.utilities.getUpdateTime
 import com.johnsondev.doboshacademyapp.utilities.saveUpdateTime
 import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails
@@ -38,7 +32,6 @@ import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModelFactory
 import com.johnsondev.doboshacademyapp.views.specificlist.SpecificListFragment
 import kotlinx.coroutines.*
-import org.w3c.dom.Text
 import java.util.concurrent.TimeUnit
 
 class FragmentMoviesList : Fragment() {
@@ -217,7 +210,7 @@ class FragmentMoviesList : Fragment() {
         }
     }
 
-    private fun openSpecificFragment(type: String){
+    private fun openSpecificFragment(type: String) {
         val bundle = Bundle()
         bundle.putString(SPECIFIC_LIST_TYPE, type)
         val specificListFragment = SpecificListFragment().apply {
@@ -237,12 +230,8 @@ class FragmentMoviesList : Fragment() {
         }
     }
 
-    private fun calculateSpanCount(): Int {
-        return if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
-            VERTICAL_SPAN_COUNT else HORIZONTAL_SPAN_COUNT
-    }
 
-    private fun doOnClick(movie: Movie, view: View) {
+    private fun doOnClick(movie: Movie) {
 
         val bundleWithMovie = Bundle()
         bundleWithMovie.putParcelable(MOVIE_KEY, movie)
@@ -266,8 +255,8 @@ class FragmentMoviesList : Fragment() {
     }
 
     private val clickListener = object : OnRecyclerItemClicked {
-        override fun onClick(movie: Movie, view: View) {
-            doOnClick(movie, view)
+        override fun onClick(movie: Movie) {
+            doOnClick(movie)
         }
     }
 
