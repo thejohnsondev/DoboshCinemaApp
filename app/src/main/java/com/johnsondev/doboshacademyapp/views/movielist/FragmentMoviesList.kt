@@ -7,14 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.ViewCompat
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.*
-import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.transition.MaterialElevationScale
+import com.google.android.material.transition.MaterialSharedAxis
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
@@ -25,21 +26,37 @@ import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.HORIZONTAL_SPAN_COUNT
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.PERIODIC_UPDATE_WORK
+import com.johnsondev.doboshacademyapp.utilities.Constants.POPULAR_SPEC_TYPE
+import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
+import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
+import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.VERTICAL_SPAN_COUNT
 import com.johnsondev.doboshacademyapp.utilities.getUpdateTime
 import com.johnsondev.doboshacademyapp.utilities.saveUpdateTime
 import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails
 import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModelFactory
+import com.johnsondev.doboshacademyapp.views.specificlist.SpecificListFragment
 import kotlinx.coroutines.*
+import org.w3c.dom.Text
 import java.util.concurrent.TimeUnit
 
 class FragmentMoviesList : Fragment() {
 
-    private lateinit var rvMovie: RecyclerView
-    private lateinit var adapter: MoviesAdapter
+    private lateinit var rvPopularMovies: RecyclerView
+    private lateinit var popularMoviesAdapter: MoviesAdapter
+    private lateinit var rvTopRatedMovies: RecyclerView
+    private lateinit var topRatedMoviesAdapter: MoviesAdapter
+    private lateinit var rvUpcomingMovies: RecyclerView
+    private lateinit var upcomingMoviesAdapter: MoviesAdapter
+
+    private lateinit var popularSpecificListBtn: View
+    private lateinit var topRatedSpecificListBtn: View
+    private lateinit var upcomingSpecificListBtn: View
+    private lateinit var tvPopularList: TextView
+    private lateinit var tvTopRatedList: TextView
+    private lateinit var tvUpcomingList: TextView
     private lateinit var swipeToRefresh: SwipeRefreshLayout
-    private lateinit var typeOfMoviesList: MaterialButtonToggleGroup
     private lateinit var listViewModel: MoviesListViewModel
     private lateinit var tvLastUpdateTime: TextView
     private val scope = CoroutineScope(Dispatchers.IO + Job())
@@ -76,14 +93,30 @@ class FragmentMoviesList : Fragment() {
     private fun initViews(view: View) {
 
         tvLastUpdateTime = view.findViewById(R.id.last_update_tv)
-        typeOfMoviesList = view.findViewById(R.id.toggle_group)
         swipeToRefresh = view.findViewById(R.id.swipe_layout)
-        typeOfMoviesList.check(R.id.btn_popular)
 
-        rvMovie = view.findViewById(R.id.movie_list_rv)
-        rvMovie.layoutManager = GridLayoutManager(view.context, calculateSpanCount())
-        adapter = MoviesAdapter(view.context, clickListener)
-        rvMovie.adapter = adapter
+        popularSpecificListBtn = view.findViewById(R.id.popular_spec_list)
+        topRatedSpecificListBtn = view.findViewById(R.id.top_rated_spec_list)
+        upcomingSpecificListBtn = view.findViewById(R.id.upcoming_spec_list)
+
+        tvPopularList = view.findViewById(R.id.popular_tv)
+        tvTopRatedList = view.findViewById(R.id.top_rated_tv)
+        tvUpcomingList = view.findViewById(R.id.upcoming_tv)
+
+        tvPopularList.transitionName = POPULAR_SPEC_TYPE
+        tvTopRatedList.transitionName = TOP_RATED_SPEC_TYPE
+        tvUpcomingList.transitionName = UPCOMING_SPEC_TYPE
+
+
+        rvPopularMovies = view.findViewById(R.id.popular_movies_rv)
+        rvTopRatedMovies = view.findViewById(R.id.top_rated_movies_rv)
+        rvUpcomingMovies = view.findViewById(R.id.upcoming_movies_rv)
+        popularMoviesAdapter = MoviesAdapter(view.context, clickListener)
+        topRatedMoviesAdapter = MoviesAdapter(view.context, clickListener)
+        upcomingMoviesAdapter = MoviesAdapter(view.context, clickListener)
+        rvPopularMovies.adapter = popularMoviesAdapter
+        rvTopRatedMovies.adapter = topRatedMoviesAdapter
+        rvUpcomingMovies.adapter = upcomingMoviesAdapter
 
         isConnectionErrorFromBundle = arguments?.getBoolean(Constants.CONNECTION_ERROR_ARG) == true
         checkInternetConnection = InternetConnectionManager(requireContext())
@@ -122,9 +155,6 @@ class FragmentMoviesList : Fragment() {
             ).show()
         }
 
-        typeOfMoviesList.addOnButtonCheckedListener { _, checkedId, _ ->
-            listViewModel.changeMoviesList(checkedId)
-        }
 
         swipeToRefresh.setOnRefreshListener {
             if (!checkInternetConnection.isNetworkAvailable()) {
@@ -136,14 +166,33 @@ class FragmentMoviesList : Fragment() {
                 swipeToRefresh.isRefreshing = false
             } else {
                 scope.launch {
-                   listViewModel.loadMoviesFromNet().apply {
+                    listViewModel.loadMoviesFromNet().apply {
                         swipeToRefresh.isRefreshing = false
+                        saveUpdateTime(requireContext())
+                        tvLastUpdateTime.text =
+                            view.context.getString(
+                                R.string.last_update,
+                                getUpdateTime(requireContext())
+                            )
+                        rvPopularMovies.scrollToPosition(0)
+                        rvTopRatedMovies.scrollToPosition(0)
+                        rvUpcomingMovies.scrollToPosition(0)
                     }
                 }
-                saveUpdateTime(requireContext())
-                tvLastUpdateTime.text =
-                    view.context.getString(R.string.last_update, getUpdateTime(requireContext()))
+
             }
+        }
+
+        popularSpecificListBtn.setOnClickListener {
+            openSpecificFragment(POPULAR_SPEC_TYPE)
+        }
+
+        topRatedSpecificListBtn.setOnClickListener {
+            openSpecificFragment(TOP_RATED_SPEC_TYPE)
+        }
+
+        upcomingSpecificListBtn.setOnClickListener {
+            openSpecificFragment(UPCOMING_SPEC_TYPE)
         }
 
         listViewModel.getPopularMovies()
@@ -152,15 +201,39 @@ class FragmentMoviesList : Fragment() {
 
 
         listViewModel.popularMoviesList.observe(viewLifecycleOwner) {
-            adapter.setMovies(it)
+            popularMoviesAdapter.setMovies(it)
         }
 
-        listViewModel.getAnotherMovieList().observe(viewLifecycleOwner) { movie ->
-            adapter.setMovies(movie)
+        listViewModel.topRatedMoviesList.observe(viewLifecycleOwner) {
+            topRatedMoviesAdapter.setMovies(it)
+        }
+
+        listViewModel.upcomingMoviesList.observe(viewLifecycleOwner) { movie ->
+            upcomingMoviesAdapter.setMovies(movie)
         }
 
         listViewModel.getLastUpdateTime(requireContext()).observe(viewLifecycleOwner) { time ->
             tvLastUpdateTime.text = view.context.getString(R.string.last_update, time)
+        }
+    }
+
+    private fun openSpecificFragment(type: String){
+        val bundle = Bundle()
+        bundle.putString(SPECIFIC_LIST_TYPE, type)
+        val specificListFragment = SpecificListFragment().apply {
+            arguments = bundle
+        }
+
+        parentFragmentManager.beginTransaction().apply {
+            setCustomAnimations(
+                R.anim.slide_in,
+                R.anim.fade_out,
+                R.anim.fade_in,
+                R.anim.slide_out
+            )
+            addToBackStack(null)
+            replace(R.id.main_container, specificListFragment)
+            commit()
         }
     }
 
@@ -171,32 +244,20 @@ class FragmentMoviesList : Fragment() {
 
     private fun doOnClick(movie: Movie, view: View) {
 
-//        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
-//            duration = resources.getInteger(R.integer.shared_element_transition_duration).toLong()
-//        }
-//        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
-//            duration = resources.getInteger(R.integer.shared_element_transition_duration).toLong()
-//        }
-
-//        exitTransition = MaterialElevationScale(false).apply {
-//            duration = resources.getInteger(R.integer.shared_element_transition_duration).toLong()
-//        }
-//
-//        reenterTransition = MaterialElevationScale(true).apply {
-//            duration = resources.getInteger(R.integer.shared_element_transition_duration).toLong()
-//        }
-
-
-
         val bundleWithMovie = Bundle()
         bundleWithMovie.putParcelable(MOVIE_KEY, movie)
 
         val fragmentMoviesDetails = FragmentMoviesDetails()
         fragmentMoviesDetails.arguments = bundleWithMovie
 
-        rvMovie.let {
+        rvPopularMovies.let {
             parentFragmentManager.beginTransaction().apply {
-                addSharedElement(view,getString(R.string.transition_name))
+                setCustomAnimations(
+                    R.anim.slide_in,
+                    R.anim.fade_out,
+                    R.anim.fade_in,
+                    R.anim.slide_out
+                )
                 addToBackStack(null)
                 replace(R.id.main_container, fragmentMoviesDetails)
                 commit()
