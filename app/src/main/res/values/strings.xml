@@ -28,4 +28,11 @@
     <string name="movie_db_ref">Movies Database refreshed!</string>
     <string name="shared_element_container_with_id">shared_element_container_$1%s</string>
     <string name="transition_name">trans_name</string>
+    <string name="popular_movies">Popular Movies</string>
+    <string name="top_rated_movies">Top Rated Movies</string>
+    <string name="upcoming_movies">Upcoming Movies</string>
+    <string name="popular_list_transition_name">popular_list_transition_name</string>
+    <string name="top_rated_list_transition_name">top_rated_list_transition_name</string>
+    <string name="upcoming_list_transition_name">upcoming_list_transition_name</string>
+
 </resources>

@@ -56,20 +56,6 @@ class FragmentMoviesDetails : Fragment() {
         val view = inflater.inflate(R.layout.fragment_movies_details, container, false)
         date = Calendar.getInstance()
 
-        sharedElementEnterTransition = MaterialContainerTransform().apply {
-            drawingViewId = R.id.main_container
-            duration = resources.getInteger(R.integer.shared_element_transition_duration).toLong()
-            scrimColor = ContextCompat.getColor(requireContext(), R.color.main_color)
-            setAllContainerColors(requireContext().themeColor(R.attr.colorSurface))
-        }
-
-//        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
-//            duration = resources.getInteger(R.integer.shared_element_transition_duration).toLong()
-//        }
-//        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
-//            duration = resources.getInteger(R.integer.shared_element_transition_duration).toLong()
-//        }
-
         initViews(view)
         initListeners()
 
