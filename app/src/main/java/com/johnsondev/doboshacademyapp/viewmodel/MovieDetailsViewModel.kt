@@ -12,6 +12,7 @@ import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_TITLE
@@ -27,6 +28,9 @@ class MovieDetailsViewModel : ViewModel() {
 
     private var _mutableActorList = MutableLiveData<List<Actor>>()
     val actorsList: LiveData<List<Actor>> get() = _mutableActorList
+
+    private var _actorDetails = MutableLiveData<ActorDetailsDto>()
+    val actorDetails: LiveData<ActorDetailsDto> get() = _actorDetails
 
     fun getActorsForCurrentMovie() {
         viewModelScope.launch {
@@ -102,6 +106,16 @@ class MovieDetailsViewModel : ViewModel() {
         }
         context.startActivity(intent)
         return intent
+    }
+
+    fun loadActorDetailsById(id: Int) {
+        viewModelScope.launch {
+            ActorsRepository.loadActorDetailsById(id)
+        }
+    }
+
+    fun getActorDetails() {
+        _actorDetails = ActorsRepository.getActorDetails()
     }
 
 }

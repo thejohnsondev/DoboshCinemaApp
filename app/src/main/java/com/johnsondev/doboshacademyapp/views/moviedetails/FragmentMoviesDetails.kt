@@ -1,6 +1,7 @@
 package com.johnsondev.doboshacademyapp.views.moviedetails
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
+import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
+import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
@@ -132,7 +135,7 @@ class FragmentMoviesDetails : Fragment() {
         addToCalendarBtn = view.findViewById(R.id.add_to_calendar_btn)
         backBtn = view.findViewById(R.id.back_btn)
 
-        adapter = ActorsAdapter(requireContext())
+        adapter = ActorsAdapter(requireContext(), clickListener)
         rvActors = view.findViewById(R.id.rv_actors)
         rvActors?.adapter = adapter
         rvActors?.setHasFixedSize(true)
@@ -146,6 +149,28 @@ class FragmentMoviesDetails : Fragment() {
 
         backBtn?.setOnClickListener {
             parentFragmentManager.popBackStack()
+        }
+
+    }
+
+    private val clickListener = object : OnActorItemClickListener {
+        override fun onClick(actor: Actor) {
+            doOnClick(actor)
+        }
+    }
+
+    private fun doOnClick(actor: Actor) {
+        if (checkInternetConnection.isNetworkAvailable()) {
+            scope.launch {
+                if (actor.id != 0) {
+                    detailsViewModel.loadActorDetailsById(actor.id)
+                }
+            }
+        }
+        detailsViewModel.getActorDetails()
+        detailsViewModel.actorDetails.observe(viewLifecycleOwner)
+        {
+            Log.d("TAG", it.toString())
         }
     }
 }

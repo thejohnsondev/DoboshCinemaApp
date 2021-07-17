@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Actor
+import com.johnsondev.doboshacademyapp.data.models.Movie
 
 class ActorsAdapter(
-    context: Context
+    context: Context,
+    private val clickListener: OnActorItemClickListener
 ) : RecyclerView.Adapter<ActorViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -25,6 +27,9 @@ class ActorsAdapter(
 
     override fun onBindViewHolder(holder: ActorViewHolder, position: Int) {
         holder.bind(actorsList[position])
+        holder.itemView.setOnClickListener {
+            clickListener.onClick(actorsList[position])
+        }
     }
 
     override fun getItemCount(): Int = actorsList.size
@@ -53,4 +58,8 @@ class ActorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         actorImg.clipToOutline = true
     }
 
+}
+
+interface OnActorItemClickListener {
+    fun onClick(actor: Actor)
 }
