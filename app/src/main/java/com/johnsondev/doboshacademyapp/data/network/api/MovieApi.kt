@@ -26,5 +26,11 @@ interface MovieApi {
     @GET("person/{person_id}")
     suspend fun getActorDetails(@Path(value = "person_id") id: Int): ActorDetailsDto
 
+    @GET("person/{person_id}/movie_credits")
+    suspend fun getActorMovieCredits(@Path(value = "person_id") id: Int): ActorMovieCreditsResponse
+
+    @GET("person/{person_id}/images")
+    suspend fun getActorImages(@Path(value = "person_id") id: Int): ActorImagesResponse
+
 
 }

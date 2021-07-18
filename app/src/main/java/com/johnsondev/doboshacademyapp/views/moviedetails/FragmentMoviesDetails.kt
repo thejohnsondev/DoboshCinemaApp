@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.views.moviedetails
+ package com.johnsondev.doboshacademyapp.views.moviedetails
 
 import android.os.Bundle
 import android.util.Log
@@ -167,9 +167,14 @@ class FragmentMoviesDetails : Fragment() {
                 }
             }
         }
-        detailsViewModel.getActorDetails()
-        detailsViewModel.actorDetails.observe(viewLifecycleOwner)
-        {
+
+        detailsViewModel.getActorDetails().observe(viewLifecycleOwner) {
+            Log.d("TAG", it.toString())
+        }
+        detailsViewModel.getActorMovieCredits().observe(viewLifecycleOwner){
+            Log.d("TAG", it.toString())
+        }
+        detailsViewModel.getActorImages().observe(viewLifecycleOwner){
             Log.d("TAG", it.toString())
         }
     }

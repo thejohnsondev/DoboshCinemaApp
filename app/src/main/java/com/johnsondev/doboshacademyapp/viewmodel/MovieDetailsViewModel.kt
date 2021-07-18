@@ -13,6 +13,7 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
+import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_TITLE
@@ -30,7 +31,8 @@ class MovieDetailsViewModel : ViewModel() {
     val actorsList: LiveData<List<Actor>> get() = _mutableActorList
 
     private var _actorDetails = MutableLiveData<ActorDetailsDto>()
-    val actorDetails: LiveData<ActorDetailsDto> get() = _actorDetails
+    private var _actorMovieCredits = MutableLiveData<List<Movie>>()
+    private var _actorImages = MutableLiveData<List<ActorImageProfileDto>>()
 
     fun getActorsForCurrentMovie() {
         viewModelScope.launch {
@@ -114,8 +116,19 @@ class MovieDetailsViewModel : ViewModel() {
         }
     }
 
-    fun getActorDetails() {
+    fun getActorDetails(): LiveData<ActorDetailsDto> {
         _actorDetails = ActorsRepository.getActorDetails()
+        return _actorDetails
+    }
+
+    fun getActorMovieCredits(): LiveData<List<Movie>> {
+        _actorMovieCredits = ActorsRepository.getActorMovieCredits()
+        return _actorMovieCredits
+    }
+
+    fun getActorImages(): LiveData<List<ActorImageProfileDto>> {
+        _actorImages = ActorsRepository.getActorImages()
+        return _actorImages
     }
 
 }
