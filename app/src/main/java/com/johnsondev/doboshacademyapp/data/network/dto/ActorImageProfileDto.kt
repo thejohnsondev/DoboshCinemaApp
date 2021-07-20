@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ActorImageProfileDto(
     @SerialName("aspect_ratio")
-    val imageRatio: Double,
+    val imageRatio: Double?,
     @SerialName("file_path")
     val imagePath: String,
     @SerialName("height")
-    val height: Int,
+    val height: Int?,
     @SerialName("width")
-    val width: Int
+    val width: Int?
 )

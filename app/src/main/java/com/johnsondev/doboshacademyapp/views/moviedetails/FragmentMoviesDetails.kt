@@ -20,6 +20,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
+import com.johnsondev.doboshacademyapp.views.actordetails.ActorDetailsFragment
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -128,7 +129,7 @@ class FragmentMoviesDetails : Fragment() {
         tvGenres = view.findViewById(R.id.movie_genres)
         tvReviews = view.findViewById(R.id.tv_reviews)
         movieRating = view.findViewById(R.id.movie_rating_bar)
-        tvDescription = view.findViewById(R.id.tv_description)
+        tvDescription = view.findViewById(R.id.tv_biography)
         tvStoryLine = view.findViewById(R.id.tv_story_line)
         tvCast = view.findViewById(R.id.tv_cast)
         headImage = view.findViewById(R.id.head_image)
@@ -176,6 +177,12 @@ class FragmentMoviesDetails : Fragment() {
         }
         detailsViewModel.getActorImages().observe(viewLifecycleOwner){
             Log.d("TAG", it.toString())
+        }
+
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.main_container, ActorDetailsFragment())
+            addToBackStack(null)
+            commit()
         }
     }
 }

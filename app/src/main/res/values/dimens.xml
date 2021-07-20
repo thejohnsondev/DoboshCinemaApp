@@ -20,6 +20,7 @@
     <dimen name="dp_2">2dp</dimen>
     <dimen name="sp_8">8sp</dimen>
     <dimen name="dp_14">14dp</dimen>
+    <dimen name="sp_22">22sp</dimen>
 
     <integer name="shared_element_transition_duration">500</integer>
 
