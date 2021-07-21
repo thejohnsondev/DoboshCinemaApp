@@ -61,7 +61,20 @@ fun animateView(
                 }
             }
         }
-        
+        else -> {
+            if(property == "alpha") {
+                valueAnimator = ValueAnimator.ofFloat(*values).apply {
+                    addUpdateListener {
+                        val animatedValue = it.animatedValue as Float
+                        view.alpha = animatedValue
+                    }
+                    duration = animDuration
+                }
+            }
+        }
+
     }
     return valueAnimator ?: ValueAnimator()
 }
+
+

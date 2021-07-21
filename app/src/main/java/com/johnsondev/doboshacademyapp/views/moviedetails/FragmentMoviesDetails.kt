@@ -198,10 +198,7 @@ class FragmentMoviesDetails : Fragment() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        detailsViewModel.clearAverageColor()
-    }
+    
 
 
 }

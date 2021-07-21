@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -19,6 +18,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 import com.johnsondev.doboshacademyapp.utilities.animateView
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 
+
 class ActorDetailsFragment : Fragment() {
 
     private lateinit var detailsViewModel: MovieDetailsViewModel
@@ -29,12 +29,13 @@ class ActorDetailsFragment : Fragment() {
     private lateinit var tvBiography: TextView
     private lateinit var ivBioMask: ImageView
     private lateinit var ivPosterProfile: ImageView
+    private lateinit var backToMovieDetailsBtn: View
 
     private lateinit var birthDayView: TextView
     private lateinit var deathDayView: TextView
     private lateinit var placeOfBirthView: TextView
 
-    private lateinit var fragmentBackgroundLayout: FrameLayout
+    private lateinit var fragmentBackgroundLayout: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +44,7 @@ class ActorDetailsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_actor_details, container, false)
 
         initViews(view)
-        initListeners(view)
+        initListeners()
 
         return view
     }
@@ -57,6 +58,7 @@ class ActorDetailsFragment : Fragment() {
         tvBiography = view.findViewById(R.id.tv_biography)
         ivBioMask = view.findViewById(R.id.bio_mask)
         ivPosterProfile = view.findViewById(R.id.iv_actor_profile_poster)
+        backToMovieDetailsBtn = view.findViewById(R.id.back_to_detail_view_group)
 
         birthDayView = view.findViewById(R.id.birth_day)
         deathDayView = view.findViewById(R.id.death_day)
@@ -66,7 +68,7 @@ class ActorDetailsFragment : Fragment() {
 
     }
 
-    private fun initListeners(view: View) {
+    private fun initListeners() {
 
         tvBiography.setOnClickListener {
             when (tvBiography.maxLines) {
@@ -81,7 +83,7 @@ class ActorDetailsFragment : Fragment() {
             }
         }
 
-        view.findViewById<View>(R.id.back_to_detail_view_group).setOnClickListener {
+        backToMovieDetailsBtn.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
 
@@ -118,6 +120,8 @@ class ActorDetailsFragment : Fragment() {
         detailsViewModel.getAverageColorBody().observe(viewLifecycleOwner) {
             fragmentBackgroundLayout.background = it.toDrawable()
             activity?.window?.statusBarColor = it
+            animateView(fragmentBackgroundLayout, "alpha", 750,  1f).start()
+
         }
 
         detailsViewModel.getAverageColorText().observe(viewLifecycleOwner) {
