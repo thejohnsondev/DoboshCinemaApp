@@ -64,7 +64,7 @@ class SpecificListFragment : Fragment() {
 
         rvSpecMoviesList = view.findViewById(R.id.rv_spec_movies_list)
         backViewGroup = view.findViewById(R.id.back_to_main_view_group)
-        adapter = MoviesAdapter(requireContext(), clickListener)
+        adapter = MoviesAdapter(requireContext(), clickListener, false)
         rvSpecMoviesList.layoutManager = GridLayoutManager(requireContext(), calculateSpanCount())
 
         rvSpecMoviesList.adapter = adapter

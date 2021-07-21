@@ -175,18 +175,27 @@
                 app:layout_constraintStart_toStartOf="@+id/biography"
                 app:layout_constraintTop_toBottomOf="@+id/biography" />
 
-            <ImageView
-                android:id="@+id/bio_mask"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:alpha="0.7"
-                android:scaleType="fitXY"
-                android:src="@drawable/mask"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_biography"
-                app:layout_constraintEnd_toEndOf="@+id/tv_biography"
+            <TextView
+                android:id="@+id/movies"
+                style="@style/LightText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_16"
+                android:text="@string/movies"
                 app:layout_constraintStart_toStartOf="@+id/tv_biography"
-                app:layout_constraintTop_toTopOf="@+id/tv_biography" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_biography" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_actor_details_movies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="horizontal"
+                tools:listitem="@layout/movie_rv_item_mini"
+                app:layout_constraintTop_toBottomOf="@id/movies"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

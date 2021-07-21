@@ -27,7 +27,15 @@ object MoviesRepository {
     private var actorImgAverageColorBody = MutableLiveData<Int>()
     private var actorImgAverageColorText = MutableLiveData<Int>()
 
-    fun setAverageColor(body: Int, text: Int){
+    private var currentMovie = MutableLiveData<Movie>()
+
+    suspend fun loadMovieById(id: Int) {
+        currentMovie.value = DtoMapper.convertMovieFromDto(movieApi.getMovieById(id))
+    }
+
+    fun getCurrentMovie(): MutableLiveData<Movie> = currentMovie
+
+    fun setAverageColor(body: Int, text: Int) {
         actorImgAverageColorBody.postValue(body)
         actorImgAverageColorText.postValue(text)
     }
@@ -35,7 +43,7 @@ object MoviesRepository {
     fun getAverageColorBody(): MutableLiveData<Int> = actorImgAverageColorBody
     fun getAverageColorText(): MutableLiveData<Int> = actorImgAverageColorText
 
-    fun clearAverageColors(){
+    fun clearAverageColors() {
         actorImgAverageColorText.value = 0
         actorImgAverageColorBody.value = 0
     }

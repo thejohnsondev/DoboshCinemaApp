@@ -104,9 +104,9 @@ class FragmentMoviesList : Fragment() {
         rvPopularMovies = view.findViewById(R.id.popular_movies_rv)
         rvTopRatedMovies = view.findViewById(R.id.top_rated_movies_rv)
         rvUpcomingMovies = view.findViewById(R.id.upcoming_movies_rv)
-        popularMoviesAdapter = MoviesAdapter(view.context, clickListener)
-        topRatedMoviesAdapter = MoviesAdapter(view.context, clickListener)
-        upcomingMoviesAdapter = MoviesAdapter(view.context, clickListener)
+        popularMoviesAdapter = MoviesAdapter(view.context, clickListener, false)
+        topRatedMoviesAdapter = MoviesAdapter(view.context, clickListener, false)
+        upcomingMoviesAdapter = MoviesAdapter(view.context, clickListener, false)
         rvPopularMovies.adapter = popularMoviesAdapter
         rvTopRatedMovies.adapter = topRatedMoviesAdapter
         rvUpcomingMovies.adapter = upcomingMoviesAdapter

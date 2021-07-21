@@ -43,12 +43,22 @@ class MovieDetailsViewModel : ViewModel() {
     private var _actorMovieCredits = MutableLiveData<List<Movie>>()
     private var _actorImages = MutableLiveData<List<ActorImageProfileDto>>()
 
-
     private var _averageColorBody = MutableLiveData<Int>()
-    val averageColorBodyLd: LiveData<Int> get() = _averageColorBody
-
     private var _averageColorText = MutableLiveData<Int>()
-    val averageColorTextLd: LiveData<Int> get() = _averageColorText
+
+    private var _currentMovie = MutableLiveData<Movie>()
+
+    fun loadMovieFromNetById(id: Int){
+        viewModelScope.launch {
+            MoviesRepository.loadMovieById(id)
+        }
+    }
+
+    fun getCurrentMovieFromNet(): LiveData<Movie>{
+        _currentMovie = MoviesRepository.getCurrentMovie()
+        return _currentMovie
+    }
+
 
     fun getActorsForCurrentMovie() {
         viewModelScope.launch {
@@ -67,7 +77,7 @@ class MovieDetailsViewModel : ViewModel() {
     }
 
 
-    fun getMovieById(id: Int): Movie {
+    fun getMovieByIdFromDb(id: Int): Movie {
         return MoviesRepository.getMovieByIdFromDb(id)
     }
 
@@ -156,22 +166,22 @@ class MovieDetailsViewModel : ViewModel() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun calculateAverageColor(imageUrl: String, context: Context) {
+        viewModelScope.launch {
+            Glide.with(context).asBitmap().load(imageUrl).into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    val palette = Palette.from(resource).generate()
+                    MoviesRepository.setAverageColor(
+                        palette.getDarkMutedColor(Color.BLACK),
+                        palette.getLightMutedColor(Color.GRAY)
+                    )
+                }
 
-        Glide.with(context).asBitmap().load(imageUrl).into(object : CustomTarget<Bitmap>() {
-            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                val palette = Palette.from(resource).generate()
-                MoviesRepository.setAverageColor(
-                    palette.getDarkMutedColor(Color.BLACK),
-                    palette.getLightMutedColor(Color.GRAY)
-                )
-//                _averageColorBody.value =
-//                _averageColorText.value =
-            }
+                override fun onLoadCleared(placeholder: Drawable?) {
 
-            override fun onLoadCleared(placeholder: Drawable?) {
-                clearAverageColor()
-            }
-        })
+                }
+            })
+        }
+
 
     }
 

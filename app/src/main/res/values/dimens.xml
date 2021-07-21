@@ -15,6 +15,8 @@
     <dimen name="dp_36">36dp</dimen>
     <dimen name="movie_card_width">170dp</dimen>
     <dimen name="movie_card_height">296dp</dimen>
+    <dimen name="movie_card_width_mini">132</dimen>
+    <dimen name="movie_card_height_mini">230dp</dimen>
     <dimen name="dp_12">12dp</dimen>
     <dimen name="dp_18">18dp</dimen>
     <dimen name="dp_2">2dp</dimen>
@@ -25,6 +27,7 @@
     <dimen name="dp_200">200dp</dimen>
     <dimen name="dp_120">120dp</dimen>
     <dimen name="dp_80">80dp</dimen>
+
 
     <integer name="shared_element_transition_duration">500</integer>
 

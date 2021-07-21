@@ -73,7 +73,7 @@ class FragmentMoviesDetails : Fragment() {
         val movieId = arguments?.getInt(MOVIE_ID)
 
         currentMovie = if (movieId != 0) {
-            detailsViewModel.getMovieById(movieId!!)
+            detailsViewModel.getMovieByIdFromDb(movieId!!)
         } else {
             arguments?.getParcelable(MOVIE_KEY)
         }
