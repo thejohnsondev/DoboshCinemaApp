@@ -1,11 +1,14 @@
 package com.johnsondev.doboshacademyapp.utilities
 
 import android.animation.Animator
+import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.drawable.toDrawable
 import androidx.preference.PreferenceManager
 import java.util.*
 
@@ -58,6 +61,7 @@ fun animateView(
                 }
             }
         }
+        
     }
     return valueAnimator ?: ValueAnimator()
 }

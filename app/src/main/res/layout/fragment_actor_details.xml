@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg">
+    android:id="@+id/actor_details_background"
+    android:background="@color/main_color">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/back_to_detail_view_group"
@@ -50,10 +51,10 @@
 
         <ImageView
             android:id="@+id/iv_actor_profile_poster"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="@dimen/dp_133"
+            android:layout_height="@dimen/dp_200"
             android:layout_margin="@dimen/dp_16"
-            android:background="@color/white"
+            android:background="@drawable/round_outline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/back_to_detail_view_group"
             tools:srcCompat="@tools:sample/avatars" />
@@ -61,11 +62,13 @@
         <TextView
             android:id="@+id/tv_actor_name_detail"
             style="@style/LightText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_16"
             android:text="@string/actor_name"
             android:textSize="@dimen/sp_22"
+            android:layout_marginEnd="@dimen/dp_16"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_actor_profile_poster"
             app:layout_constraintTop_toTopOf="@+id/iv_actor_profile_poster" />
 
@@ -107,7 +110,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_8"
-            android:text="@string/symb_min"
             app:layout_constraintEnd_toEndOf="@+id/tv_birth_day"
             app:layout_constraintStart_toEndOf="@+id/death_day"
             app:layout_constraintTop_toTopOf="@+id/death_day" />
@@ -131,6 +133,7 @@
             android:layout_marginStart="@dimen/dp_8"
             android:ellipsize="end"
             android:maxLines="3"
+            android:layout_marginEnd="@dimen/dp_16"
             android:text="Esher, Surrey, England, UK"
             app:layout_constraintBottom_toBottomOf="@+id/iv_actor_profile_poster"
             app:layout_constraintEnd_toEndOf="parent"
@@ -170,6 +173,7 @@
             android:alpha="0.7"
             android:scaleType="fitXY"
             android:src="@drawable/mask"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/tv_biography"
             app:layout_constraintEnd_toEndOf="@+id/tv_biography"
             app:layout_constraintStart_toStartOf="@+id/tv_biography"

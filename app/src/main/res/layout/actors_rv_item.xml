@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/actor_img"
-        android:layout_width="@dimen/cast_dimension"
-        android:layout_height="@dimen/cast_dimension"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="@dimen/dp_120"
         android:layout_marginTop="@dimen/dp_8"
         android:background="@drawable/pg_shape"
         app:layout_constraintStart_toStartOf="parent"

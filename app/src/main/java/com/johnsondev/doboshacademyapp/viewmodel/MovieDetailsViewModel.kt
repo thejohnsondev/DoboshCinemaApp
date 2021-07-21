@@ -4,10 +4,19 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.palette.graphics.Palette
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Actor
@@ -33,6 +42,13 @@ class MovieDetailsViewModel : ViewModel() {
     private var _actorDetails = MutableLiveData<ActorDetailsDto>()
     private var _actorMovieCredits = MutableLiveData<List<Movie>>()
     private var _actorImages = MutableLiveData<List<ActorImageProfileDto>>()
+
+
+    private var _averageColorBody = MutableLiveData<Int>()
+    val averageColorBodyLd: LiveData<Int> get() = _averageColorBody
+
+    private var _averageColorText = MutableLiveData<Int>()
+    val averageColorTextLd: LiveData<Int> get() = _averageColorText
 
     fun getActorsForCurrentMovie() {
         viewModelScope.launch {
@@ -131,4 +147,45 @@ class MovieDetailsViewModel : ViewModel() {
         return _actorImages
     }
 
+    fun clearActorDetails() {
+        _actorImages.value = emptyList()
+        _actorMovieCredits.value = emptyList()
+        _actorDetails.value = ActorDetailsDto()
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun calculateAverageColor(imageUrl: String, context: Context) {
+
+        Glide.with(context).asBitmap().load(imageUrl).into(object : CustomTarget<Bitmap>() {
+            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                val palette = Palette.from(resource).generate()
+                MoviesRepository.setAverageColor(
+                    palette.getDarkMutedColor(Color.BLACK),
+                    palette.getLightMutedColor(Color.GRAY)
+                )
+//                _averageColorBody.value =
+//                _averageColorText.value =
+            }
+
+            override fun onLoadCleared(placeholder: Drawable?) {
+                clearAverageColor()
+            }
+        })
+
+    }
+
+    fun getAverageColorBody(): LiveData<Int>{
+        _averageColorBody = MoviesRepository.getAverageColorBody()
+        return _averageColorBody
+    }
+
+    fun getAverageColorText(): LiveData<Int>{
+        _averageColorText = MoviesRepository.getAverageColorText()
+        return _averageColorText
+    }
+
+    fun clearAverageColor() {
+        MoviesRepository.clearAverageColors()
+    }
 }

@@ -1,26 +1,29 @@
 package com.johnsondev.doboshacademyapp.data.network.dto
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Parcelize
 data class ActorDetailsDto(
     @SerialName("id")
-    val id: Int,
+    val id: Int = 0,
     @SerialName("name")
-    val name: String?,
+    val name: String? = "",
     @SerialName("birthday")
-    val birthDay: String?,
+    val birthDay: String? = "",
     @SerialName("deathday")
-    val deathDay: String?,
+    val deathDay: String? = "",
     @SerialName("gender")
-    val gender: Int?,
+    val gender: Int? = 0,
     @SerialName("biography")
-    val biography: String?,
+    val biography: String? = "",
     @SerialName("popularity")
-    val popularity: Double?,
+    val popularity: Double? = 0.0,
     @SerialName("place_of_birth")
-    val placeOfBirth: String?,
+    val placeOfBirth: String? = "",
     @SerialName("profile_path")
-    val profilePath: String?
-)
+    val profilePath: String? = ""
+): Parcelable

@@ -1,5 +1,6 @@
 package com.johnsondev.doboshacademyapp.data.repositories
 
+import androidx.lifecycle.MutableLiveData
 import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
@@ -22,6 +23,22 @@ object MoviesRepository {
     private var upcomingMoviesList: List<Movie> = listOf()
 
     private var allMoviesList: MutableList<Movie> = mutableListOf()
+
+    private var actorImgAverageColorBody = MutableLiveData<Int>()
+    private var actorImgAverageColorText = MutableLiveData<Int>()
+
+    fun setAverageColor(body: Int, text: Int){
+        actorImgAverageColorBody.postValue(body)
+        actorImgAverageColorText.postValue(text)
+    }
+
+    fun getAverageColorBody(): MutableLiveData<Int> = actorImgAverageColorBody
+    fun getAverageColorText(): MutableLiveData<Int> = actorImgAverageColorText
+
+    fun clearAverageColors(){
+        actorImgAverageColorText.value = 0
+        actorImgAverageColorBody.value = 0
+    }
 
     suspend fun loadMoviesFromNet() {
         allMoviesList.apply {

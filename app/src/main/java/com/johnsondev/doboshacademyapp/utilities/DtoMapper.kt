@@ -37,7 +37,7 @@ object DtoMapper {
         return Actor(
             id = actorDto.id,
             name = actorDto.name,
-            picture = "${ACTOR_IMG_PATH}${actorDto.profileImg}"
+            picture = "${POSTER_PATH}${actorDto.profileImg}"
         )
     }
 
