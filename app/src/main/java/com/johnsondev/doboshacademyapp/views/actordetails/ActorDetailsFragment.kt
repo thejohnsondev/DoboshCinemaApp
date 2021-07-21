@@ -21,6 +21,7 @@ import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 import com.johnsondev.doboshacademyapp.utilities.animateView
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
@@ -172,25 +173,26 @@ class ActorDetailsFragment : Fragment() {
     }
 
     private fun doOnClick(movie: Movie) {
-        val bundleWithMovie = Bundle()
-        bundleWithMovie.putInt(MOVIE_ID, movie.id)
 
-        val fragmentMoviesDetails = FragmentMoviesDetails()
-        fragmentMoviesDetails.arguments = bundleWithMovie
+        detailsViewModel.loadMovieFromNetById(movie.id)
+        detailsViewModel.getCurrentMovieFromNet().observe(viewLifecycleOwner){
+            val bundleWithMovie = Bundle()
+            bundleWithMovie.putParcelable(MOVIE_KEY, movie)
 
-        parentFragmentManager.beginTransaction().apply {
-            setCustomAnimations(
-                R.anim.slide_in,
-                R.anim.fade_out,
-                R.anim.fade_in,
-                R.anim.slide_out
-            )
-            addToBackStack(null)
-            replace(R.id.main_container, fragmentMoviesDetails)
-            commit()
+            val fragmentMoviesDetails = FragmentMoviesDetails()
+            fragmentMoviesDetails.arguments = bundleWithMovie
+
+            parentFragmentManager.beginTransaction().apply {
+                setCustomAnimations(
+                    R.anim.slide_in,
+                    R.anim.fade_out,
+                    R.anim.fade_in,
+                    R.anim.slide_out
+                )
+                addToBackStack(null)
+                replace(R.id.main_container, fragmentMoviesDetails)
+                commit()
+            }
         }
-
     }
-
-
 }

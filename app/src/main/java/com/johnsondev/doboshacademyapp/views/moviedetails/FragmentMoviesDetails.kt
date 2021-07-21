@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -101,6 +102,9 @@ class FragmentMoviesDetails : Fragment() {
     }
 
     private fun initViews(view: View) {
+
+        activity?.window?.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.main_color)
 
         tvTitle = view.findViewById(R.id.tv_title)
         tvAge = view.findViewById(R.id.tv_age)

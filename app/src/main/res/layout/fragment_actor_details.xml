@@ -14,7 +14,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -191,6 +191,7 @@
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:orientation="horizontal"
+                android:paddingBottom="@dimen/dp_16"
                 tools:listitem="@layout/movie_rv_item_mini"
                 app:layout_constraintTop_toBottomOf="@id/movies"
                 app:layout_constraintStart_toStartOf="parent"
