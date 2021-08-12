@@ -76,8 +76,6 @@ class FragmentMoviesDetails : Fragment() {
 
         detailsViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
         val movieId = arguments?.getInt(MOVIE_ID)
-        actorFrom = arguments?.getParcelable("ACTOR_FROM")
-        Log.d("TAG", actorFrom.toString())
 
 
         currentMovie = if (movieId != 0) {
@@ -173,16 +171,16 @@ class FragmentMoviesDetails : Fragment() {
         }
 
         backBtn?.setOnClickListener {
-            if (checkInternetConnection.isNetworkAvailable()) {
-                scope.launch {
-                    if (actorFrom?.id != 0) {
-                        detailsViewModel.loadActorDetailsById(actorFrom?.id!!)
-                    }
-                }
-            }
-            val imagePath = "${Constants.POSTER_PATH}${actorFrom?.profilePath}"
-
-            detailsViewModel.calculateAverageColor(imagePath, requireContext())
+//            if (checkInternetConnection.isNetworkAvailable()) {
+//                scope.launch {
+//                    if (actorFrom?.id != 0) {
+//                        detailsViewModel.loadActorDetailsById(actorFrom?.id!!)
+//                    }
+//                }
+//            }
+//            val imagePath = "${Constants.POSTER_PATH}${actorFrom?.profilePath}"
+//
+//            detailsViewModel.calculateAverageColor(imagePath, requireContext())
 
             parentFragmentManager.popBackStack()
         }
@@ -197,16 +195,22 @@ class FragmentMoviesDetails : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun doOnClick(actor: Actor) {
-        if (checkInternetConnection.isNetworkAvailable()) {
-            scope.launch {
-                if (actor.id != 0) {
-                    detailsViewModel.loadActorDetailsById(actor.id)
-                }
-            }
-        }
-        val imagePath = "${Constants.POSTER_PATH}${actor.picture}"
+//        if (checkInternetConnection.isNetworkAvailable()) {
+//            scope.launch {
+//                if (actor.id != 0) {
+//                    detailsViewModel.loadActorDetailsById(actor.id)
+//                }
+//            }
+//        }
+//        val imagePath = "${Constants.POSTER_PATH}${actor.picture}"
+//
+//        detailsViewModel.calculateAverageColor(imagePath, requireContext())
 
-        detailsViewModel.calculateAverageColor(imagePath, requireContext())
+        val bundle = Bundle()
+        bundle.putParcelable("ACTOR", actor)
+
+        val fragment = ActorDetailsFragment()
+        fragment.arguments = bundle
 
         parentFragmentManager.beginTransaction().apply {
             setCustomAnimations(
@@ -215,7 +219,7 @@ class FragmentMoviesDetails : Fragment() {
                 R.anim.fade_in,
                 R.anim.slide_out
             )
-            replace(R.id.main_container, ActorDetailsFragment())
+            replace(R.id.main_container, fragment)
             addToBackStack(null)
             commit()
         }

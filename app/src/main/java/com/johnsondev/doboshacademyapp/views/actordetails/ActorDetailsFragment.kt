@@ -1,5 +1,6 @@
 package com.johnsondev.doboshacademyapp.views.actordetails
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.doOnPreDraw
@@ -18,15 +20,19 @@ import coil.load
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
+import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.utilities.Constants
-import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
+import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.animateView
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 
 class ActorDetailsFragment : Fragment() {
@@ -46,8 +52,10 @@ class ActorDetailsFragment : Fragment() {
     private lateinit var moviesAdapter: MoviesAdapter
 
     private lateinit var fragmentBackgroundLayout: View
+    private lateinit var checkInternetConnection: InternetConnectionManager
+    private val scope = CoroutineScope(Dispatchers.IO + Job())
 
-    private var currentActor: ActorDetailsDto? = null
+    private var currentActor: Actor? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,12 +69,27 @@ class ActorDetailsFragment : Fragment() {
         return view
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
 
-        
+        currentActor = arguments?.getParcelable("ACTOR")
+
+
+        checkInternetConnection = InternetConnectionManager(requireContext())
+        if (checkInternetConnection.isNetworkAvailable()) {
+            scope.launch {
+                if (currentActor?.id != 0) {
+                    detailsViewModel.loadActorDetailsById(currentActor?.id!!)
+                }
+            }
+        }
+        val imagePath = "${POSTER_PATH}${currentActor?.picture}"
+
+        detailsViewModel.calculateAverageColor(imagePath, requireContext())
+
     }
 
     private fun initViews(view: View) {
@@ -110,7 +133,7 @@ class ActorDetailsFragment : Fragment() {
         }
 
         detailsViewModel.getActorDetails().observe(viewLifecycleOwner) {
-            currentActor = it
+//            currentActorId = it
 
             tvName.text = it.name
             tvBirthDay.text = it.birthDay
@@ -185,7 +208,7 @@ class ActorDetailsFragment : Fragment() {
         detailsViewModel.getCurrentMovieFromNet().observe(viewLifecycleOwner){
             val bundleWithMovie = Bundle()
             bundleWithMovie.putParcelable(MOVIE_KEY, movie)
-            bundleWithMovie.putParcelable("ACTOR_FROM", currentActor!!)
+//            bundleWithMovie.putParcelable("ACTOR_FROM", currentActorId!!)
 
             val fragmentMoviesDetails = FragmentMoviesDetails()
             fragmentMoviesDetails.arguments = bundleWithMovie
