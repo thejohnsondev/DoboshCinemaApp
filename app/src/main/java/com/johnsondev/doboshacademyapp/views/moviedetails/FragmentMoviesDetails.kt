@@ -2,6 +2,7 @@ package com.johnsondev.doboshacademyapp.views.moviedetails
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
@@ -31,6 +33,7 @@ import java.util.*
 class FragmentMoviesDetails : Fragment() {
 
     private var currentMovie: Movie? = null
+    private var actorFrom: ActorDetailsDto? = null
 
     private var tvTitle: TextView? = null
     private var tvAge: TextView? = null
@@ -53,6 +56,7 @@ class FragmentMoviesDetails : Fragment() {
 
     private lateinit var checkInternetConnection: InternetConnectionManager
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -72,6 +76,9 @@ class FragmentMoviesDetails : Fragment() {
 
         detailsViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
         val movieId = arguments?.getInt(MOVIE_ID)
+        actorFrom = arguments?.getParcelable("ACTOR_FROM")
+        Log.d("TAG", actorFrom.toString())
+
 
         currentMovie = if (movieId != 0) {
             detailsViewModel.getMovieByIdFromDb(movieId!!)
@@ -159,12 +166,24 @@ class FragmentMoviesDetails : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initListeners() {
         addToCalendarBtn?.setOnClickListener {
             detailsViewModel.callDatePicker(requireContext(), date!!, currentMovie!!)
         }
 
         backBtn?.setOnClickListener {
+            if (checkInternetConnection.isNetworkAvailable()) {
+                scope.launch {
+                    if (actorFrom?.id != 0) {
+                        detailsViewModel.loadActorDetailsById(actorFrom?.id!!)
+                    }
+                }
+            }
+            val imagePath = "${Constants.POSTER_PATH}${actorFrom?.profilePath}"
+
+            detailsViewModel.calculateAverageColor(imagePath, requireContext())
+
             parentFragmentManager.popBackStack()
         }
     }

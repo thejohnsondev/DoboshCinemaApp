@@ -19,6 +19,7 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
@@ -46,6 +47,8 @@ class ActorDetailsFragment : Fragment() {
 
     private lateinit var fragmentBackgroundLayout: View
 
+    private var currentActor: ActorDetailsDto? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,6 +65,8 @@ class ActorDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
+
+        
     }
 
     private fun initViews(view: View) {
@@ -105,6 +110,8 @@ class ActorDetailsFragment : Fragment() {
         }
 
         detailsViewModel.getActorDetails().observe(viewLifecycleOwner) {
+            currentActor = it
+
             tvName.text = it.name
             tvBirthDay.text = it.birthDay
             tvDeathDay.text = it.deathDay
@@ -178,6 +185,7 @@ class ActorDetailsFragment : Fragment() {
         detailsViewModel.getCurrentMovieFromNet().observe(viewLifecycleOwner){
             val bundleWithMovie = Bundle()
             bundleWithMovie.putParcelable(MOVIE_KEY, movie)
+            bundleWithMovie.putParcelable("ACTOR_FROM", currentActor!!)
 
             val fragmentMoviesDetails = FragmentMoviesDetails()
             fragmentMoviesDetails.arguments = bundleWithMovie
