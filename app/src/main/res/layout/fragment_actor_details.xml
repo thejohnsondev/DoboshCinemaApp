@@ -144,10 +144,43 @@
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:layout_marginEnd="@dimen/dp_16"
-                android:text="Esher, Surrey, England, UK"
+                android:text="@string/esher_surrey_england_uk"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/place_of_birth"
                 app:layout_constraintTop_toTopOf="@+id/place_of_birth" />
+
+            <TextView
+                android:id="@+id/images"
+                style="@style/LightText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_16"
+                android:text="@string/images"
+                app:layout_constraintStart_toStartOf="@+id/iv_actor_profile_poster"
+                app:layout_constraintTop_toBottomOf="@+id/iv_actor_profile_poster" />
+
+            <TextView
+                android:id="@+id/tv_images_count"
+                style="@style/LightText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray"
+                android:text="5"
+                app:layout_constraintTop_toTopOf="@id/images"
+                app:layout_constraintStart_toEndOf="@id/images"
+                android:layout_marginStart="@dimen/dp_8" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_actor_images"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/images"
+                app:layout_constraintTop_toBottomOf="@+id/images"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="horizontal"
+                tools:listitem="@layout/actor_image_rv_item"/>
+
 
             <TextView
                 android:id="@+id/biography"
@@ -157,7 +190,7 @@
                 android:layout_marginTop="@dimen/dp_16"
                 android:text="@string/biography"
                 app:layout_constraintStart_toStartOf="@+id/iv_actor_profile_poster"
-                app:layout_constraintTop_toBottomOf="@+id/iv_actor_profile_poster" />
+                app:layout_constraintTop_toBottomOf="@+id/rv_actor_images" />
 
             <TextView
                 android:id="@+id/tv_biography"
@@ -184,6 +217,17 @@
                 android:text="@string/movies"
                 app:layout_constraintStart_toStartOf="@+id/tv_biography"
                 app:layout_constraintTop_toBottomOf="@+id/tv_biography" />
+
+            <TextView
+                android:id="@+id/tv_movies_count"
+                style="@style/LightText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray"
+                android:text="5"
+                app:layout_constraintTop_toTopOf="@id/movies"
+                app:layout_constraintStart_toEndOf="@id/movies"
+                android:layout_marginStart="@dimen/dp_8" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_actor_details_movies"

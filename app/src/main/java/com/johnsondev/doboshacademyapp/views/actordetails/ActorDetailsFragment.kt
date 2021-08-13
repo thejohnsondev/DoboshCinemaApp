@@ -20,10 +20,13 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.request.CachePolicy
 import com.johnsondev.doboshacademyapp.R
+import com.johnsondev.doboshacademyapp.adapters.ActorImagesAdapter
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
+import com.johnsondev.doboshacademyapp.adapters.OnImageClickListener
 import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_DETAILS_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
@@ -34,6 +37,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.w3c.dom.Text
 
 
 class ActorDetailsFragment : Fragment() {
@@ -44,6 +48,8 @@ class ActorDetailsFragment : Fragment() {
     private lateinit var tvDeathDay: TextView
     private lateinit var tvPlaceOfBirth: TextView
     private lateinit var tvBiography: TextView
+    private lateinit var tvImagesCount: TextView
+    private lateinit var tvMoviesCount: TextView
     private lateinit var ivPosterProfile: ImageView
     private lateinit var backToMovieDetailsBtn: View
     private lateinit var birthDayView: TextView
@@ -51,6 +57,9 @@ class ActorDetailsFragment : Fragment() {
     private lateinit var placeOfBirthView: TextView
     private lateinit var rvActorDetailsMovies: RecyclerView
     private lateinit var moviesAdapter: MoviesAdapter
+
+    private lateinit var rvActorImages: RecyclerView
+    private lateinit var actorImagesAdapter: ActorImagesAdapter
 
     private lateinit var fragmentBackgroundLayout: View
     private val scope = CoroutineScope(Dispatchers.IO + Job())
@@ -103,6 +112,8 @@ class ActorDetailsFragment : Fragment() {
         tvPlaceOfBirth = view.findViewById(R.id.tv_place_of_birth)
         tvDeathDay = view.findViewById(R.id.tv_death_day)
         tvBiography = view.findViewById(R.id.tv_biography)
+        tvImagesCount = view.findViewById(R.id.tv_images_count)
+        tvMoviesCount = view.findViewById(R.id.tv_movies_count)
         ivPosterProfile = view.findViewById(R.id.iv_actor_profile_poster)
         backToMovieDetailsBtn = view.findViewById(R.id.back_to_detail_view_group)
 
@@ -110,8 +121,12 @@ class ActorDetailsFragment : Fragment() {
         deathDayView = view.findViewById(R.id.death_day)
         placeOfBirthView = view.findViewById(R.id.place_of_birth)
         rvActorDetailsMovies = view.findViewById(R.id.rv_actor_details_movies)
-        moviesAdapter = MoviesAdapter(view.context, clickListener, true)
+        moviesAdapter = MoviesAdapter(view.context, movieClickListener, true)
         rvActorDetailsMovies.adapter = moviesAdapter
+
+        rvActorImages = view.findViewById(R.id.rv_actor_images)
+        actorImagesAdapter = ActorImagesAdapter(requireContext(), imageClickListener)
+        rvActorImages.adapter = actorImagesAdapter
 
         fragmentBackgroundLayout = view.findViewById(R.id.actor_details_background)
 
@@ -163,10 +178,12 @@ class ActorDetailsFragment : Fragment() {
 
         detailsViewModel.getActorMovieCredits().observe(viewLifecycleOwner) {
             moviesAdapter.setMovies(it.sortedByDescending { element -> element.numberOfRatings })
+            tvMoviesCount.text = it.size.toString()
         }
 
         detailsViewModel.getActorImages().observe(viewLifecycleOwner) {
-            Log.d("TAG", it.toString())
+            actorImagesAdapter.setActorImages(it)
+            tvImagesCount.text = it.size.toString()
         }
 
         detailsViewModel.getAverageColorBody().observe(viewLifecycleOwner) {
@@ -180,6 +197,8 @@ class ActorDetailsFragment : Fragment() {
             deathDayView.setTextColor(it)
             placeOfBirthView.setTextColor(it)
             tvBiography.setTextColor(it)
+            tvImagesCount.setTextColor(it)
+            tvMoviesCount.setTextColor(it)
         }
 
         // TODO: 20.07.2021 handle timeout exception
@@ -195,13 +214,23 @@ class ActorDetailsFragment : Fragment() {
             ContextCompat.getColor(requireContext(), R.color.main_color)
     }
 
-    private val clickListener = object : OnRecyclerItemClicked {
+    private val movieClickListener = object : OnRecyclerItemClicked {
         override fun onClick(movie: Movie) {
-            doOnClick(movie)
+            doOnMovieClick(movie)
         }
     }
 
-    private fun doOnClick(movie: Movie) {
+    private val imageClickListener = object : OnImageClickListener{
+        override fun onClick(actorImage: ActorImageProfileDto) {
+            doOnImageClick(actorImage)
+        }
+    }
+
+    private fun doOnImageClick(actorImage: ActorImageProfileDto) {
+        Toast.makeText(requireContext(), actorImage.imagePath, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun doOnMovieClick(movie: Movie) {
 
 
         if(detailsViewModel.checkInternetConnection(requireContext())){
