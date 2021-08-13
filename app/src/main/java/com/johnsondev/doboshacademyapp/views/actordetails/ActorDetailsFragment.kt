@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
@@ -17,15 +18,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.request.CachePolicy
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.utilities.Constants
+import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_DETAILS_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
-import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.animateView
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails
@@ -52,7 +53,6 @@ class ActorDetailsFragment : Fragment() {
     private lateinit var moviesAdapter: MoviesAdapter
 
     private lateinit var fragmentBackgroundLayout: View
-    private lateinit var checkInternetConnection: InternetConnectionManager
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
     private var currentActor: Actor? = null
@@ -62,6 +62,8 @@ class ActorDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_actor_details, container, false)
+
+        detailsViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
 
         initViews(view)
         initListeners()
@@ -75,16 +77,18 @@ class ActorDetailsFragment : Fragment() {
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
 
-        currentActor = arguments?.getParcelable("ACTOR")
+        currentActor = arguments?.getParcelable(ACTOR_DETAILS_ID)
 
-
-        checkInternetConnection = InternetConnectionManager(requireContext())
-        if (checkInternetConnection.isNetworkAvailable()) {
+        if (detailsViewModel.checkInternetConnection(requireContext())) {
             scope.launch {
                 if (currentActor?.id != 0) {
                     detailsViewModel.loadActorDetailsById(currentActor?.id!!)
                 }
             }
+        }else{
+            Toast.makeText(context, getString(R.string.internet_connection_error), Toast.LENGTH_LONG)
+                .show()
+
         }
         val imagePath = "${POSTER_PATH}${currentActor?.picture}"
 
@@ -133,7 +137,6 @@ class ActorDetailsFragment : Fragment() {
         }
 
         detailsViewModel.getActorDetails().observe(viewLifecycleOwner) {
-//            currentActorId = it
 
             tvName.text = it.name
             tvBirthDay.text = it.birthDay
@@ -148,10 +151,11 @@ class ActorDetailsFragment : Fragment() {
             val imagePath = "$POSTER_PATH${it.profilePath}"
 
             ivPosterProfile.clipToOutline = true
+
             ivPosterProfile.load(imagePath) {
+                memoryCachePolicy(CachePolicy.ENABLED)
                 crossfade(true)
                 placeholder(R.drawable.ic_baseline_person_24)
-                fallback(R.drawable.ic_baseline_person_24)
                 error(R.drawable.ic_baseline_person_24)
             }
 
@@ -169,7 +173,6 @@ class ActorDetailsFragment : Fragment() {
             fragmentBackgroundLayout.background = it.toDrawable()
             activity?.window?.statusBarColor = it
             animateView(fragmentBackgroundLayout, "alpha", 750, 1f).start()
-
         }
 
         detailsViewModel.getAverageColorText().observe(viewLifecycleOwner) {
@@ -183,10 +186,6 @@ class ActorDetailsFragment : Fragment() {
 
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        detailsViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
-    }
 
 
     override fun onDestroy() {
@@ -204,26 +203,33 @@ class ActorDetailsFragment : Fragment() {
 
     private fun doOnClick(movie: Movie) {
 
-        detailsViewModel.loadMovieFromNetById(movie.id)
-        detailsViewModel.getCurrentMovieFromNet().observe(viewLifecycleOwner){
-            val bundleWithMovie = Bundle()
-            bundleWithMovie.putParcelable(MOVIE_KEY, movie)
-//            bundleWithMovie.putParcelable("ACTOR_FROM", currentActorId!!)
 
-            val fragmentMoviesDetails = FragmentMoviesDetails()
-            fragmentMoviesDetails.arguments = bundleWithMovie
+        if(detailsViewModel.checkInternetConnection(requireContext())){
+            detailsViewModel.loadMovieFromNetById(movie.id)
+            detailsViewModel.getCurrentMovieFromNet().observe(viewLifecycleOwner){
+                val bundleWithMovie = Bundle()
+                bundleWithMovie.putParcelable(MOVIE_KEY, movie)
 
-            parentFragmentManager.beginTransaction().apply {
-                setCustomAnimations(
-                    R.anim.slide_in,
-                    R.anim.fade_out,
-                    R.anim.fade_in,
-                    R.anim.slide_out
-                )
-                addToBackStack(null)
-                replace(R.id.main_container, fragmentMoviesDetails)
-                commit()
+                val fragmentMoviesDetails = FragmentMoviesDetails()
+                fragmentMoviesDetails.arguments = bundleWithMovie
+
+                parentFragmentManager.beginTransaction().apply {
+                    setCustomAnimations(
+                        R.anim.slide_in,
+                        R.anim.fade_out,
+                        R.anim.fade_in,
+                        R.anim.slide_out
+                    )
+                    addToBackStack(null)
+                    replace(R.id.main_container, fragmentMoviesDetails)
+                    commit()
+                }
             }
+        }else{
+            Toast.makeText(context, getString(R.string.internet_connection_error), Toast.LENGTH_LONG)
+                .show()
         }
+
+
     }
 }

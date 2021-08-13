@@ -31,6 +31,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_ALL_DAY
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_BEGIN_TIME
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_DESCRIPTION
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_END_TIME
+import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -195,7 +196,8 @@ class MovieDetailsViewModel : ViewModel() {
         return _averageColorText
     }
 
-    fun clearAverageColor() {
-        MoviesRepository.clearAverageColors()
+    fun checkInternetConnection(context: Context): Boolean{
+        val internetConnectionManager = InternetConnectionManager(context)
+        return internetConnectionManager.isNetworkAvailable()
     }
 }

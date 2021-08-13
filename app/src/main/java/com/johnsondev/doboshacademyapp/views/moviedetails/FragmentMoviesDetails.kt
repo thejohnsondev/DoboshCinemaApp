@@ -2,7 +2,6 @@ package com.johnsondev.doboshacademyapp.views.moviedetails
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,11 +19,9 @@ import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
-import com.johnsondev.doboshacademyapp.utilities.Constants
+import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_DETAILS_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
-import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 import com.johnsondev.doboshacademyapp.views.actordetails.ActorDetailsFragment
 import kotlinx.coroutines.*
@@ -33,7 +30,6 @@ import java.util.*
 class FragmentMoviesDetails : Fragment() {
 
     private var currentMovie: Movie? = null
-    private var actorFrom: ActorDetailsDto? = null
 
     private var tvTitle: TextView? = null
     private var tvAge: TextView? = null
@@ -54,7 +50,6 @@ class FragmentMoviesDetails : Fragment() {
     private lateinit var detailsViewModel: MovieDetailsViewModel
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
-    private lateinit var checkInternetConnection: InternetConnectionManager
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -75,8 +70,8 @@ class FragmentMoviesDetails : Fragment() {
         super.onCreate(savedInstanceState)
 
         detailsViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
-        val movieId = arguments?.getInt(MOVIE_ID)
 
+        val movieId = arguments?.getInt(MOVIE_ID)
 
         currentMovie = if (movieId != 0) {
             detailsViewModel.getMovieByIdFromDb(movieId!!)
@@ -84,18 +79,6 @@ class FragmentMoviesDetails : Fragment() {
             arguments?.getParcelable(MOVIE_KEY)
         }
 
-        checkInternetConnection = InternetConnectionManager(requireContext())
-
-        if (checkInternetConnection.isNetworkAvailable()) {
-            scope.launch {
-                if (currentMovie?.id!! != 0) {
-                    detailsViewModel.loadActorsForMovieById(currentMovie?.id!!)
-                }
-            }
-        } else {
-            Toast.makeText(context, getString(R.string.unable_load_cast), Toast.LENGTH_LONG)
-                .show()
-        }
 
     }
 
@@ -104,6 +87,19 @@ class FragmentMoviesDetails : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
+
+        if (detailsViewModel.checkInternetConnection(requireContext())) {
+            scope.launch {
+                if (currentMovie?.id!! != 0) {
+                    detailsViewModel.loadActorsForMovieById(currentMovie?.id!!)
+                }
+            }
+        } else {
+            Toast.makeText(context, getString(R.string.unable_load_cast), Toast.LENGTH_LONG)
+                .show()
+            rvActors?.isVisible = false
+        }
+
     }
 
     private fun initViews(view: View) {
@@ -127,6 +123,7 @@ class FragmentMoviesDetails : Fragment() {
         rvActors = view.findViewById(R.id.rv_actors)
         rvActors?.adapter = adapter
         rvActors?.setHasFixedSize(true)
+
 
         if (currentMovie?.id!! == 0) {
             tvReviews?.isVisible = false
@@ -162,6 +159,7 @@ class FragmentMoviesDetails : Fragment() {
             }
         }
 
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -171,17 +169,6 @@ class FragmentMoviesDetails : Fragment() {
         }
 
         backBtn?.setOnClickListener {
-//            if (checkInternetConnection.isNetworkAvailable()) {
-//                scope.launch {
-//                    if (actorFrom?.id != 0) {
-//                        detailsViewModel.loadActorDetailsById(actorFrom?.id!!)
-//                    }
-//                }
-//            }
-//            val imagePath = "${Constants.POSTER_PATH}${actorFrom?.profilePath}"
-//
-//            detailsViewModel.calculateAverageColor(imagePath, requireContext())
-
             parentFragmentManager.popBackStack()
         }
     }
@@ -195,19 +182,9 @@ class FragmentMoviesDetails : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun doOnClick(actor: Actor) {
-//        if (checkInternetConnection.isNetworkAvailable()) {
-//            scope.launch {
-//                if (actor.id != 0) {
-//                    detailsViewModel.loadActorDetailsById(actor.id)
-//                }
-//            }
-//        }
-//        val imagePath = "${Constants.POSTER_PATH}${actor.picture}"
-//
-//        detailsViewModel.calculateAverageColor(imagePath, requireContext())
 
         val bundle = Bundle()
-        bundle.putParcelable("ACTOR", actor)
+        bundle.putParcelable(ACTOR_DETAILS_ID, actor)
 
         val fragment = ActorDetailsFragment()
         fragment.arguments = bundle
@@ -224,9 +201,6 @@ class FragmentMoviesDetails : Fragment() {
             commit()
         }
     }
-
-    
-
 
 }
 
