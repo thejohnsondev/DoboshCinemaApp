@@ -6,7 +6,6 @@ import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDto
 import com.johnsondev.doboshacademyapp.data.network.dto.GenreDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieDto
-import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_IMG_PATH
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 
 object DtoMapper {
@@ -37,7 +36,7 @@ object DtoMapper {
         return Actor(
             id = actorDto.id,
             name = actorDto.name,
-            picture = "${ACTOR_IMG_PATH}${actorDto.profileImg}"
+            picture = "${POSTER_PATH}${actorDto.profileImg}"
         )
     }
 

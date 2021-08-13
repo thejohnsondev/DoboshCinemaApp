@@ -1,25 +1,29 @@
 package com.johnsondev.doboshacademyapp.views.moviedetails
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.google.android.material.transition.MaterialContainerTransform
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
+import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
+import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_DETAILS_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
-import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
-import com.johnsondev.doboshacademyapp.utilities.themeColor
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
+import com.johnsondev.doboshacademyapp.views.actordetails.ActorDetailsFragment
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -46,8 +50,8 @@ class FragmentMoviesDetails : Fragment() {
     private lateinit var detailsViewModel: MovieDetailsViewModel
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
-    private lateinit var checkInternetConnection: InternetConnectionManager
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,6 +62,68 @@ class FragmentMoviesDetails : Fragment() {
 
         initViews(view)
         initListeners()
+
+        return view
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        detailsViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
+
+        val movieId = arguments?.getInt(MOVIE_ID)
+
+        currentMovie = if (movieId != 0) {
+            detailsViewModel.getMovieByIdFromDb(movieId!!)
+        } else {
+            arguments?.getParcelable(MOVIE_KEY)
+        }
+
+
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+
+        if (detailsViewModel.checkInternetConnection(requireContext())) {
+            scope.launch {
+                if (currentMovie?.id!! != 0) {
+                    detailsViewModel.loadActorsForMovieById(currentMovie?.id!!)
+                }
+            }
+        } else {
+            Toast.makeText(context, getString(R.string.unable_load_cast), Toast.LENGTH_LONG)
+                .show()
+            rvActors?.isVisible = false
+        }
+
+    }
+
+    private fun initViews(view: View) {
+
+        activity?.window?.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.main_color)
+
+        tvTitle = view.findViewById(R.id.tv_title)
+        tvAge = view.findViewById(R.id.tv_age)
+        tvGenres = view.findViewById(R.id.movie_genres)
+        tvReviews = view.findViewById(R.id.tv_reviews)
+        movieRating = view.findViewById(R.id.movie_rating_bar)
+        tvDescription = view.findViewById(R.id.tv_biography)
+        tvStoryLine = view.findViewById(R.id.tv_story_line)
+        tvCast = view.findViewById(R.id.tv_cast)
+        headImage = view.findViewById(R.id.head_image)
+        addToCalendarBtn = view.findViewById(R.id.add_to_calendar_btn)
+        backBtn = view.findViewById(R.id.back_btn)
+
+        adapter = ActorsAdapter(requireContext(), clickListener)
+        rvActors = view.findViewById(R.id.rv_actors)
+        rvActors?.adapter = adapter
+        rvActors?.setHasFixedSize(true)
+
 
         if (currentMovie?.id!! == 0) {
             tvReviews?.isVisible = false
@@ -92,56 +158,11 @@ class FragmentMoviesDetails : Fragment() {
                 error(R.drawable.movie_placeholder)
             }
         }
-        return view
-    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        detailsViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
-        val movieId = arguments?.getInt(MOVIE_ID)
-
-        currentMovie = if (movieId != 0) {
-            detailsViewModel.getMovieById(movieId!!)
-        } else {
-            arguments?.getParcelable(MOVIE_KEY)
-        }
-
-        checkInternetConnection = InternetConnectionManager(requireContext())
-
-        if (checkInternetConnection.isNetworkAvailable()) {
-            scope.launch {
-                if (currentMovie?.id!! != 0) {
-                    detailsViewModel.loadActorsForMovieById(currentMovie?.id!!)
-                }
-            }
-        } else {
-            Toast.makeText(context, getString(R.string.unable_load_cast), Toast.LENGTH_LONG)
-                .show()
-        }
-    }
-
-    private fun initViews(view: View) {
-
-        tvTitle = view.findViewById(R.id.tv_title)
-        tvAge = view.findViewById(R.id.tv_age)
-        tvGenres = view.findViewById(R.id.movie_genres)
-        tvReviews = view.findViewById(R.id.tv_reviews)
-        movieRating = view.findViewById(R.id.movie_rating_bar)
-        tvDescription = view.findViewById(R.id.tv_description)
-        tvStoryLine = view.findViewById(R.id.tv_story_line)
-        tvCast = view.findViewById(R.id.tv_cast)
-        headImage = view.findViewById(R.id.head_image)
-        addToCalendarBtn = view.findViewById(R.id.add_to_calendar_btn)
-        backBtn = view.findViewById(R.id.back_btn)
-
-        adapter = ActorsAdapter(requireContext())
-        rvActors = view.findViewById(R.id.rv_actors)
-        rvActors?.adapter = adapter
-        rvActors?.setHasFixedSize(true)
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initListeners() {
         addToCalendarBtn?.setOnClickListener {
             detailsViewModel.callDatePicker(requireContext(), date!!, currentMovie!!)
@@ -151,5 +172,35 @@ class FragmentMoviesDetails : Fragment() {
             parentFragmentManager.popBackStack()
         }
     }
+
+    private val clickListener = object : OnActorItemClickListener {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onClick(actor: Actor) {
+            doOnClick(actor)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun doOnClick(actor: Actor) {
+
+        val bundle = Bundle()
+        bundle.putParcelable(ACTOR_DETAILS_ID, actor)
+
+        val fragment = ActorDetailsFragment()
+        fragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction().apply {
+            setCustomAnimations(
+                R.anim.slide_in,
+                R.anim.fade_out,
+                R.anim.fade_in,
+                R.anim.slide_out
+            )
+            replace(R.id.main_container, fragment)
+            addToBackStack(null)
+            commit()
+        }
+    }
+
 }
 

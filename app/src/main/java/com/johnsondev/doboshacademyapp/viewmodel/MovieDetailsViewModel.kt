@@ -4,14 +4,25 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.palette.graphics.Palette
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
+import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_TITLE
@@ -20,6 +31,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_ALL_DAY
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_BEGIN_TIME
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_DESCRIPTION
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_END_TIME
+import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -27,6 +39,27 @@ class MovieDetailsViewModel : ViewModel() {
 
     private var _mutableActorList = MutableLiveData<List<Actor>>()
     val actorsList: LiveData<List<Actor>> get() = _mutableActorList
+
+    private var _actorDetails = MutableLiveData<ActorDetailsDto>()
+    private var _actorMovieCredits = MutableLiveData<List<Movie>>()
+    private var _actorImages = MutableLiveData<List<ActorImageProfileDto>>()
+
+    private var _averageColorBody = MutableLiveData<Int>()
+    private var _averageColorText = MutableLiveData<Int>()
+
+    private var _currentMovie = MutableLiveData<Movie>()
+
+    fun loadMovieFromNetById(id: Int){
+        viewModelScope.launch {
+            MoviesRepository.loadMovieById(id)
+        }
+    }
+
+    fun getCurrentMovieFromNet(): LiveData<Movie>{
+        _currentMovie = MoviesRepository.getCurrentMovie()
+        return _currentMovie
+    }
+
 
     fun getActorsForCurrentMovie() {
         viewModelScope.launch {
@@ -45,7 +78,7 @@ class MovieDetailsViewModel : ViewModel() {
     }
 
 
-    fun getMovieById(id: Int): Movie {
+    fun getMovieByIdFromDb(id: Int): Movie {
         return MoviesRepository.getMovieByIdFromDb(id)
     }
 
@@ -104,4 +137,67 @@ class MovieDetailsViewModel : ViewModel() {
         return intent
     }
 
+    fun loadActorDetailsById(id: Int) {
+        viewModelScope.launch {
+            ActorsRepository.loadActorDetailsById(id)
+        }
+    }
+
+    fun getActorDetails(): LiveData<ActorDetailsDto> {
+        _actorDetails = ActorsRepository.getActorDetails()
+        return _actorDetails
+    }
+
+    fun getActorMovieCredits(): LiveData<List<Movie>> {
+        _actorMovieCredits = ActorsRepository.getActorMovieCredits()
+        return _actorMovieCredits
+    }
+
+    fun getActorImages(): LiveData<List<ActorImageProfileDto>> {
+        _actorImages = ActorsRepository.getActorImages()
+        return _actorImages
+    }
+
+    fun clearActorDetails() {
+        _actorImages.value = emptyList()
+        _actorMovieCredits.value = emptyList()
+        _actorDetails.value = ActorDetailsDto()
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun calculateAverageColor(imageUrl: String, context: Context) {
+        viewModelScope.launch {
+            Glide.with(context).asBitmap().load(imageUrl).into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    val palette = Palette.from(resource).generate()
+                    MoviesRepository.setAverageColor(
+                        palette.getDarkMutedColor(Color.BLACK),
+                        palette.getLightMutedColor(Color.GRAY)
+                    )
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+
+                }
+            })
+        }
+
+
+    }
+
+    fun getAverageColorBody(): LiveData<Int>{
+        _averageColorBody = MoviesRepository.getAverageColorBody()
+        return _averageColorBody
+    }
+
+    fun getAverageColorText(): LiveData<Int>{
+        _averageColorText = MoviesRepository.getAverageColorText()
+        return _averageColorText
+    }
+
+    fun checkInternetConnection(context: Context): Boolean{
+        val internetConnectionManager = InternetConnectionManager(context)
+        return internetConnectionManager.isNetworkAvailable()
+    }
 }

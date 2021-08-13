@@ -6,7 +6,7 @@
     <dimen name="dp_8">8dp</dimen>
     <dimen name="dp_6">6dp</dimen>
     <dimen name="sp_12">12sp</dimen>
-    <dimen name="cast_dimension">80dp</dimen>
+    <dimen name="cast_dimension">120dp</dimen>
     <dimen name="title_text_size">40sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_12">12sp</dimen>
@@ -15,11 +15,19 @@
     <dimen name="dp_36">36dp</dimen>
     <dimen name="movie_card_width">170dp</dimen>
     <dimen name="movie_card_height">296dp</dimen>
+    <dimen name="movie_card_width_mini">132</dimen>
+    <dimen name="movie_card_height_mini">230dp</dimen>
     <dimen name="dp_12">12dp</dimen>
     <dimen name="dp_18">18dp</dimen>
     <dimen name="dp_2">2dp</dimen>
     <dimen name="sp_8">8sp</dimen>
     <dimen name="dp_14">14dp</dimen>
+    <dimen name="sp_22">22sp</dimen>
+    <dimen name="dp_133">133dp</dimen>
+    <dimen name="dp_200">200dp</dimen>
+    <dimen name="dp_120">120dp</dimen>
+    <dimen name="dp_80">80dp</dimen>
+
 
     <integer name="shared_element_transition_duration">500</integer>
 

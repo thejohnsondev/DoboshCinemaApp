@@ -24,7 +24,8 @@
                 android:layout_marginTop="@dimen/dp_16"
                 android:src="@drawable/target_img"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="TODO" />
 
             <TextView
                 android:id="@+id/type_of_list_tv"
@@ -81,7 +82,8 @@
                     android:src="@drawable/ic_baseline_arrow_forward_24"
                     app:layout_constraintBottom_toBottomOf="@+id/popular_tv"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/popular_tv" />
+                    app:layout_constraintTop_toTopOf="@+id/popular_tv"
+                    android:contentDescription="TODO" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -130,7 +132,8 @@
                     android:src="@drawable/ic_baseline_arrow_forward_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:contentDescription="TODO" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -180,7 +183,8 @@
                     android:src="@drawable/ic_baseline_arrow_forward_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:contentDescription="TODO" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -6,7 +6,6 @@ object Constants {
 
     const val BASE_URL = "https://api.themoviedb.org/3/"
     const val POSTER_PATH = "https://image.tmdb.org/t/p/w342"
-    const val ACTOR_IMG_PATH = "https://image.tmdb.org/t/p/w92"
     const val API_KEY = BuildConfig.API_KEY
 
     const val CALENDAR_PATH = "vnd.android.cursor.item/event"
@@ -30,8 +29,8 @@ object Constants {
     const val TOP_RATED_SPEC_TYPE = "top_rated_spec_type"
     const val UPCOMING_SPEC_TYPE = "upcoming_spec_type"
 
-
     const val MOVIE_ID = "movie_id"
+    const val ACTOR_DETAILS_ID = "actor_details_id"
 
     const val POPULAR_MOVIES_TYPE: String = "popular"
     const val TOP_RATED_MOVIES_TYPE: String = "topRated"
