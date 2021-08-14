@@ -19,17 +19,21 @@ import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_DETAILS_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 import com.johnsondev.doboshacademyapp.views.actordetails.ActorDetailsFragment
+import com.johnsondev.doboshacademyapp.views.movietrailers.MovieTrailersFragment
 import kotlinx.coroutines.*
 import java.util.*
+import kotlin.collections.ArrayList
 
-class FragmentMoviesDetails : Fragment() {
+class MoviesDetailsFragment : Fragment() {
 
     private var currentMovie: Movie? = null
+    private var movieVideos: ArrayList<MovieVideoDto>? = null
 
     private var tvTitle: TextView? = null
     private var tvAge: TextView? = null
@@ -44,6 +48,7 @@ class FragmentMoviesDetails : Fragment() {
     private var adapter: ActorsAdapter? = null
     private var addToCalendarBtn: Button? = null
     private var backBtn: TextView? = null
+    private var watchTheTrailerBtn: Button? = null
 
     private var date: Calendar? = null
 
@@ -118,6 +123,7 @@ class FragmentMoviesDetails : Fragment() {
         headImage = view.findViewById(R.id.head_image)
         addToCalendarBtn = view.findViewById(R.id.add_to_calendar_btn)
         backBtn = view.findViewById(R.id.back_btn)
+        watchTheTrailerBtn = view.findViewById(R.id.watch_the_trailer_btn)
 
         adapter = ActorsAdapter(requireContext(), clickListener)
         rvActors = view.findViewById(R.id.rv_actors)
@@ -147,9 +153,15 @@ class FragmentMoviesDetails : Fragment() {
 
             detailsViewModel.getActorsForCurrentMovie()
 
+
             detailsViewModel.actorsList.observe(viewLifecycleOwner) {
                 adapter?.setActors(it)
             }
+
+            detailsViewModel.getMovieVideos(movie.id).observe(viewLifecycleOwner) {
+                movieVideos = it as ArrayList<MovieVideoDto>?
+            }
+
 
             headImage?.load(movie.poster) {
                 crossfade(true)
@@ -166,6 +178,26 @@ class FragmentMoviesDetails : Fragment() {
     private fun initListeners() {
         addToCalendarBtn?.setOnClickListener {
             detailsViewModel.callDatePicker(requireContext(), date!!, currentMovie!!)
+        }
+
+        watchTheTrailerBtn?.setOnClickListener {
+            //todo open a new fragment, transfer trailers in it and show a list of trailers
+            val bundle = Bundle()
+            bundle.putParcelableArrayList("TRAILER_KEY", movieVideos)
+            val trailersFragment = MovieTrailersFragment()
+            trailersFragment.arguments = bundle
+
+            parentFragmentManager.beginTransaction().apply {
+                setCustomAnimations(
+                    R.anim.slide_in,
+                    R.anim.fade_out,
+                    R.anim.fade_in,
+                    R.anim.slide_out
+                )
+                addToBackStack(null)
+                replace(R.id.main_container, trailersFragment)
+                commit()
+            }
         }
 
         backBtn?.setOnClickListener {

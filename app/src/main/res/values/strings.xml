@@ -22,7 +22,7 @@
     <string name="channel_name">New Movies</string>
     <string name="movie_with_highest_rating">Movie with highest rating</string>
     <string name="base_deep_link">https://doboshacademyapp.johnsondev.com/</string>
-    <string name="add_to_calendar">Add to calendar</string>
+    <string name="watch_later">Watch later</string>
     <string name="watch_the_movie">Watch the movie: </string>
     <string name="open_movie_details">\"Open movie details: \"</string>
     <string name="movie_db_ref">Movies Database refreshed!</string>
@@ -48,5 +48,7 @@
     <string name="movies">Movies</string>
     <string name="images">Images</string>
     <string name="esher_surrey_england_uk">Esher, Surrey, England, UK</string>
+    <string name="trailer">Watch trailer</string>
+    <string name="movie_trailers">Movie trailers</string>
 
 </resources>

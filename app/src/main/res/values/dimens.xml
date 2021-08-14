@@ -27,6 +27,7 @@
     <dimen name="dp_200">200dp</dimen>
     <dimen name="dp_120">120dp</dimen>
     <dimen name="dp_80">80dp</dimen>
+    <dimen name="sp18">18sp</dimen>
 
 
     <integer name="shared_element_transition_duration">500</integer>

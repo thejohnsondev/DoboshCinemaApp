@@ -5,6 +5,7 @@ import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.NetworkService
+import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import com.johnsondev.doboshacademyapp.utilities.Constants.POPULAR_MOVIES_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_MOVIES_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_MOVIES_TYPE
@@ -27,7 +28,15 @@ object MoviesRepository {
     private var actorImgAverageColorBody = MutableLiveData<Int>()
     private var actorImgAverageColorText = MutableLiveData<Int>()
 
+    private var movieVideos = MutableLiveData<List<MovieVideoDto>>()
+
     private var currentMovie = MutableLiveData<Movie>()
+
+    suspend fun loadMovieVideosById(id: Int){
+        movieVideos.postValue(movieApi.getMovieVideos(id, "ru-RU").results)
+    }
+
+    fun getMovieVideos(): MutableLiveData<List<MovieVideoDto>> = movieVideos
 
     suspend fun loadMovieById(id: Int) {
         currentMovie.value = DtoMapper.convertMovieFromDto(movieApi.getMovieById(id))
@@ -43,10 +52,6 @@ object MoviesRepository {
     fun getAverageColorBody(): MutableLiveData<Int> = actorImgAverageColorBody
     fun getAverageColorText(): MutableLiveData<Int> = actorImgAverageColorText
 
-    fun clearAverageColors() {
-        actorImgAverageColorText.value = 0
-        actorImgAverageColorBody.value = 0
-    }
 
     suspend fun loadMoviesFromNet() {
         allMoviesList.apply {
@@ -216,7 +221,7 @@ object MoviesRepository {
         return upcomingMoviesList
     }
 
-    // TODO: 31.05.2021 change toggle button group to viewpager 2
+
 
 
 }
