@@ -6,6 +6,7 @@ import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.NetworkService
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
+import com.johnsondev.doboshacademyapp.utilities.Constants.LANG_RU
 import com.johnsondev.doboshacademyapp.utilities.Constants.POPULAR_MOVIES_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_MOVIES_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_MOVIES_TYPE
@@ -33,7 +34,7 @@ object MoviesRepository {
     private var currentMovie = MutableLiveData<Movie>()
 
     suspend fun loadMovieVideosById(id: Int){
-        movieVideos.postValue(movieApi.getMovieVideos(id, "ru-RU").results)
+        movieVideos.postValue(movieApi.getMovieVideos(id, LANG_RU).results)
     }
 
     fun getMovieVideos(): MutableLiveData<List<MovieVideoDto>> = movieVideos

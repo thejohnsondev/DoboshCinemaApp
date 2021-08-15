@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MovieTrailersAdapter
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
+import com.johnsondev.doboshacademyapp.utilities.Constants.TRAILERS_KEY
 
 
 class MovieTrailersFragment : Fragment() {
@@ -46,7 +47,7 @@ class MovieTrailersFragment : Fragment() {
         adapter = MovieTrailersAdapter(requireContext())
         rvTrailers.adapter = adapter
 
-        trailersList = arguments?.getParcelableArrayList("TRAILER_KEY") ?: arrayListOf()
+        trailersList = arguments?.getParcelableArrayList(TRAILERS_KEY) ?: arrayListOf()
         adapter.setTrailers(trailersList)
 
     }

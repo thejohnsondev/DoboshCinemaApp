@@ -17,7 +17,6 @@ object ActorsRepository {
 
     private var actors = MutableLiveData<List<Actor>>()
 
-
     private var actorDetails = MutableLiveData<ActorDetailsDto>()
     private var actorMovieCredits = MutableLiveData<List<Movie>>()
     private var actorImages = MutableLiveData<List<ActorImageProfileDto>>()
@@ -40,7 +39,6 @@ object ActorsRepository {
         actorImages.postValue(movieApi.getActorImages(id).profiles)
 
     }
-
 
     fun getActorDetails(): MutableLiveData<ActorDetailsDto> = actorDetails
 

@@ -2,6 +2,7 @@ package com.johnsondev.doboshacademyapp.views.moviedetails
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_DETAILS_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
+import com.johnsondev.doboshacademyapp.utilities.Constants.TRAILERS_KEY
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 import com.johnsondev.doboshacademyapp.views.actordetails.ActorDetailsFragment
 import com.johnsondev.doboshacademyapp.views.movietrailers.MovieTrailersFragment
@@ -34,7 +36,6 @@ class MoviesDetailsFragment : Fragment() {
 
     private var currentMovie: Movie? = null
     private var movieVideos: ArrayList<MovieVideoDto>? = null
-
     private var tvTitle: TextView? = null
     private var tvAge: TextView? = null
     private var tvGenres: TextView? = null
@@ -49,9 +50,7 @@ class MoviesDetailsFragment : Fragment() {
     private var addToCalendarBtn: Button? = null
     private var backBtn: TextView? = null
     private var watchTheTrailerBtn: Button? = null
-
     private var date: Calendar? = null
-
     private lateinit var detailsViewModel: MovieDetailsViewModel
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
@@ -63,6 +62,7 @@ class MoviesDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movies_details, container, false)
+
         date = Calendar.getInstance()
 
         initViews(view)
@@ -84,7 +84,6 @@ class MoviesDetailsFragment : Fragment() {
             arguments?.getParcelable(MOVIE_KEY)
         }
 
-
     }
 
 
@@ -97,12 +96,14 @@ class MoviesDetailsFragment : Fragment() {
             scope.launch {
                 if (currentMovie?.id!! != 0) {
                     detailsViewModel.loadActorsForMovieById(currentMovie?.id!!)
+                    detailsViewModel.loadMovieVideosById(currentMovie?.id!!)
                 }
             }
         } else {
             Toast.makeText(context, getString(R.string.unable_load_cast), Toast.LENGTH_LONG)
                 .show()
             rvActors?.isVisible = false
+
         }
 
     }
@@ -130,7 +131,6 @@ class MoviesDetailsFragment : Fragment() {
         rvActors?.adapter = adapter
         rvActors?.setHasFixedSize(true)
 
-
         if (currentMovie?.id!! == 0) {
             tvReviews?.isVisible = false
             movieRating?.isVisible = false
@@ -153,15 +153,15 @@ class MoviesDetailsFragment : Fragment() {
 
             detailsViewModel.getActorsForCurrentMovie()
 
-
             detailsViewModel.actorsList.observe(viewLifecycleOwner) {
                 adapter?.setActors(it)
             }
 
-            detailsViewModel.getMovieVideos(movie.id).observe(viewLifecycleOwner) {
-                movieVideos = it as ArrayList<MovieVideoDto>?
+            if (detailsViewModel.checkInternetConnection(requireContext())) {
+                detailsViewModel.getMovieVideos().observe(viewLifecycleOwner) {
+                    movieVideos = it as ArrayList<MovieVideoDto>?
+                }
             }
-
 
             headImage?.load(movie.poster) {
                 crossfade(true)
@@ -170,7 +170,6 @@ class MoviesDetailsFragment : Fragment() {
                 error(R.drawable.movie_placeholder)
             }
         }
-
 
     }
 
@@ -181,23 +180,31 @@ class MoviesDetailsFragment : Fragment() {
         }
 
         watchTheTrailerBtn?.setOnClickListener {
-            //todo open a new fragment, transfer trailers in it and show a list of trailers
-            val bundle = Bundle()
-            bundle.putParcelableArrayList("TRAILER_KEY", movieVideos)
-            val trailersFragment = MovieTrailersFragment()
-            trailersFragment.arguments = bundle
+            if (detailsViewModel.checkInternetConnection(requireContext())) {
+                val bundle = Bundle()
+                bundle.putParcelableArrayList(TRAILERS_KEY, movieVideos)
+                val trailersFragment = MovieTrailersFragment()
+                trailersFragment.arguments = bundle
 
-            parentFragmentManager.beginTransaction().apply {
-                setCustomAnimations(
-                    R.anim.slide_in,
-                    R.anim.fade_out,
-                    R.anim.fade_in,
-                    R.anim.slide_out
-                )
-                addToBackStack(null)
-                replace(R.id.main_container, trailersFragment)
-                commit()
+                parentFragmentManager.beginTransaction().apply {
+                    setCustomAnimations(
+                        R.anim.slide_in,
+                        R.anim.fade_out,
+                        R.anim.fade_in,
+                        R.anim.slide_out
+                    )
+                    addToBackStack(null)
+                    replace(R.id.main_container, trailersFragment)
+                    commit()
+                }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.internet_connection_error),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
+
         }
 
         backBtn?.setOnClickListener {

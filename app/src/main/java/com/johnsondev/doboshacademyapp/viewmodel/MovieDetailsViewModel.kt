@@ -204,11 +204,14 @@ class MovieDetailsViewModel : ViewModel() {
         return internetConnectionManager.isNetworkAvailable()
     }
 
-
-    fun getMovieVideos(id: Int): LiveData<List<MovieVideoDto>> {
+    fun loadMovieVideosById(id: Int){
         viewModelScope.launch {
             MoviesRepository.loadMovieVideosById(id)
         }
+    }
+
+
+    fun getMovieVideos(): LiveData<List<MovieVideoDto>> {
         _movieVideos = MoviesRepository.getMovieVideos()
         return _movieVideos
     }

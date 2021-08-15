@@ -50,5 +50,6 @@
     <string name="esher_surrey_england_uk">Esher, Surrey, England, UK</string>
     <string name="trailer">Watch trailer</string>
     <string name="movie_trailers">Movie trailers</string>
+    <string name="uncknown_viewvmodel">Unknown ViewModel class</string>
 
 </resources>

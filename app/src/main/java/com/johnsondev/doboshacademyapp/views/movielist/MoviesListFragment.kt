@@ -42,7 +42,6 @@ class MoviesListFragment : Fragment() {
     private lateinit var topRatedMoviesAdapter: MoviesAdapter
     private lateinit var rvUpcomingMovies: RecyclerView
     private lateinit var upcomingMoviesAdapter: MoviesAdapter
-
     private lateinit var popularSpecificListBtn: View
     private lateinit var topRatedSpecificListBtn: View
     private lateinit var upcomingSpecificListBtn: View
@@ -188,9 +187,11 @@ class MoviesListFragment : Fragment() {
             openSpecificFragment(UPCOMING_SPEC_TYPE)
         }
 
-        listViewModel.getPopularMovies()
-        listViewModel.getTopRatedMovies()
-        listViewModel.getUpcomingMovies()
+        listViewModel.apply {
+            getPopularMovies()
+            getTopRatedMovies()
+            getUpcomingMovies()
+        }
 
 
         listViewModel.popularMoviesList.observe(viewLifecycleOwner) {
