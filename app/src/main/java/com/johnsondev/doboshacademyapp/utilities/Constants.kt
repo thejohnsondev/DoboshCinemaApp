@@ -40,6 +40,6 @@ object Constants {
     const val MOVIES_DB_NAME = "moviesdatabase.db"
 
     const val LANG_ENG = "en-US"
-    const val LANG_RU = "ru_RU"
+    const val LANG_RU = "ru-RU"
 
 }
