@@ -31,11 +31,15 @@ object Constants {
 
     const val MOVIE_ID = "movie_id"
     const val ACTOR_DETAILS_ID = "actor_details_id"
+    const val TRAILERS_KEY = "trailers_key"
 
     const val POPULAR_MOVIES_TYPE: String = "popular"
     const val TOP_RATED_MOVIES_TYPE: String = "topRated"
     const val UPCOMING_MOVIES_TYPE: String = "upcoming"
 
     const val MOVIES_DB_NAME = "moviesdatabase.db"
+
+    const val LANG_ENG = "en-US"
+    const val LANG_RU = "ru-RU"
 
 }

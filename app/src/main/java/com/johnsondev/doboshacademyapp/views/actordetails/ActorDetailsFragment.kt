@@ -2,7 +2,6 @@ package com.johnsondev.doboshacademyapp.views.actordetails
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,12 +31,11 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 import com.johnsondev.doboshacademyapp.utilities.animateView
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
-import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails
+import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 
 
 class ActorDetailsFragment : Fragment() {
@@ -239,7 +237,7 @@ class ActorDetailsFragment : Fragment() {
                 val bundleWithMovie = Bundle()
                 bundleWithMovie.putParcelable(MOVIE_KEY, movie)
 
-                val fragmentMoviesDetails = FragmentMoviesDetails()
+                val fragmentMoviesDetails = MoviesDetailsFragment()
                 fragmentMoviesDetails.arguments = bundleWithMovie
 
                 parentFragmentManager.beginTransaction().apply {

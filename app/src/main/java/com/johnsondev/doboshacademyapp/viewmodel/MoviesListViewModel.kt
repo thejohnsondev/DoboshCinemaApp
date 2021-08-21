@@ -26,12 +26,7 @@ class MoviesListViewModel(application: Application) : AndroidViewModel(applicati
     val upcomingMoviesList: LiveData<List<Movie>> get() = upcomingMovies
 
     private var lastUpdateTime = MutableLiveData<String>()
-
     private var checkInternetConnection: InternetConnectionManager? = null
-
-    private var movieList = MutableLiveData<List<Movie>>()
-
-
 
     fun getLastUpdateTime(context: Context): LiveData<String> {
         if (lastUpdateTime.value.isNullOrEmpty()) {
@@ -69,7 +64,6 @@ class MoviesListViewModel(application: Application) : AndroidViewModel(applicati
         return upcomingMovies
     }
 
-
     fun isInternetConnectionAvailable(): Boolean {
         checkInternetConnection = InternetConnectionManager(getApplication())
         if (checkInternetConnection!!.isNetworkAvailable()) {
@@ -77,7 +71,6 @@ class MoviesListViewModel(application: Application) : AndroidViewModel(applicati
         }
         return false
     }
-
 
     suspend fun loadMoviesFromNet() {
         viewModelScope.launch {
@@ -87,7 +80,5 @@ class MoviesListViewModel(application: Application) : AndroidViewModel(applicati
             upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
         }.join()
     }
-
-
 
 }

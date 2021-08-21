@@ -1,13 +1,13 @@
 package com.johnsondev.doboshacademyapp.data.network.response
 
-import com.johnsondev.doboshacademyapp.data.network.dto.MovieDto
+import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ActorMovieCreditsResponse(
-    @SerialName("cast")
-    val cast: List<MovieDto>,
+data class MovieVideosResponse(
     @SerialName("id")
-    val id: Int
+    val id: Int,
+    @SerialName("results")
+    val results: List<MovieVideoDto>
 )

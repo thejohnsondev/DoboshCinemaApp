@@ -27,14 +27,14 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.getUpdateTime
 import com.johnsondev.doboshacademyapp.utilities.saveUpdateTime
-import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails
+import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragment
 import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModelFactory
 import com.johnsondev.doboshacademyapp.views.specificlist.SpecificListFragment
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 
-class FragmentMoviesList : Fragment() {
+class MoviesListFragment : Fragment() {
 
     private lateinit var rvPopularMovies: RecyclerView
     private lateinit var popularMoviesAdapter: MoviesAdapter
@@ -42,7 +42,6 @@ class FragmentMoviesList : Fragment() {
     private lateinit var topRatedMoviesAdapter: MoviesAdapter
     private lateinit var rvUpcomingMovies: RecyclerView
     private lateinit var upcomingMoviesAdapter: MoviesAdapter
-
     private lateinit var popularSpecificListBtn: View
     private lateinit var topRatedSpecificListBtn: View
     private lateinit var upcomingSpecificListBtn: View
@@ -188,9 +187,11 @@ class FragmentMoviesList : Fragment() {
             openSpecificFragment(UPCOMING_SPEC_TYPE)
         }
 
-        listViewModel.getPopularMovies()
-        listViewModel.getTopRatedMovies()
-        listViewModel.getUpcomingMovies()
+        listViewModel.apply {
+            getPopularMovies()
+            getTopRatedMovies()
+            getUpcomingMovies()
+        }
 
 
         listViewModel.popularMoviesList.observe(viewLifecycleOwner) {
@@ -236,7 +237,7 @@ class FragmentMoviesList : Fragment() {
         val bundleWithMovie = Bundle()
         bundleWithMovie.putParcelable(MOVIE_KEY, movie)
 
-        val fragmentMoviesDetails = FragmentMoviesDetails()
+        val fragmentMoviesDetails = MoviesDetailsFragment()
         fragmentMoviesDetails.arguments = bundleWithMovie
 
         rvPopularMovies.let {

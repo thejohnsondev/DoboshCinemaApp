@@ -5,6 +5,7 @@ import com.johnsondev.doboshacademyapp.data.network.dto.MovieDto
 import com.johnsondev.doboshacademyapp.data.network.response.*
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface MovieApi {
 
@@ -31,6 +32,12 @@ interface MovieApi {
 
     @GET("person/{person_id}/images")
     suspend fun getActorImages(@Path(value = "person_id") id: Int): ActorImagesResponse
+
+    @GET("movie/{movie_id}/videos")
+    suspend fun getMovieVideos(
+        @Path(value = "movie_id") id: Int,
+        @Query("language") lang: String
+    ): MovieVideosResponse
 
 
 }

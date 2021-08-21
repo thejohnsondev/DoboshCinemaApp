@@ -21,7 +21,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
-import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails
+import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragment
 
 
 class SpecificListFragment : Fragment() {
@@ -118,7 +118,7 @@ class SpecificListFragment : Fragment() {
         val bundleWithMovie = Bundle()
         bundleWithMovie.putParcelable(Constants.MOVIE_KEY, movie)
 
-        val fragmentMoviesDetails = FragmentMoviesDetails()
+        val fragmentMoviesDetails = MoviesDetailsFragment()
         fragmentMoviesDetails.arguments = bundleWithMovie
 
         rvSpecMoviesList.let {

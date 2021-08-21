@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
-import com.johnsondev.doboshacademyapp.views.moviedetails.FragmentMoviesDetails
-import com.johnsondev.doboshacademyapp.views.movielist.FragmentMoviesList
+import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragment
+import com.johnsondev.doboshacademyapp.views.movielist.MoviesListFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,9 +25,9 @@ class MainActivity : AppCompatActivity() {
 
             if (movieId != 0) {
                 bundle.putInt(MOVIE_ID, movieId)
-                openNextFragment(FragmentMoviesDetails(), bundle)
+                openNextFragment(MoviesDetailsFragment(), bundle)
             } else {
-                openNextFragment(FragmentMoviesList(), bundle)
+                openNextFragment(MoviesListFragment(), bundle)
             }
         }
     }

@@ -23,6 +23,7 @@ import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
+import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_TITLE
@@ -49,13 +50,15 @@ class MovieDetailsViewModel : ViewModel() {
 
     private var _currentMovie = MutableLiveData<Movie>()
 
-    fun loadMovieFromNetById(id: Int){
+    private var _movieVideos = MutableLiveData<List<MovieVideoDto>>()
+
+    fun loadMovieFromNetById(id: Int) {
         viewModelScope.launch {
             MoviesRepository.loadMovieById(id)
         }
     }
 
-    fun getCurrentMovieFromNet(): LiveData<Movie>{
+    fun getCurrentMovieFromNet(): LiveData<Movie> {
         _currentMovie = MoviesRepository.getCurrentMovie()
         return _currentMovie
     }
@@ -186,18 +189,30 @@ class MovieDetailsViewModel : ViewModel() {
 
     }
 
-    fun getAverageColorBody(): LiveData<Int>{
+    fun getAverageColorBody(): LiveData<Int> {
         _averageColorBody = MoviesRepository.getAverageColorBody()
         return _averageColorBody
     }
 
-    fun getAverageColorText(): LiveData<Int>{
+    fun getAverageColorText(): LiveData<Int> {
         _averageColorText = MoviesRepository.getAverageColorText()
         return _averageColorText
     }
 
-    fun checkInternetConnection(context: Context): Boolean{
+    fun checkInternetConnection(context: Context): Boolean {
         val internetConnectionManager = InternetConnectionManager(context)
         return internetConnectionManager.isNetworkAvailable()
+    }
+
+    fun loadMovieVideosById(id: Int){
+        viewModelScope.launch {
+            MoviesRepository.loadMovieVideosById(id)
+        }
+    }
+
+
+    fun getMovieVideos(): LiveData<List<MovieVideoDto>> {
+        _movieVideos = MoviesRepository.getMovieVideos()
+        return _movieVideos
     }
 }
