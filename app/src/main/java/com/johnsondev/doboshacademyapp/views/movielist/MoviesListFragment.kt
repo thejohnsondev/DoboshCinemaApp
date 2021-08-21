@@ -1,13 +1,9 @@
 package com.johnsondev.doboshacademyapp.views.movielist
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.doOnPreDraw
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -25,6 +21,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.POPULAR_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.getUpdateTime
 import com.johnsondev.doboshacademyapp.utilities.saveUpdateTime
 import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragment
@@ -34,7 +31,7 @@ import com.johnsondev.doboshacademyapp.views.specificlist.SpecificListFragment
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 
-class MoviesListFragment : Fragment() {
+class MoviesListFragment : BaseFragment() {
 
     private lateinit var rvPopularMovies: RecyclerView
     private lateinit var popularMoviesAdapter: MoviesAdapter
@@ -55,34 +52,13 @@ class MoviesListFragment : Fragment() {
     private lateinit var checkInternetConnection: InternetConnectionManager
     private var isConnectionErrorFromBundle: Boolean? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_movies_list, container, false)
+    override fun initViews(view: View) {
 
         listViewModel = ViewModelProvider(
             this,
             MovieViewModelFactory(activity?.application!!)
         )[MoviesListViewModel::class.java]
-
-        initViews(view)
-        initWorkManager()
-        initListenersAndObservers(view)
-
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        postponeEnterTransition()
-        view.doOnPreDraw { startPostponedEnterTransition() }
-    }
-
-
-    private fun initViews(view: View) {
 
         tvLastUpdateTime = view.findViewById(R.id.last_update_tv)
         swipeToRefresh = view.findViewById(R.id.swipe_layout)
@@ -110,35 +86,27 @@ class MoviesListFragment : Fragment() {
         rvTopRatedMovies.adapter = topRatedMoviesAdapter
         rvUpcomingMovies.adapter = upcomingMoviesAdapter
 
-        isConnectionErrorFromBundle = arguments?.getBoolean(Constants.CONNECTION_ERROR_ARG) == true
         checkInternetConnection = InternetConnectionManager(requireContext())
 
-    }
-
-    private fun initWorkManager() {
-
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val updateWorkRequest =
-            PeriodicWorkRequest.Builder(MovieDbUpdateWorker::class.java, 8, TimeUnit.HOURS)
-                .setConstraints(constraints)
-                .build()
-
-        WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
-            PERIODIC_UPDATE_WORK,
-            ExistingPeriodicWorkPolicy.KEEP,
-            updateWorkRequest
-        )
-
-//        it`s for tests
-//        WorkManager.getInstance(requireContext()).enqueue(updateWorkRequest)
+        initWorkManager()
 
     }
 
-    private fun initListenersAndObservers(view: View) {
+    override fun layoutId(): Int = R.layout.fragment_movies_list
 
+    override fun loadData() {
+        isConnectionErrorFromBundle = arguments?.getBoolean(Constants.CONNECTION_ERROR_ARG) == true
+
+        listViewModel.apply {
+            getPopularMovies()
+            getTopRatedMovies()
+            getUpcomingMovies()
+        }
+    }
+
+    override fun bindViews(view: View) {}
+
+    override fun initListenersAndObservers(view: View) {
         if (isConnectionErrorFromBundle == true && !listViewModel.isInternetConnectionAvailable()) {
             Toast.makeText(
                 context,
@@ -146,7 +114,6 @@ class MoviesListFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
         }
-
 
         swipeToRefresh.setOnRefreshListener {
             if (!checkInternetConnection.isNetworkAvailable()) {
@@ -171,7 +138,6 @@ class MoviesListFragment : Fragment() {
                         rvUpcomingMovies.scrollToPosition(0)
                     }
                 }
-
             }
         }
 
@@ -186,13 +152,6 @@ class MoviesListFragment : Fragment() {
         upcomingSpecificListBtn.setOnClickListener {
             openSpecificFragment(UPCOMING_SPEC_TYPE)
         }
-
-        listViewModel.apply {
-            getPopularMovies()
-            getTopRatedMovies()
-            getUpcomingMovies()
-        }
-
 
         listViewModel.popularMoviesList.observe(viewLifecycleOwner) {
             popularMoviesAdapter.setMovies(it)
@@ -209,6 +168,26 @@ class MoviesListFragment : Fragment() {
         listViewModel.getLastUpdateTime(requireContext()).observe(viewLifecycleOwner) { time ->
             tvLastUpdateTime.text = view.context.getString(R.string.last_update, time)
         }
+    }
+
+    private fun initWorkManager() {
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresCharging(true)
+            .build()
+
+        val updateWorkRequest =
+            PeriodicWorkRequest.Builder(MovieDbUpdateWorker::class.java, 8, TimeUnit.HOURS)
+                .setConstraints(constraints)
+                .build()
+
+        WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
+            PERIODIC_UPDATE_WORK,
+            ExistingPeriodicWorkPolicy.KEEP,
+            updateWorkRequest
+        )
+
     }
 
     private fun openSpecificFragment(type: String) {
@@ -230,7 +209,6 @@ class MoviesListFragment : Fragment() {
             commit()
         }
     }
-
 
     private fun doOnClick(movie: Movie) {
 

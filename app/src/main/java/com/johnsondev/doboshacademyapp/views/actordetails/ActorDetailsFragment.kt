@@ -2,18 +2,14 @@ package com.johnsondev.doboshacademyapp.views.actordetails
 
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
-import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -30,6 +26,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_DETAILS_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 import com.johnsondev.doboshacademyapp.utilities.animateView
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragment
 import kotlinx.coroutines.CoroutineScope
@@ -38,7 +35,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 
-class ActorDetailsFragment : Fragment() {
+class ActorDetailsFragment : BaseFragment() {
 
     private lateinit var detailsViewModel: MovieDetailsViewModel
     private lateinit var tvName: TextView
@@ -55,55 +52,16 @@ class ActorDetailsFragment : Fragment() {
     private lateinit var placeOfBirthView: TextView
     private lateinit var rvActorDetailsMovies: RecyclerView
     private lateinit var moviesAdapter: MoviesAdapter
-
     private lateinit var rvActorImages: RecyclerView
     private lateinit var actorImagesAdapter: ActorImagesAdapter
-
     private lateinit var fragmentBackgroundLayout: View
     private val scope = CoroutineScope(Dispatchers.IO + Job())
-
     private var currentActor: Actor? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_actor_details, container, false)
+
+    override fun initViews(view: View) {
 
         detailsViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
-
-        initViews(view)
-        initListeners()
-
-        return view
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        postponeEnterTransition()
-        view.doOnPreDraw { startPostponedEnterTransition() }
-
-        currentActor = arguments?.getParcelable(ACTOR_DETAILS_ID)
-
-        if (detailsViewModel.checkInternetConnection(requireContext())) {
-            scope.launch {
-                if (currentActor?.id != 0) {
-                    detailsViewModel.loadActorDetailsById(currentActor?.id!!)
-                }
-            }
-        }else{
-            Toast.makeText(context, getString(R.string.internet_connection_error), Toast.LENGTH_LONG)
-                .show()
-
-        }
-        val imagePath = "${POSTER_PATH}${currentActor?.picture}"
-
-        detailsViewModel.calculateAverageColor(imagePath, requireContext())
-
-    }
-
-    private fun initViews(view: View) {
 
         tvName = view.findViewById(R.id.tv_actor_name_detail)
         tvBirthDay = view.findViewById(R.id.tv_birth_day)
@@ -130,8 +88,35 @@ class ActorDetailsFragment : Fragment() {
 
     }
 
-    private fun initListeners() {
+    override fun layoutId(): Int = R.layout.fragment_actor_details
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun loadData() {
+        currentActor = arguments?.getParcelable(ACTOR_DETAILS_ID)
+
+        if (detailsViewModel.checkInternetConnection(requireContext())) {
+            scope.launch {
+                if (currentActor?.id != 0) {
+                    detailsViewModel.loadActorDetailsById(currentActor?.id!!)
+                }
+            }
+        } else {
+            Toast.makeText(
+                context,
+                getString(R.string.internet_connection_error),
+                Toast.LENGTH_LONG
+            )
+                .show()
+
+        }
+        val imagePath = "${POSTER_PATH}${currentActor?.picture}"
+
+        detailsViewModel.calculateAverageColor(imagePath, requireContext())
+    }
+
+    override fun bindViews(view: View) {}
+
+    override fun initListenersAndObservers(view: View) {
         tvBiography.setOnClickListener {
             when (tvBiography.maxLines) {
                 15 -> {
@@ -198,12 +183,9 @@ class ActorDetailsFragment : Fragment() {
             tvImagesCount.setTextColor(it)
             tvMoviesCount.setTextColor(it)
         }
-
-        // TODO: 20.07.2021 handle timeout exception
-
     }
 
-
+    // TODO: 20.07.2021 handle timeout exception
 
     override fun onDestroy() {
         super.onDestroy()
@@ -218,7 +200,7 @@ class ActorDetailsFragment : Fragment() {
         }
     }
 
-    private val imageClickListener = object : OnImageClickListener{
+    private val imageClickListener = object : OnImageClickListener {
         override fun onClick(actorImage: ActorImageProfileDto) {
             doOnImageClick(actorImage)
         }
@@ -230,10 +212,9 @@ class ActorDetailsFragment : Fragment() {
 
     private fun doOnMovieClick(movie: Movie) {
 
-
-        if(detailsViewModel.checkInternetConnection(requireContext())){
+        if (detailsViewModel.checkInternetConnection(requireContext())) {
             detailsViewModel.loadMovieFromNetById(movie.id)
-            detailsViewModel.getCurrentMovieFromNet().observe(viewLifecycleOwner){
+            detailsViewModel.getCurrentMovieFromNet().observe(viewLifecycleOwner) {
                 val bundleWithMovie = Bundle()
                 bundleWithMovie.putParcelable(MOVIE_KEY, movie)
 
@@ -252,11 +233,13 @@ class ActorDetailsFragment : Fragment() {
                     commit()
                 }
             }
-        }else{
-            Toast.makeText(context, getString(R.string.internet_connection_error), Toast.LENGTH_LONG)
+        } else {
+            Toast.makeText(
+                context,
+                getString(R.string.internet_connection_error),
+                Toast.LENGTH_LONG
+            )
                 .show()
         }
-
-
     }
 }
