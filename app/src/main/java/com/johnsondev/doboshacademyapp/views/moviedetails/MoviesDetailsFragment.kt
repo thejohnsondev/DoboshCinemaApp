@@ -21,6 +21,8 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.TRAILERS_KEY
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
+import com.johnsondev.doboshacademyapp.utilities.replaceFragment
+import com.johnsondev.doboshacademyapp.utilities.showMessage
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 import com.johnsondev.doboshacademyapp.views.actordetails.ActorDetailsFragment
 import com.johnsondev.doboshacademyapp.views.movietrailers.MovieTrailersFragment
@@ -96,8 +98,7 @@ class MoviesDetailsFragment : BaseFragment() {
                 }
             }
         } else {
-            Toast.makeText(context, getString(R.string.unable_load_cast), Toast.LENGTH_LONG)
-                .show()
+            showMessage(getString(R.string.unable_load_cast))
             rvActors?.isVisible = false
 
         }
@@ -162,24 +163,9 @@ class MoviesDetailsFragment : BaseFragment() {
                 bundle.putParcelableArrayList(TRAILERS_KEY, movieVideos)
                 val trailersFragment = MovieTrailersFragment()
                 trailersFragment.arguments = bundle
-
-                parentFragmentManager.beginTransaction().apply {
-                    setCustomAnimations(
-                        R.anim.slide_in,
-                        R.anim.fade_out,
-                        R.anim.fade_in,
-                        R.anim.slide_out
-                    )
-                    addToBackStack(null)
-                    replace(R.id.main_container, trailersFragment)
-                    commit()
-                }
+                replaceFragment(trailersFragment)
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.internet_connection_error),
-                    Toast.LENGTH_SHORT
-                ).show()
+                showMessage(getString(R.string.internet_connection_error))
             }
         }
 
@@ -197,24 +183,11 @@ class MoviesDetailsFragment : BaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun doOnClick(actor: Actor) {
-
         val bundle = Bundle()
         bundle.putParcelable(ACTOR_DETAILS_ID, actor)
-
-        val fragment = ActorDetailsFragment()
-        fragment.arguments = bundle
-
-        parentFragmentManager.beginTransaction().apply {
-            setCustomAnimations(
-                R.anim.slide_in,
-                R.anim.fade_out,
-                R.anim.fade_in,
-                R.anim.slide_out
-            )
-            replace(R.id.main_container, fragment)
-            addToBackStack(null)
-            commit()
-        }
+        val actorFragment = ActorDetailsFragment()
+        actorFragment.arguments = bundle
+        replaceFragment(actorFragment)
     }
 
 }

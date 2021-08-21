@@ -27,6 +27,8 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 import com.johnsondev.doboshacademyapp.utilities.animateView
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
+import com.johnsondev.doboshacademyapp.utilities.replaceFragment
+import com.johnsondev.doboshacademyapp.utilities.showMessage
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragment
 import kotlinx.coroutines.CoroutineScope
@@ -101,13 +103,7 @@ class ActorDetailsFragment : BaseFragment() {
                 }
             }
         } else {
-            Toast.makeText(
-                context,
-                getString(R.string.internet_connection_error),
-                Toast.LENGTH_LONG
-            )
-                .show()
-
+            showMessage(getString(R.string.internet_connection_error))
         }
         val imagePath = "${POSTER_PATH}${currentActor?.picture}"
 
@@ -221,25 +217,10 @@ class ActorDetailsFragment : BaseFragment() {
                 val fragmentMoviesDetails = MoviesDetailsFragment()
                 fragmentMoviesDetails.arguments = bundleWithMovie
 
-                parentFragmentManager.beginTransaction().apply {
-                    setCustomAnimations(
-                        R.anim.slide_in,
-                        R.anim.fade_out,
-                        R.anim.fade_in,
-                        R.anim.slide_out
-                    )
-                    addToBackStack(null)
-                    replace(R.id.main_container, fragmentMoviesDetails)
-                    commit()
-                }
+                replaceFragment(fragmentMoviesDetails)
             }
         } else {
-            Toast.makeText(
-                context,
-                getString(R.string.internet_connection_error),
-                Toast.LENGTH_LONG
-            )
-                .show()
+            showMessage(getString(R.string.internet_connection_error))
         }
     }
 }

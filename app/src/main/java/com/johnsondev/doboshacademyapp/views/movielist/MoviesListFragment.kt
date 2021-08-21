@@ -13,8 +13,7 @@ import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.services.MovieDbUpdateWorker
-import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
-import com.johnsondev.doboshacademyapp.utilities.Constants
+import com.johnsondev.doboshacademyapp.utilities.*
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.PERIODIC_UPDATE_WORK
 import com.johnsondev.doboshacademyapp.utilities.Constants.POPULAR_SPEC_TYPE
@@ -22,8 +21,6 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
-import com.johnsondev.doboshacademyapp.utilities.getUpdateTime
-import com.johnsondev.doboshacademyapp.utilities.saveUpdateTime
 import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragment
 import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModelFactory
@@ -108,20 +105,12 @@ class MoviesListFragment : BaseFragment() {
 
     override fun initListenersAndObservers(view: View) {
         if (isConnectionErrorFromBundle == true && !listViewModel.isInternetConnectionAvailable()) {
-            Toast.makeText(
-                context,
-                getString(R.string.internet_connection_error),
-                Toast.LENGTH_SHORT
-            ).show()
+           showMessage(getString(R.string.internet_connection_error))
         }
 
         swipeToRefresh.setOnRefreshListener {
             if (!checkInternetConnection.isNetworkAvailable()) {
-                Toast.makeText(
-                    context,
-                    getString(R.string.internet_connection_error),
-                    Toast.LENGTH_SHORT
-                ).show()
+                showMessage(getString(R.string.internet_connection_error))
                 swipeToRefresh.isRefreshing = false
             } else {
                 scope.launch {
@@ -196,18 +185,7 @@ class MoviesListFragment : BaseFragment() {
         val specificListFragment = SpecificListFragment().apply {
             arguments = bundle
         }
-
-        parentFragmentManager.beginTransaction().apply {
-            setCustomAnimations(
-                R.anim.slide_in,
-                R.anim.fade_out,
-                R.anim.fade_in,
-                R.anim.slide_out
-            )
-            addToBackStack(null)
-            replace(R.id.main_container, specificListFragment)
-            commit()
-        }
+        replaceFragment(specificListFragment)
     }
 
     private fun doOnClick(movie: Movie) {
@@ -217,20 +195,7 @@ class MoviesListFragment : BaseFragment() {
 
         val fragmentMoviesDetails = MoviesDetailsFragment()
         fragmentMoviesDetails.arguments = bundleWithMovie
-
-        rvPopularMovies.let {
-            parentFragmentManager.beginTransaction().apply {
-                setCustomAnimations(
-                    R.anim.slide_in,
-                    R.anim.fade_out,
-                    R.anim.fade_in,
-                    R.anim.slide_out
-                )
-                addToBackStack(null)
-                replace(R.id.main_container, fragmentMoviesDetails)
-                commit()
-            }
-        }
+        replaceFragment(fragmentMoviesDetails)
     }
 
     private val clickListener = object : OnRecyclerItemClicked {

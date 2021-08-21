@@ -17,6 +17,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
+import com.johnsondev.doboshacademyapp.utilities.replaceFragment
 import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
 import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragment
 
@@ -101,20 +102,8 @@ class SpecificListFragment : BaseFragment() {
 
         val fragmentMoviesDetails = MoviesDetailsFragment()
         fragmentMoviesDetails.arguments = bundleWithMovie
+        replaceFragment(fragmentMoviesDetails)
 
-        rvSpecMoviesList.let {
-            parentFragmentManager.beginTransaction().apply {
-                setCustomAnimations(
-                    R.anim.slide_in,
-                    R.anim.fade_out,
-                    R.anim.fade_in,
-                    R.anim.slide_out
-                )
-                addToBackStack(null)
-                replace(R.id.main_container, fragmentMoviesDetails)
-                commit()
-            }
-        }
     }
 
 }
