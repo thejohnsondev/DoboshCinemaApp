@@ -3,12 +3,16 @@ package com.johnsondev.doboshacademyapp.data.services
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.bumptech.glide.Glide
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
@@ -29,6 +33,7 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
     private var isNewMovie = false
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
         return try {
             var newMovieList: List<Movie>
@@ -43,8 +48,6 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
                         newMovieList = MoviesRepository.getAllMoviesFromNet()
                     }
                 }
-//                val newMovie =
-//                    findNewMovie(oldMovieList, newMovieList).sortedBy { it.ratings }.last()
 
                 val newMovie = findNewMovie(oldMovieList, newMovieList)
 
@@ -85,10 +88,17 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
         val contentTitle =
             context.getString(R.string.new_movie)
 
+        val futureTarget = Glide.with(context)
+            .asBitmap()
+            .load(movie.poster)
+            .submit()
+
+        val bitMapImg = futureTarget.get()
+
         return NotificationCompat.Builder(context, CHANNEL_ID).apply {
             setContentTitle(contentTitle)
             setContentText(movie.title)
-            setSmallIcon(R.drawable.ic_baseline_videocam_24)
+            setSmallIcon(R.drawable.cinema)
             priority = NotificationCompat.PRIORITY_DEFAULT
             setOnlyAlertOnce(true)
             setContentIntent(
@@ -101,10 +111,16 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
                     PendingIntent.FLAG_UPDATE_CURRENT
                 )
             )
+            setLargeIcon(bitMapImg)
+            setStyle(NotificationCompat.BigPictureStyle()
+                .bigPicture(bitMapImg)
+                .bigLargeIcon(null))
+            Glide.with(context).clear(futureTarget)
             setAutoCancel(true)
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun buildNotificationChannel() {
         if (notificationManagerCompat.getNotificationChannel(CHANNEL_ID) == null) {
             notificationManagerCompat.createNotificationChannel(
