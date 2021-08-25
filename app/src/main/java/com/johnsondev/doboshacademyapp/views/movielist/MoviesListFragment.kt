@@ -105,7 +105,7 @@ class MoviesListFragment : BaseFragment() {
 
     override fun initListenersAndObservers(view: View) {
         if (isConnectionErrorFromBundle == true && !listViewModel.isInternetConnectionAvailable()) {
-           showMessage(getString(R.string.internet_connection_error))
+            showMessage(getString(R.string.internet_connection_error))
         }
 
         swipeToRefresh.setOnRefreshListener {
