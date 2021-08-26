@@ -25,6 +25,7 @@ import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragment
 import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModelFactory
+import com.johnsondev.doboshacademyapp.views.activities.MainActivity
 import com.johnsondev.doboshacademyapp.views.specificlist.SpecificListFragment
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
@@ -52,6 +53,7 @@ class MoviesListFragment : BaseFragment() {
 
 
     override fun initViews(view: View) {
+
 
         listViewModel = ViewModelProvider(
             this,
@@ -134,19 +136,28 @@ class MoviesListFragment : BaseFragment() {
         popularSpecificListBtn.setOnClickListener {
             val bundle = Bundle()
             bundle.putString(SPECIFIC_LIST_TYPE, POPULAR_SPEC_TYPE)
-            findNavController().navigate(R.id.action_moviesListFragment_to_specificListFragment, bundle)
+            findNavController().navigate(
+                R.id.action_moviesListFragment_to_specificListFragment,
+                bundle
+            )
         }
 
         topRatedSpecificListBtn.setOnClickListener {
             val bundle = Bundle()
             bundle.putString(SPECIFIC_LIST_TYPE, TOP_RATED_SPEC_TYPE)
-            findNavController().navigate(R.id.action_moviesListFragment_to_specificListFragment, bundle)
+            findNavController().navigate(
+                R.id.action_moviesListFragment_to_specificListFragment,
+                bundle
+            )
         }
 
         upcomingSpecificListBtn.setOnClickListener {
             val bundle = Bundle()
             bundle.putString(SPECIFIC_LIST_TYPE, UPCOMING_SPEC_TYPE)
-            findNavController().navigate(R.id.action_moviesListFragment_to_specificListFragment, bundle)
+            findNavController().navigate(
+                R.id.action_moviesListFragment_to_specificListFragment,
+                bundle
+            )
         }
 
         listViewModel.popularMoviesList.observe(viewLifecycleOwner) {
@@ -186,20 +197,15 @@ class MoviesListFragment : BaseFragment() {
 
     }
 
-    private fun openSpecificFragment(type: String) {
-        val bundle = Bundle()
-        bundle.putString(SPECIFIC_LIST_TYPE, type)
-        val specificListFragment = SpecificListFragment().apply {
-            arguments = bundle
-        }
-        replaceFragment(specificListFragment)
-    }
 
     private fun doOnClick(movie: Movie) {
 
         val bundleWithMovie = Bundle()
         bundleWithMovie.putParcelable(MOVIE_KEY, movie)
-        findNavController().navigate(R.id.action_moviesListFragment_to_moviesDetailsFragment, bundleWithMovie)
+        findNavController().navigate(
+            R.id.action_moviesListFragment_to_moviesDetailsFragment,
+            bundleWithMovie
+        )
     }
 
     private val clickListener = object : OnRecyclerItemClicked {
