@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.johnsondev.doboshacademyapp.R
@@ -161,16 +162,17 @@ class MoviesDetailsFragment : BaseFragment() {
             if (detailsViewModel.checkInternetConnection(requireContext())) {
                 val bundle = Bundle()
                 bundle.putParcelableArrayList(TRAILERS_KEY, movieVideos)
-                val trailersFragment = MovieTrailersFragment()
-                trailersFragment.arguments = bundle
-                replaceFragment(trailersFragment)
+//                val trailersFragment = MovieTrailersFragment()
+//                trailersFragment.arguments = bundle
+                findNavController().navigate(R.id.action_moviesDetailsFragment_to_movieTrailersFragment, bundle)
+//                replaceFragment(trailersFragment)
             } else {
                 showMessage(getString(R.string.internet_connection_error))
             }
         }
 
         backBtn?.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
     }
 
@@ -185,9 +187,7 @@ class MoviesDetailsFragment : BaseFragment() {
     private fun doOnClick(actor: Actor) {
         val bundle = Bundle()
         bundle.putParcelable(ACTOR_DETAILS_ID, actor)
-        val actorFragment = ActorDetailsFragment()
-        actorFragment.arguments = bundle
-        replaceFragment(actorFragment)
+        findNavController().navigate(R.id.action_moviesDetailsFragment_to_actorDetailsFragment, bundle)
     }
 
 }

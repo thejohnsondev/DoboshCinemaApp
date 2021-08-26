@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.*
@@ -131,15 +132,21 @@ class MoviesListFragment : BaseFragment() {
         }
 
         popularSpecificListBtn.setOnClickListener {
-            openSpecificFragment(POPULAR_SPEC_TYPE)
+            val bundle = Bundle()
+            bundle.putString(SPECIFIC_LIST_TYPE, POPULAR_SPEC_TYPE)
+            findNavController().navigate(R.id.action_moviesListFragment_to_specificListFragment, bundle)
         }
 
         topRatedSpecificListBtn.setOnClickListener {
-            openSpecificFragment(TOP_RATED_SPEC_TYPE)
+            val bundle = Bundle()
+            bundle.putString(SPECIFIC_LIST_TYPE, TOP_RATED_SPEC_TYPE)
+            findNavController().navigate(R.id.action_moviesListFragment_to_specificListFragment, bundle)
         }
 
         upcomingSpecificListBtn.setOnClickListener {
-            openSpecificFragment(UPCOMING_SPEC_TYPE)
+            val bundle = Bundle()
+            bundle.putString(SPECIFIC_LIST_TYPE, UPCOMING_SPEC_TYPE)
+            findNavController().navigate(R.id.action_moviesListFragment_to_specificListFragment, bundle)
         }
 
         listViewModel.popularMoviesList.observe(viewLifecycleOwner) {
@@ -192,10 +199,7 @@ class MoviesListFragment : BaseFragment() {
 
         val bundleWithMovie = Bundle()
         bundleWithMovie.putParcelable(MOVIE_KEY, movie)
-
-        val fragmentMoviesDetails = MoviesDetailsFragment()
-        fragmentMoviesDetails.arguments = bundleWithMovie
-        replaceFragment(fragmentMoviesDetails)
+        findNavController().navigate(R.id.action_moviesListFragment_to_moviesDetailsFragment, bundleWithMovie)
     }
 
     private val clickListener = object : OnRecyclerItemClicked {

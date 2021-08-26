@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.request.CachePolicy
@@ -127,7 +128,7 @@ class ActorDetailsFragment : BaseFragment() {
         }
 
         backToMovieDetailsBtn.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
 
         detailsViewModel.getActorDetails().observe(viewLifecycleOwner) {
@@ -214,10 +215,11 @@ class ActorDetailsFragment : BaseFragment() {
                 val bundleWithMovie = Bundle()
                 bundleWithMovie.putParcelable(MOVIE_KEY, movie)
 
-                val fragmentMoviesDetails = MoviesDetailsFragment()
-                fragmentMoviesDetails.arguments = bundleWithMovie
+                findNavController().navigate(
+                    R.id.action_actorDetailsFragment_to_moviesDetailsFragment,
+                    bundleWithMovie
+                )
 
-                replaceFragment(fragmentMoviesDetails)
             }
         } else {
             showMessage(getString(R.string.internet_connection_error))

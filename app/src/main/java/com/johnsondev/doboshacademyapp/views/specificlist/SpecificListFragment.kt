@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.johnsondev.doboshacademyapp.R
@@ -62,7 +63,7 @@ class SpecificListFragment : BaseFragment() {
 
     override fun initListenersAndObservers(view: View) {
         backViewGroup.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
 
         when (specType) {
@@ -100,9 +101,11 @@ class SpecificListFragment : BaseFragment() {
         val bundleWithMovie = Bundle()
         bundleWithMovie.putParcelable(Constants.MOVIE_KEY, movie)
 
-        val fragmentMoviesDetails = MoviesDetailsFragment()
-        fragmentMoviesDetails.arguments = bundleWithMovie
-        replaceFragment(fragmentMoviesDetails)
+        findNavController().navigate(R.id.action_specificListFragment_to_moviesDetailsFragment, bundleWithMovie)
+
+//        val fragmentMoviesDetails = MoviesDetailsFragment()
+//        fragmentMoviesDetails.arguments = bundleWithMovie
+//        replaceFragment(fragmentMoviesDetails)
 
     }
 

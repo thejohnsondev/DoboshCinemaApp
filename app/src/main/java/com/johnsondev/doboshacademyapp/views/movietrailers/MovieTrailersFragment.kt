@@ -1,6 +1,7 @@
 package com.johnsondev.doboshacademyapp.views.movietrailers
 
 import android.view.View
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MovieTrailersAdapter
@@ -35,7 +36,7 @@ class MovieTrailersFragment : BaseFragment() {
 
     override fun initListenersAndObservers(view: View) {
         backBtn.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
     }
 }
