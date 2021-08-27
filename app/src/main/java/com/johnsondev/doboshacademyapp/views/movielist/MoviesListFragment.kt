@@ -3,7 +3,6 @@ package com.johnsondev.doboshacademyapp.views.movielist
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -22,11 +21,8 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
-import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragment
 import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModelFactory
-import com.johnsondev.doboshacademyapp.views.activities.MainActivity
-import com.johnsondev.doboshacademyapp.views.specificlist.SpecificListFragment
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 
@@ -46,36 +42,27 @@ class MoviesListFragment : BaseFragment() {
     private lateinit var tvUpcomingList: TextView
     private lateinit var swipeToRefresh: SwipeRefreshLayout
     private lateinit var listViewModel: MoviesListViewModel
-    private lateinit var tvLastUpdateTime: TextView
     private val scope = CoroutineScope(Dispatchers.IO + Job())
     private lateinit var checkInternetConnection: InternetConnectionManager
     private var isConnectionErrorFromBundle: Boolean? = null
 
 
     override fun initViews(view: View) {
-
-
         listViewModel = ViewModelProvider(
             this,
             MovieViewModelFactory(activity?.application!!)
         )[MoviesListViewModel::class.java]
 
-        tvLastUpdateTime = view.findViewById(R.id.last_update_tv)
         swipeToRefresh = view.findViewById(R.id.swipe_layout)
-
         popularSpecificListBtn = view.findViewById(R.id.popular_spec_list)
         topRatedSpecificListBtn = view.findViewById(R.id.top_rated_spec_list)
         upcomingSpecificListBtn = view.findViewById(R.id.upcoming_spec_list)
-
         tvPopularList = view.findViewById(R.id.popular_tv)
         tvTopRatedList = view.findViewById(R.id.top_rated_tv)
         tvUpcomingList = view.findViewById(R.id.upcoming_tv)
-
         tvPopularList.transitionName = POPULAR_SPEC_TYPE
         tvTopRatedList.transitionName = TOP_RATED_SPEC_TYPE
         tvUpcomingList.transitionName = UPCOMING_SPEC_TYPE
-
-
         rvPopularMovies = view.findViewById(R.id.popular_movies_rv)
         rvTopRatedMovies = view.findViewById(R.id.top_rated_movies_rv)
         rvUpcomingMovies = view.findViewById(R.id.upcoming_movies_rv)
@@ -85,9 +72,7 @@ class MoviesListFragment : BaseFragment() {
         rvPopularMovies.adapter = popularMoviesAdapter
         rvTopRatedMovies.adapter = topRatedMoviesAdapter
         rvUpcomingMovies.adapter = upcomingMoviesAdapter
-
         checkInternetConnection = InternetConnectionManager(requireContext())
-
         initWorkManager()
 
     }
@@ -119,12 +104,6 @@ class MoviesListFragment : BaseFragment() {
                 scope.launch {
                     listViewModel.loadMoviesFromNet().apply {
                         swipeToRefresh.isRefreshing = false
-                        saveUpdateTime(requireContext())
-                        tvLastUpdateTime.text =
-                            view.context.getString(
-                                R.string.last_update,
-                                getUpdateTime(requireContext())
-                            )
                         rvPopularMovies.scrollToPosition(0)
                         rvTopRatedMovies.scrollToPosition(0)
                         rvUpcomingMovies.scrollToPosition(0)
@@ -172,9 +151,6 @@ class MoviesListFragment : BaseFragment() {
             upcomingMoviesAdapter.setMovies(movie)
         }
 
-        listViewModel.getLastUpdateTime(requireContext()).observe(viewLifecycleOwner) { time ->
-            tvLastUpdateTime.text = view.context.getString(R.string.last_update, time)
-        }
     }
 
     private fun initWorkManager() {

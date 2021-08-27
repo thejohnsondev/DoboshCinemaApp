@@ -21,7 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="1dp"
-        android:background="@drawable/round_outline"
+        android:background="@drawable/round_outline_8"
         android:contentDescription="TODO"
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="2:3"
@@ -53,7 +53,7 @@
 
     <TextView
         android:id="@+id/tv_age"
-        style="@style/LightText"
+        style="@style/TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/_13"
@@ -111,7 +111,7 @@
 
     <TextView
         android:id="@+id/movie_reviews"
-        style="@style/LightText"
+        style="@style/TitleText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp_4"
@@ -124,8 +124,8 @@
         tools:text="@tools:sample/lorem" />
 
     <TextView
-        android:id="@+id/movie_name"
-        style="@style/LightText"
+        android:id="@+id/movie_title"
+        style="@style/TitleText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_4"

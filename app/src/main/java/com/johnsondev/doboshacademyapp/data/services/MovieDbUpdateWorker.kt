@@ -3,7 +3,6 @@ package com.johnsondev.doboshacademyapp.data.services
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationChannelCompat
@@ -16,7 +15,6 @@ import com.bumptech.glide.Glide
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
-import com.johnsondev.doboshacademyapp.utilities.saveUpdateTime
 import com.johnsondev.doboshacademyapp.views.activities.SplashScreenActivity
 import kotlinx.coroutines.*
 
@@ -61,7 +59,6 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
                     )
                 }
                 isNewMovie = false
-                saveUpdateTime(context)
             }
             Result.success()
         } catch (throwable: Throwable) {
@@ -98,8 +95,8 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
         return NotificationCompat.Builder(context, CHANNEL_ID).apply {
             setContentTitle(contentTitle)
             setContentText(movie.title)
-            setSmallIcon(R.drawable.cinema)
-            priority = NotificationCompat.PRIORITY_DEFAULT
+            setSmallIcon(R.drawable.cinema_app_icon_round)
+            priority = NotificationCompat.PRIORITY_LOW
             setOnlyAlertOnce(true)
             setContentIntent(
                 PendingIntent.getActivity(

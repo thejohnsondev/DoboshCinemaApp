@@ -47,7 +47,7 @@
 
                 <TextView
                     android:id="@+id/trailers_nav"
-                    style="@style/LightText"
+                    style="@style/TitleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_16"
@@ -64,14 +64,14 @@
                 android:layout_width="@dimen/dp_133"
                 android:layout_height="@dimen/dp_200"
                 android:layout_margin="@dimen/dp_16"
-                android:background="@drawable/round_outline"
+                android:background="@drawable/round_outline_8"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/back_to_detail_view_group"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/tv_actor_name_detail"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_16"
@@ -84,7 +84,7 @@
 
             <TextView
                 android:id="@+id/birth_day"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/birth_day"
@@ -95,7 +95,7 @@
 
             <TextView
                 android:id="@+id/tv_birth_day"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_8"
@@ -105,7 +105,7 @@
 
             <TextView
                 android:id="@+id/death_day"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/death_day"
@@ -116,7 +116,7 @@
 
             <TextView
                 android:id="@+id/tv_death_day"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_8"
@@ -126,7 +126,7 @@
 
             <TextView
                 android:id="@+id/place_of_birth"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/place_of_birth"
@@ -137,7 +137,7 @@
 
             <TextView
                 android:id="@+id/tv_place_of_birth"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_8"
@@ -151,7 +151,7 @@
 
             <TextView
                 android:id="@+id/images"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_16"
@@ -161,7 +161,7 @@
 
             <TextView
                 android:id="@+id/tv_images_count"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"
@@ -184,7 +184,7 @@
 
             <TextView
                 android:id="@+id/biography"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_16"
@@ -210,7 +210,7 @@
 
             <TextView
                 android:id="@+id/movies"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_16"
@@ -220,7 +220,7 @@
 
             <TextView
                 android:id="@+id/tv_movies_count"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"

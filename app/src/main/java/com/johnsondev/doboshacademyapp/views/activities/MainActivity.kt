@@ -1,36 +1,33 @@
 package com.johnsondev.doboshacademyapp.views.activities
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
+import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.view.animation.AnimationSet
-import android.view.animation.AnimationUtils
+import android.view.WindowManager
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
-import com.johnsondev.doboshacademyapp.utilities.addFragment
-import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragment
-import com.johnsondev.doboshacademyapp.views.movielist.MoviesListFragment
+
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var navController: NavController
-    private lateinit var bottomNavView: BottomNavigationView
+    private var navController: NavController? = null
+    lateinit var bottomNavView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        Log.d("TAG", "onCreate ----------------------------")
 
         initViews()
         initListeners()
@@ -38,10 +35,21 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("TAG", "onDestroy ----------------------------")
+
+        navController = null
+
+    }
+
     private fun initViews(){
-        navController = findNavController(R.id.nav_host_fragment)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
         bottomNavView = findViewById(R.id.bottom_nav_view)
-        bottomNavView.setupWithNavController(navController)
+        bottomNavView.setupWithNavController(navController!!)
+
     }
 
     private fun loadData(savedInstanceState: Bundle?){
@@ -55,17 +63,18 @@ class MainActivity : AppCompatActivity() {
             val movieId = intent.getIntExtra(MOVIE_ID, 0)
 
             if (movieId != 0) {
+                bottomNavView.visibility = View.GONE
                 bundle.putInt(MOVIE_ID, movieId)
-                navController.setGraph(R.navigation.nav_graph_details, bundle)
+                navController?.setGraph(R.navigation.nav_graph_details, bundle)
             } else {
                 bottomNavView.isVisible = true
-                navController.setGraph(R.navigation.nav_graph_list)
+                navController?.setGraph(R.navigation.nav_graph_list)
             }
         }
     }
 
     private fun initListeners(){
-        navController.addOnDestinationChangedListener { _, destination, _ ->
+        navController?.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.moviesListFragment -> {
                     showNav()
@@ -93,4 +102,7 @@ class MainActivity : AppCompatActivity() {
     private fun showNav() {
         bottomNavView.visibility = View.VISIBLE
     }
+
+
+
 }

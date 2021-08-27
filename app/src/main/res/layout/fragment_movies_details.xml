@@ -60,7 +60,7 @@
 
         <TextView
             android:id="@+id/tv_age"
-            style="@style/LightText"
+            style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/_13"
@@ -71,7 +71,7 @@
 
         <TextView
             android:id="@+id/tv_title"
-            style="@style/LightText"
+            style="@style/TitleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_16"
@@ -114,7 +114,7 @@
 
         <TextView
             android:id="@+id/tv_reviews"
-            style="@style/LightText"
+            style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_4"
@@ -125,7 +125,7 @@
 
         <TextView
             android:id="@+id/tv_story_line"
-            style="@style/LightText"
+            style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_16"
@@ -172,7 +172,7 @@
 
         <TextView
             android:id="@+id/tv_cast"
-            style="@style/LightText"
+            style="@style/TitleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_16"

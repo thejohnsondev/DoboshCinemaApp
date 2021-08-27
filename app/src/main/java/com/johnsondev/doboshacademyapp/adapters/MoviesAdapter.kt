@@ -63,29 +63,21 @@ class MoviesAdapter(
 class MovieViewHolder(private val view: View, private val context: Context) :
     RecyclerView.ViewHolder(view) {
 
-    private val name: TextView = view.findViewById(R.id.movie_name)
-    private val genre: TextView = view.findViewById(R.id.movie_genres)
+    private val name: TextView = view.findViewById(R.id.movie_title)
     private val reviews: TextView = view.findViewById(R.id.movie_reviews)
     private val rating: RatingBar = view.findViewById(R.id.movie_rating)
-    private val time: TextView = view.findViewById(R.id.movie_time)
-    private val age: TextView = view.findViewById(R.id.tv_age)
     private val movieImg: ImageView = view.findViewById(R.id.movie_img)
+    private val movieMask: ImageView = view.findViewById(R.id.movie_mask)
 
     fun bind(movie: Movie) {
         itemView.transitionName =
             context.getString(R.string.shared_element_container_with_id, movie.id.toString())
 
         val movieReviews: String = view.context.getString(R.string.reviews, movie.numberOfRatings)
-        val movieAge: String = view.context.getString(R.string.plus, movie.minimumAge)
-        val movieRunningTime: String =
-            view.context.getString(R.string.running_time, movie.runtime)
 
         name.text = movie.title
-        genre.text = movie.genres?.joinToString { it.name }
         reviews.text = movieReviews
         rating.progress = (movie.ratings * 2).toInt()
-        time.text = movieRunningTime
-        age.text = movieAge
 
         movieImg.load(movie.poster) {
             crossfade(true)
@@ -94,13 +86,14 @@ class MovieViewHolder(private val view: View, private val context: Context) :
             error(R.drawable.movie_placeholder)
         }
         movieImg.clipToOutline = true
+        movieMask.clipToOutline = true
     }
 
 }
 
 class MovieViewHolderMini(private val view: View, private val context: Context) :
     RecyclerView.ViewHolder(view) {
-    private val name: TextView = view.findViewById(R.id.movie_name)
+    private val name: TextView = view.findViewById(R.id.movie_title)
     private val genre: TextView = view.findViewById(R.id.movie_genres)
     private val reviews: TextView = view.findViewById(R.id.movie_reviews)
     private val rating: RatingBar = view.findViewById(R.id.movie_rating)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="LightText">
+    <style name="TitleText">
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/text_size_14</item>

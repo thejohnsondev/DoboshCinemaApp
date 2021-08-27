@@ -22,11 +22,9 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.TRAILERS_KEY
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
-import com.johnsondev.doboshacademyapp.utilities.replaceFragment
 import com.johnsondev.doboshacademyapp.utilities.showMessage
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
-import com.johnsondev.doboshacademyapp.views.actordetails.ActorDetailsFragment
-import com.johnsondev.doboshacademyapp.views.movietrailers.MovieTrailersFragment
+import com.johnsondev.doboshacademyapp.views.activities.MainActivity
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -162,10 +160,7 @@ class MoviesDetailsFragment : BaseFragment() {
             if (detailsViewModel.checkInternetConnection(requireContext())) {
                 val bundle = Bundle()
                 bundle.putParcelableArrayList(TRAILERS_KEY, movieVideos)
-//                val trailersFragment = MovieTrailersFragment()
-//                trailersFragment.arguments = bundle
                 findNavController().navigate(R.id.action_moviesDetailsFragment_to_movieTrailersFragment, bundle)
-//                replaceFragment(trailersFragment)
             } else {
                 showMessage(getString(R.string.internet_connection_error))
             }

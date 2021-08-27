@@ -11,7 +11,6 @@ import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
-import com.johnsondev.doboshacademyapp.utilities.getUpdateTime
 import kotlinx.coroutines.launch
 
 class MoviesListViewModel(application: Application) : AndroidViewModel(application) {
@@ -25,17 +24,8 @@ class MoviesListViewModel(application: Application) : AndroidViewModel(applicati
     private var upcomingMovies = MutableLiveData<List<Movie>>()
     val upcomingMoviesList: LiveData<List<Movie>> get() = upcomingMovies
 
-    private var lastUpdateTime = MutableLiveData<String>()
     private var checkInternetConnection: InternetConnectionManager? = null
 
-    fun getLastUpdateTime(context: Context): LiveData<String> {
-        if (lastUpdateTime.value.isNullOrEmpty()) {
-            viewModelScope.launch {
-                lastUpdateTime.postValue(getUpdateTime(context))
-            }
-        }
-        return lastUpdateTime
-    }
 
     fun getPopularMovies(): LiveData<List<Movie>> {
         if (popularMovies.value.isNullOrEmpty()) {

@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/trailer_title"
-        style="@style/LightText"
+        style="@style/TitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_16"
