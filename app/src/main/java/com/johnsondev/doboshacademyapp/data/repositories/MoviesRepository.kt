@@ -21,16 +21,13 @@ import java.util.concurrent.TimeoutException
 
 object MoviesRepository {
 
-    private var allGenresList: List<Genre>? = null
-
     private val movieApi = NetworkService.MOVIE_API
-//    private val moviesDatabase = App.getInstance().getMovieDatabase()
 
     private var popularMoviesList: List<Movie> = listOf()
     private var topRatedMoviesList: List<Movie> = listOf()
     private var upcomingMoviesList: List<Movie> = listOf()
 
-    private var allMoviesList: MutableList<Movie> = mutableListOf()
+
 
     private var actorImgAverageColorBody = MutableLiveData<Int>()
     private var actorImgAverageColorText = MutableLiveData<Int>()

@@ -5,12 +5,11 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.R
+import com.johnsondev.doboshacademyapp.data.network.exception.ConnectionErrorException
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.Constants
-import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import kotlinx.coroutines.*
 
@@ -34,9 +33,17 @@ class SplashScreenActivity : AppCompatActivity() {
 
             if(checkInternetConnection.isNetworkAvailable()){
                 scope.launch {
-                    MoviesRepository.loadMoviesFromNet()
-                }.join()
+                    try {
+                        MoviesRepository.loadMoviesFromNet()
+                    }catch (e: Exception){
+                        when(e){
+                            is ConnectionErrorException -> {
+                                openNextActivity(mainActivityIntent)
+                            }
+                        }
+                    }
 
+                }.join()
                 if (intent != null) {
                     handleIntent(intent)
                     mainActivityIntent.putExtra(MOVIE_KEY, movieId)
@@ -46,6 +53,8 @@ class SplashScreenActivity : AppCompatActivity() {
                     startActivity(mainActivityIntent)
                     finish()
                 }
+            }else{
+                openNextActivity(mainActivityIntent)
             }
         }
     }

@@ -104,9 +104,6 @@ class MoviesListFragment : BaseFragment() {
                 scope.launch {
                     listViewModel.loadMoviesFromNet().apply {
                         swipeToRefresh.isRefreshing = false
-                        rvPopularMovies.scrollToPosition(0)
-                        rvTopRatedMovies.scrollToPosition(0)
-                        rvUpcomingMovies.scrollToPosition(0)
                     }
                 }
             }
@@ -149,6 +146,12 @@ class MoviesListFragment : BaseFragment() {
 
         listViewModel.upcomingMoviesList.observe(viewLifecycleOwner) { movie ->
             upcomingMoviesAdapter.setMovies(movie)
+        }
+
+        listViewModel.error.observe(viewLifecycleOwner){
+            if(it != null){
+                onError(it)
+            }
         }
 
     }

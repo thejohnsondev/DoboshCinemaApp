@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_8"
-                android:text="@string/_1983_11_15"
+
                 app:layout_constraintStart_toEndOf="@+id/birth_day"
                 app:layout_constraintTop_toTopOf="@+id/birth_day" />
 
@@ -144,7 +144,7 @@
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:layout_marginEnd="@dimen/dp_16"
-                android:text="@string/esher_surrey_england_uk"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/place_of_birth"
                 app:layout_constraintTop_toTopOf="@+id/place_of_birth" />
@@ -165,7 +165,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"
-                android:text="5"
                 app:layout_constraintTop_toTopOf="@id/images"
                 app:layout_constraintStart_toEndOf="@id/images"
                 android:layout_marginStart="@dimen/dp_8" />
@@ -203,7 +202,6 @@
                 android:maxLines="15"
                 android:paddingTop="@dimen/dp_8"
                 android:paddingBottom="@dimen/dp_8"
-                android:text="@string/bio_example"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/biography"
                 app:layout_constraintTop_toBottomOf="@+id/biography" />
@@ -224,7 +222,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"
-                android:text="5"
                 app:layout_constraintTop_toTopOf="@id/movies"
                 app:layout_constraintStart_toEndOf="@id/movies"
                 android:layout_marginStart="@dimen/dp_8" />

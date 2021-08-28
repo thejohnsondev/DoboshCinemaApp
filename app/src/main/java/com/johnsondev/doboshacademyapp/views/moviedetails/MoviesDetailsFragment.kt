@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import coil.clear
 import coil.load
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
@@ -118,12 +119,12 @@ class MoviesDetailsFragment : BaseFragment() {
 
         watchTheTrailerBtn?.setOnClickListener {
 //            if (detailsViewModel.checkInternetConnection(requireContext())) {
-                val bundle = Bundle()
-                bundle.putParcelableArrayList(TRAILERS_KEY, movieVideos)
-                findNavController().navigate(
-                    R.id.action_moviesDetailsFragment_to_movieTrailersFragment,
-                    bundle
-                )
+            val bundle = Bundle()
+            bundle.putParcelableArrayList(TRAILERS_KEY, movieVideos)
+            findNavController().navigate(
+                R.id.action_moviesDetailsFragment_to_movieTrailersFragment,
+                bundle
+            )
 //            } else {
 //                showMessage(getString(R.string.internet_connection_error))
 //            }
@@ -161,7 +162,22 @@ class MoviesDetailsFragment : BaseFragment() {
             movieVideos = it as ArrayList<MovieVideoDto>?
         }
 
-
+        detailsViewModel.error.observe(viewLifecycleOwner) {
+            if (it != null) {
+                onError(it)
+                tvTitle?.isVisible = false
+                headImage?.isVisible = false
+                tvGenres?.isVisible = false
+                tvReviews?.isVisible = false
+                movieRating?.isVisible = false
+                tvDescription?.isVisible = false
+                tvStoryLine?.isVisible = false
+                tvCast?.isVisible = false
+                addToCalendarBtn?.isVisible = false
+                rvActors?.adapter = null
+                watchTheTrailerBtn?.isVisible = false
+            }
+        }
     }
 
     private val clickListener = object : OnActorItemClickListener {
@@ -173,13 +189,18 @@ class MoviesDetailsFragment : BaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun doOnClick(actor: Actor) {
+
         val bundle = Bundle()
         bundle.putParcelable(ACTOR_DETAILS_ID, actor)
         findNavController().navigate(
             R.id.action_moviesDetailsFragment_to_actorDetailsFragment,
             bundle
         )
+
+
     }
+
+
 
 }
 

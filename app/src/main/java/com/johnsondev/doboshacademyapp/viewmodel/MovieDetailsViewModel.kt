@@ -1,5 +1,6 @@
 package com.johnsondev.doboshacademyapp.viewmodel
 
+import android.app.Application
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
@@ -33,11 +34,12 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_BEGIN_TI
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_DESCRIPTION
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_END_TIME
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
+import com.johnsondev.doboshacademyapp.utilities.base.BaseViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import java.util.*
 
-class MovieDetailsViewModel : ViewModel() {
+class MovieDetailsViewModel(application: Application) : BaseViewModel(application) {
 
     private var _mutableActorList = MutableLiveData<List<Actor>>()
 
@@ -55,14 +57,30 @@ class MovieDetailsViewModel : ViewModel() {
 
 
     fun loadMovieFromNetById(id: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch (exceptionHandler()){
             MoviesRepository.loadMovieById(id)
+            mutableError.value = null
         }
     }
 
     fun loadActorsForMovieById(movieId: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch (exceptionHandler()){
             ActorsRepository.loadActors(movieId)
+            mutableError.value = null
+        }
+    }
+
+    fun loadActorDetailsById(id: Int) {
+        viewModelScope.launch(exceptionHandler()){
+            ActorsRepository.loadActorDetailsById(id)
+            mutableError.value = null
+        }
+    }
+
+    fun loadMovieVideosById(id: Int) {
+        viewModelScope.launch(exceptionHandler()) {
+            MoviesRepository.loadMovieVideosById(id)
+            mutableError.value = null
         }
     }
 
@@ -133,11 +151,7 @@ class MovieDetailsViewModel : ViewModel() {
         return intent
     }
 
-    fun loadActorDetailsById(id: Int) {
-        viewModelScope.launch {
-            ActorsRepository.loadActorDetailsById(id)
-        }
-    }
+
 
     fun getActorDetails(): LiveData<ActorDetailsDto> {
         _actorDetails = ActorsRepository.getActorDetails()
@@ -197,11 +211,7 @@ class MovieDetailsViewModel : ViewModel() {
         return internetConnectionManager.isNetworkAvailable()
     }
 
-    fun loadMovieVideosById(id: Int) {
-        viewModelScope.launch {
-            MoviesRepository.loadMovieVideosById(id)
-        }
-    }
+
 
     fun getMovieVideos(): LiveData<List<MovieVideoDto>> {
         _movieVideos = MoviesRepository.getMovieVideos()

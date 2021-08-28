@@ -11,9 +11,10 @@ import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
+import com.johnsondev.doboshacademyapp.utilities.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class MoviesListViewModel(application: Application) : AndroidViewModel(application) {
+class MoviesListViewModel(application: Application) : BaseViewModel(application) {
 
     private var popularMovies = MutableLiveData<List<Movie>>()
     val popularMoviesList: LiveData<List<Movie>> get() = popularMovies
@@ -29,8 +30,9 @@ class MoviesListViewModel(application: Application) : AndroidViewModel(applicati
 
     fun getPopularMovies(): LiveData<List<Movie>> {
         if (popularMovies.value.isNullOrEmpty()) {
-            viewModelScope.launch {
+            viewModelScope.launch(exceptionHandler()) {
                 popularMovies.postValue(MoviesRepository.getPopularMovies())
+                mutableError.value = null
             }
         }
         return popularMovies
@@ -38,8 +40,9 @@ class MoviesListViewModel(application: Application) : AndroidViewModel(applicati
 
     fun getTopRatedMovies(): LiveData<List<Movie>> {
         if (topRatedMovies.value.isNullOrEmpty()) {
-            viewModelScope.launch {
+            viewModelScope.launch (exceptionHandler()){
                 topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
+                mutableError.value = null
             }
         }
         return  topRatedMovies
@@ -47,8 +50,9 @@ class MoviesListViewModel(application: Application) : AndroidViewModel(applicati
 
     fun getUpcomingMovies(): LiveData<List<Movie>> {
         if (upcomingMovies.value.isNullOrEmpty()) {
-            viewModelScope.launch {
+            viewModelScope.launch(exceptionHandler()){
                 upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
+                mutableError.value = null
             }
         }
         return upcomingMovies
@@ -63,11 +67,12 @@ class MoviesListViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     suspend fun loadMoviesFromNet() {
-        viewModelScope.launch {
+        viewModelScope.launch (exceptionHandler()){
             MoviesRepository.loadMoviesFromNet()
             popularMovies.postValue(MoviesRepository.getPopularMovies())
             topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
             upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
+            mutableError.value = null
         }.join()
     }
 

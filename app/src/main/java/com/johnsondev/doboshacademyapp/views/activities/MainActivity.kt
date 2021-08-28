@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                 navController?.setGraph(R.navigation.nav_graph_details, bundle)
             } else {
                 bottomNavView.isVisible = true
-                navController?.setGraph(R.navigation.nav_graph_list)
+                navController?.setGraph(R.navigation.nav_graph_list, bundle)
             }
         }
     }

@@ -178,9 +178,20 @@ class ActorDetailsFragment : BaseFragment() {
             tvImagesCount.setTextColor(it)
             tvMoviesCount.setTextColor(it)
         }
+
+        detailsViewModel.error.observe(viewLifecycleOwner) {
+            if (it != null) {
+                onError(it)
+                birthDayView.isVisible = false
+                deathDayView.isVisible = false
+                placeOfBirthView.isVisible = false
+                tvBiography.isVisible = false
+                tvImagesCount.isVisible = false
+                tvMoviesCount.isVisible = false
+            }
+        }
     }
 
-    // TODO: 20.07.2021 handle timeout exception
 
     override fun onDestroy() {
         super.onDestroy()
