@@ -38,16 +38,17 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
             var oldMovieList: List<Movie>
             scope.launch {
 
-                withContext(scope.coroutineContext) {
-                    oldMovieList = MoviesRepository.loadAllMovieFromDb()
-                }
+//                withContext(scope.coroutineContext) {
+//                    oldMovieList = MoviesRepository.loadAllMovieFromDb()
+//                }
                 withContext(scope.coroutineContext) {
                     MoviesRepository.loadMoviesFromNet().apply {
-                        newMovieList = MoviesRepository.getAllMoviesFromNet()
+                        newMovieList = MoviesRepository.getUpcomingMovies()
                     }
                 }
 
-                val newMovie = findNewMovie(oldMovieList, newMovieList)
+//                val newMovie = findNewMovie(oldMovieList, newMovieList)
+                val newMovie = newMovieList.random()
 
                 buildNotificationChannel()
 

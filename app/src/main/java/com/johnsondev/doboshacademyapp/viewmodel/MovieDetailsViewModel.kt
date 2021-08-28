@@ -33,13 +33,13 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_BEGIN_TI
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_DESCRIPTION
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_END_TIME
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import java.util.*
 
 class MovieDetailsViewModel : ViewModel() {
 
     private var _mutableActorList = MutableLiveData<List<Actor>>()
-    val actorsList: LiveData<List<Actor>> get() = _mutableActorList
 
     private var _actorDetails = MutableLiveData<ActorDetailsDto>()
     private var _actorMovieCredits = MutableLiveData<List<Movie>>()
@@ -52,25 +52,11 @@ class MovieDetailsViewModel : ViewModel() {
 
     private var _movieVideos = MutableLiveData<List<MovieVideoDto>>()
 
+
+
     fun loadMovieFromNetById(id: Int) {
         viewModelScope.launch {
             MoviesRepository.loadMovieById(id)
-        }
-    }
-
-    fun getCurrentMovieFromNet(): LiveData<Movie> {
-        _currentMovie = MoviesRepository.getCurrentMovie()
-        return _currentMovie
-    }
-
-
-    fun getActorsForCurrentMovie() {
-        viewModelScope.launch {
-            try {
-                _mutableActorList = ActorsRepository.getActorsForCurrentMovie()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
         }
     }
 
@@ -80,10 +66,17 @@ class MovieDetailsViewModel : ViewModel() {
         }
     }
 
-
-    fun getMovieByIdFromDb(id: Int): Movie {
-        return MoviesRepository.getMovieByIdFromDb(id)
+    fun getCurrentMovieFromNet(): LiveData<Movie> {
+        _currentMovie = MoviesRepository.getCurrentMovie()
+        return _currentMovie
     }
+
+
+    fun getActorsForCurrentMovie(): LiveData<List<Actor>> {
+        _mutableActorList = ActorsRepository.getActorsForCurrentMovie()
+        return _mutableActorList
+    }
+
 
     fun callDatePicker(context: Context, date: Calendar, currentMovie: Movie) {
 
@@ -204,12 +197,11 @@ class MovieDetailsViewModel : ViewModel() {
         return internetConnectionManager.isNetworkAvailable()
     }
 
-    fun loadMovieVideosById(id: Int){
+    fun loadMovieVideosById(id: Int) {
         viewModelScope.launch {
             MoviesRepository.loadMovieVideosById(id)
         }
     }
-
 
     fun getMovieVideos(): LiveData<List<MovieVideoDto>> {
         _movieVideos = MoviesRepository.getMovieVideos()

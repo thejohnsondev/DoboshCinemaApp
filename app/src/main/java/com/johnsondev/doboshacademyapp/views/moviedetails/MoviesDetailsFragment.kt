@@ -81,72 +81,32 @@ class MoviesDetailsFragment : BaseFragment() {
     override fun loadData() {
         date = Calendar.getInstance()
 
-        val movieId = arguments?.getInt(MOVIE_ID)
+//        val movieId = arguments?.getInt(MOVIE_ID)
+        val movieId = arguments?.getInt(MOVIE_KEY)
 
-        currentMovie = if (movieId != 0) {
-            detailsViewModel.getMovieByIdFromDb(movieId!!)
-        } else {
-            arguments?.getParcelable(MOVIE_KEY)
+//        else {
+//            arguments?.getParcelable(MOVIE_KEY)
+//        }
+
+//        if (detailsViewModel.checkInternetConnection(requireContext())) {
+
+        if (movieId != 0 && movieId != null) {
+            detailsViewModel.loadMovieFromNetById(movieId)
+            detailsViewModel.loadActorsForMovieById(movieId)
+            detailsViewModel.loadMovieVideosById(movieId)
         }
 
-        if (detailsViewModel.checkInternetConnection(requireContext())) {
-            scope.launch {
-                if (currentMovie?.id!! != 0) {
-                    detailsViewModel.loadActorsForMovieById(currentMovie?.id!!)
-                    detailsViewModel.loadMovieVideosById(currentMovie?.id!!)
-                }
-            }
-        } else {
-            showMessage(getString(R.string.unable_load_cast))
-            rvActors?.isVisible = false
-
-        }
+//        } else {
+//            showMessage(getString(R.string.unable_load_cast))
+//            rvActors?.isVisible = false
+//
+//        }
 
     }
 
     override fun bindViews(view: View) {
         activity?.window?.statusBarColor =
             ContextCompat.getColor(requireContext(), R.color.main_color)
-
-        if (currentMovie?.id!! == 0) {
-            tvReviews?.isVisible = false
-            movieRating?.isVisible = false
-            tvDescription?.isVisible = false
-            tvStoryLine?.isVisible = false
-            tvCast?.isVisible = false
-            addToCalendarBtn?.isVisible = false
-        }
-
-        currentMovie?.let { movie ->
-            val movieReviews: String =
-                view.context.getString(R.string.reviews, movie.numberOfRatings)
-            val movieAge: String = view.context.getString(R.string.plus, movie.minimumAge)
-            tvTitle?.text = movie.title
-            tvAge?.text = movieAge
-            tvGenres?.text = movie.genres?.joinToString { it.name }
-            tvReviews?.text = movieReviews
-            movieRating?.progress = (movie.ratings * 2).toInt()
-            tvDescription?.text = movie.overview
-
-            detailsViewModel.getActorsForCurrentMovie()
-
-            detailsViewModel.actorsList.observe(viewLifecycleOwner) {
-                adapter?.setActors(it)
-            }
-
-            if (detailsViewModel.checkInternetConnection(requireContext())) {
-                detailsViewModel.getMovieVideos().observe(viewLifecycleOwner) {
-                    movieVideos = it as ArrayList<MovieVideoDto>?
-                }
-            }
-
-            headImage?.load(movie.poster) {
-                crossfade(true)
-                placeholder(R.drawable.movie_placeholder)
-                fallback(R.drawable.movie_placeholder)
-                error(R.drawable.movie_placeholder)
-            }
-        }
 
     }
 
@@ -157,18 +117,51 @@ class MoviesDetailsFragment : BaseFragment() {
         }
 
         watchTheTrailerBtn?.setOnClickListener {
-            if (detailsViewModel.checkInternetConnection(requireContext())) {
+//            if (detailsViewModel.checkInternetConnection(requireContext())) {
                 val bundle = Bundle()
                 bundle.putParcelableArrayList(TRAILERS_KEY, movieVideos)
-                findNavController().navigate(R.id.action_moviesDetailsFragment_to_movieTrailersFragment, bundle)
-            } else {
-                showMessage(getString(R.string.internet_connection_error))
-            }
+                findNavController().navigate(
+                    R.id.action_moviesDetailsFragment_to_movieTrailersFragment,
+                    bundle
+                )
+//            } else {
+//                showMessage(getString(R.string.internet_connection_error))
+//            }
         }
 
         backBtn?.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        detailsViewModel.getCurrentMovieFromNet().observe(viewLifecycleOwner) { movie ->
+            val movieReviews: String =
+                view.context.getString(R.string.reviews, movie.numberOfRatings)
+            val movieAge: String = view.context.getString(R.string.plus, movie.minimumAge)
+            tvTitle?.text = movie.title
+            tvAge?.text = movieAge
+            tvGenres?.text = movie.genres?.joinToString { it.name }
+            tvReviews?.text = movieReviews
+            movieRating?.progress = (movie.ratings * 2).toInt()
+            tvDescription?.text = movie.overview
+
+
+            headImage?.load(movie.poster) {
+                crossfade(true)
+                placeholder(R.drawable.movie_placeholder)
+                fallback(R.drawable.movie_placeholder)
+                error(R.drawable.movie_placeholder)
+            }
+        }
+
+        detailsViewModel.getActorsForCurrentMovie().observe(viewLifecycleOwner) {
+            adapter?.setActors(it)
+        }
+
+        detailsViewModel.getMovieVideos().observe(viewLifecycleOwner) {
+            movieVideos = it as ArrayList<MovieVideoDto>?
+        }
+
+
     }
 
     private val clickListener = object : OnActorItemClickListener {
@@ -182,7 +175,10 @@ class MoviesDetailsFragment : BaseFragment() {
     private fun doOnClick(actor: Actor) {
         val bundle = Bundle()
         bundle.putParcelable(ACTOR_DETAILS_ID, actor)
-        findNavController().navigate(R.id.action_moviesDetailsFragment_to_actorDetailsFragment, bundle)
+        findNavController().navigate(
+            R.id.action_moviesDetailsFragment_to_actorDetailsFragment,
+            bundle
+        )
     }
 
 }

@@ -177,7 +177,7 @@ class MoviesListFragment : BaseFragment() {
     private fun doOnClick(movie: Movie) {
 
         val bundleWithMovie = Bundle()
-        bundleWithMovie.putParcelable(MOVIE_KEY, movie)
+        bundleWithMovie.putInt(MOVIE_KEY, movie.id)
         findNavController().navigate(
             R.id.action_moviesListFragment_to_moviesDetailsFragment,
             bundleWithMovie

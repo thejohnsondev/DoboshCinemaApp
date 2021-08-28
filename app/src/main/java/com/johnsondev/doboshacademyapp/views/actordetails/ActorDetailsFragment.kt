@@ -206,21 +206,11 @@ class ActorDetailsFragment : BaseFragment() {
     }
 
     private fun doOnMovieClick(movie: Movie) {
-
-        if (detailsViewModel.checkInternetConnection(requireContext())) {
-            detailsViewModel.loadMovieFromNetById(movie.id)
-            detailsViewModel.getCurrentMovieFromNet().observe(viewLifecycleOwner) {
-                val bundleWithMovie = Bundle()
-                bundleWithMovie.putParcelable(MOVIE_KEY, movie)
-
-                findNavController().navigate(
-                    R.id.action_actorDetailsFragment_to_moviesDetailsFragment,
-                    bundleWithMovie
-                )
-
-            }
-        } else {
-            showMessage(getString(R.string.internet_connection_error))
-        }
+        val bundleWithMovieId = Bundle()
+        bundleWithMovieId.putInt(MOVIE_KEY, movie.id)
+        findNavController().navigate(
+            R.id.action_actorDetailsFragment_to_moviesDetailsFragment,
+            bundleWithMovieId
+        )
     }
 }

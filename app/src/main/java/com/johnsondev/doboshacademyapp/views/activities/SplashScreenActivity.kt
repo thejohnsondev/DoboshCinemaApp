@@ -11,6 +11,7 @@ import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import kotlinx.coroutines.*
 
 class SplashScreenActivity : AppCompatActivity() {
@@ -19,10 +20,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
     private lateinit var checkInternetConnection: InternetConnectionManager
 
-    private val moviesDatabase = App.getInstance().getMovieDatabase()
-
     private var movieId: Int? = null
-
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,32 +31,20 @@ class SplashScreenActivity : AppCompatActivity() {
 
         checkInternetConnection = InternetConnectionManager(this)
         scope.launch {
-            if (moviesDatabase.movieDao().getAllMovies().isNotEmpty()) {
 
+            if(checkInternetConnection.isNetworkAvailable()){
                 scope.launch {
-                    MoviesRepository.loadPopularMoviesFromDb()
-                    MoviesRepository.loadTopRatedMoviesFromDb()
-                    MoviesRepository.loadUpcomingMoviesFromDb()
+                    MoviesRepository.loadMoviesFromNet()
                 }.join()
 
                 if (intent != null) {
                     handleIntent(intent)
-                    mainActivityIntent.putExtra(MOVIE_ID, movieId)
+                    mainActivityIntent.putExtra(MOVIE_KEY, movieId)
                     startActivity(mainActivityIntent)
                     finish()
                 }else{
                     startActivity(mainActivityIntent)
                     finish()
-                }
-
-            } else {
-                if (checkInternetConnection.isNetworkAvailable()) {
-                    scope.launch {
-                        MoviesRepository.loadMoviesFromNet()
-                    }.join()
-                    openNextActivity(mainActivityIntent)
-                } else {
-                    openNextActivity(mainActivityIntent)
                 }
             }
         }

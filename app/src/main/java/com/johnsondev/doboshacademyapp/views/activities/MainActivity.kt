@@ -16,6 +16,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 
 
 class MainActivity : AppCompatActivity() {
@@ -60,11 +61,11 @@ class MainActivity : AppCompatActivity() {
                 Constants.CONNECTION_ERROR_ARG,
                 intent.getBooleanExtra(Constants.CONNECTION_ERROR_EXTRA, false)
             )
-            val movieId = intent.getIntExtra(MOVIE_ID, 0)
+            val movieId = intent.getIntExtra(MOVIE_KEY, 0)
 
             if (movieId != 0) {
                 bottomNavView.visibility = View.GONE
-                bundle.putInt(MOVIE_ID, movieId)
+                bundle.putInt(MOVIE_KEY, movieId)
                 navController?.setGraph(R.navigation.nav_graph_details, bundle)
             } else {
                 bottomNavView.isVisible = true
