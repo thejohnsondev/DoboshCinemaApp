@@ -9,14 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.*
 import com.johnsondev.doboshacademyapp.R
-import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
-import com.johnsondev.doboshacademyapp.adapters.OnGenreClickListener
-import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
-import com.johnsondev.doboshacademyapp.adapters.PopGenresAdapter
+import com.johnsondev.doboshacademyapp.adapters.*
+import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.services.MovieDbUpdateWorker
 import com.johnsondev.doboshacademyapp.utilities.*
+import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
@@ -41,6 +40,8 @@ class MoviesListFragment : BaseFragment() {
     private lateinit var upcomingMoviesAdapter: MoviesAdapter
     private lateinit var rvPopGenres: RecyclerView
     private lateinit var popGenresAdapter: PopGenresAdapter
+    private lateinit var rvPopActors: RecyclerView
+    private lateinit var popActorsAdapter: ActorsAdapter
     private lateinit var popularSpecificListBtn: View
     private lateinit var topRatedSpecificListBtn: View
     private lateinit var upcomingSpecificListBtn: View
@@ -78,14 +79,17 @@ class MoviesListFragment : BaseFragment() {
         rvTopRatedMovies = view.findViewById(R.id.top_rated_movies_rv)
         rvUpcomingMovies = view.findViewById(R.id.upcoming_movies_rv)
         rvPopGenres = view.findViewById(R.id.pop_genres_rv)
+        rvPopActors = view.findViewById(R.id.pop_actors_rv)
         popularMoviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
         topRatedMoviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
         upcomingMoviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
         popGenresAdapter = PopGenresAdapter(view.context, genreClickListener)
+        popActorsAdapter = ActorsAdapter(view.context, actorClickListener)
         rvPopularMovies.adapter = popularMoviesAdapter
         rvTopRatedMovies.adapter = topRatedMoviesAdapter
         rvUpcomingMovies.adapter = upcomingMoviesAdapter
         rvPopGenres.adapter = popGenresAdapter
+        rvPopActors.adapter = popActorsAdapter
         checkInternetConnection = InternetConnectionManager(requireContext())
         initWorkManager()
 
@@ -101,6 +105,7 @@ class MoviesListFragment : BaseFragment() {
             getTopRatedMovies()
             getUpcomingMovies()
             loadGenresList()
+            loadPopularActors()
         }
     }
 
@@ -129,6 +134,7 @@ class MoviesListFragment : BaseFragment() {
                             rvTopRatedMovies.visibility = View.VISIBLE
                             rvUpcomingMovies.visibility = View.VISIBLE
                             rvPopGenres.visibility = View.VISIBLE
+                            rvPopActors.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -180,6 +186,10 @@ class MoviesListFragment : BaseFragment() {
             popGenresAdapter.setGenresList(it)
         }
 
+        listViewModel.getPopularActors().observe(viewLifecycleOwner) {
+            popActorsAdapter.setActors(it)
+        }
+
         listViewModel.error.observe(viewLifecycleOwner) {
             if (it != null) {
                 onError(it)
@@ -192,6 +202,7 @@ class MoviesListFragment : BaseFragment() {
                 rvTopRatedMovies.visibility = View.GONE
                 rvUpcomingMovies.visibility = View.GONE
                 rvPopGenres.visibility = View.GONE
+                rvPopActors.visibility = View.GONE
             }
         }
 
@@ -239,6 +250,18 @@ class MoviesListFragment : BaseFragment() {
             )
 
         }
+    }
+
+    private val actorClickListener = object : OnActorItemClickListener {
+        override fun onClick(actor: Actor) {
+            val bundleWithActor = Bundle()
+            bundleWithActor.putParcelable(ACTOR_KEY, actor)
+            findNavController().navigate(
+                R.id.action_moviesListFragment_to_actorDetailsFragment,
+                bundleWithActor
+            )
+        }
+
     }
 
 

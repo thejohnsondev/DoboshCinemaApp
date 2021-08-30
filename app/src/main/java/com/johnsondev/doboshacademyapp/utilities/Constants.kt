@@ -30,7 +30,7 @@ object Constants {
     const val UPCOMING_SPEC_TYPE = "upcoming_spec_type"
     const val GENRE_SPEC_TYPE = "genre_spec_type"
 
-    const val ACTOR_DETAILS_ID = "actor_details_id"
+    const val ACTOR_KEY = "actor_key"
     const val TRAILERS_KEY = "trailers_key"
     const val MOVIE_KEY = "movie_key"
     const val GENRE_KEY = "genre_key"

@@ -10,7 +10,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import coil.clear
 import coil.load
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
@@ -18,13 +17,11 @@ import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
-import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_DETAILS_ID
+import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.TRAILERS_KEY
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
-import com.johnsondev.doboshacademyapp.utilities.showMessage
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
-import com.johnsondev.doboshacademyapp.views.activities.MainActivity
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -177,7 +174,7 @@ class MoviesDetailsFragment : BaseFragment() {
     private fun doOnClick(actor: Actor) {
 
         val bundle = Bundle()
-        bundle.putParcelable(ACTOR_DETAILS_ID, actor)
+        bundle.putParcelable(ACTOR_KEY, actor)
         findNavController().navigate(
             R.id.action_moviesDetailsFragment_to_actorDetailsFragment,
             bundle

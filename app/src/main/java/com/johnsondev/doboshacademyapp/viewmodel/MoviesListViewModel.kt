@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
@@ -29,6 +30,7 @@ class MoviesListViewModel(application: Application) : BaseViewModel(application)
 
     private var _popularGenres = MutableLiveData<List<Genre>>()
     private var _moviesByGenre = MutableLiveData<List<Movie>>()
+    private var _popularActors = MutableLiveData<List<Actor>>()
 
     private var checkInternetConnection: InternetConnectionManager? = null
 
@@ -51,9 +53,21 @@ class MoviesListViewModel(application: Application) : BaseViewModel(application)
         }
     }
 
-    fun getMoviesByGenre(): LiveData<List<Movie>>{
+    fun getMoviesByGenre(): LiveData<List<Movie>> {
         _moviesByGenre = MoviesRepository.getMoviesByGenre()
         return _moviesByGenre
+    }
+
+    fun loadPopularActors() {
+        viewModelScope.launch(exceptionHandler()) {
+            MoviesRepository.loadPopularActorsList()
+            mutableError.value = null
+        }
+    }
+
+    fun getPopularActors(): LiveData<List<Actor>> {
+        _popularActors = MoviesRepository.getPopularActors()
+        return _popularActors
     }
 
 

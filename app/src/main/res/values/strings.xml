@@ -58,5 +58,6 @@
     <string name="internet_connection_is_unavailable">Internet connection is unavailable</string>
     <string name="popular_genres">Popular genres</string>
     <string name="comedy">Comedy</string>
+    <string name="popular_actors">Popular actors</string>
 
 </resources>

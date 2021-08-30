@@ -1,6 +1,7 @@
 package com.johnsondev.doboshacademyapp.data.repositories
 
 import androidx.lifecycle.MutableLiveData
+import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.NetworkService
@@ -23,6 +24,7 @@ object MoviesRepository {
     private var upcomingMoviesList: List<Movie> = listOf()
     private var genresList = MutableLiveData<List<Genre>>()
     private var moviesByGenre = MutableLiveData<List<Movie>>()
+    private var popularActorsList = MutableLiveData<List<Actor>>()
     private var actorImgAverageColorBody = MutableLiveData<Int>()
     private var actorImgAverageColorText = MutableLiveData<Int>()
 
@@ -65,6 +67,18 @@ object MoviesRepository {
             handleExceptions(e)
         }
     }
+
+    suspend fun loadPopularActorsList(){
+        try {
+            popularActorsList.value = movieApi.getPopularActors().results.distinct().map {
+                DtoMapper.convertActorFromDto(it)
+            }
+        }catch (e: Exception){
+            handleExceptions(e)
+        }
+    }
+
+    fun getPopularActors(): MutableLiveData<List<Actor>> = popularActorsList
 
     fun getMoviesByGenre(): MutableLiveData<List<Movie>> = moviesByGenre
 

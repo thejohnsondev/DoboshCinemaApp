@@ -23,7 +23,7 @@ import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
-import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_DETAILS_ID
+import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 import com.johnsondev.doboshacademyapp.utilities.animateView
@@ -93,7 +93,7 @@ class ActorDetailsFragment : BaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun loadData() {
-        currentActor = arguments?.getParcelable(ACTOR_DETAILS_ID)
+        currentActor = arguments?.getParcelable(ACTOR_KEY)
 
         if (detailsViewModel.checkInternetConnection(requireContext())) {
             scope.launch {

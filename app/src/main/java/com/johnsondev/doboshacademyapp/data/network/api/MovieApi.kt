@@ -45,4 +45,7 @@ interface MovieApi {
 
     @GET("discover/movie")
     suspend fun getMoviesListByGenreId(@Query("with_genres")id: Int): MovieResponse
+
+    @GET("person/popular")
+    suspend fun getPopularActors(): ActorsListResponse
 }
