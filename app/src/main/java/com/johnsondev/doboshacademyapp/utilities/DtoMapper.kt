@@ -26,7 +26,7 @@ object DtoMapper {
         )
     }
 
-    private fun convertGenreFromDto(genreDto: GenreDto) = Genre(
+    fun convertGenreFromDto(genreDto: GenreDto) = Genre(
         id = genreDto.id,
         name = genreDto.name
     )

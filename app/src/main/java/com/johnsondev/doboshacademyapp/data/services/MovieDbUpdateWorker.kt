@@ -35,20 +35,15 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
     override suspend fun doWork(): Result {
         return try {
             var newMovieList: List<Movie>
-            var oldMovieList: List<Movie>
             scope.launch {
 
-//                withContext(scope.coroutineContext) {
-//                    oldMovieList = MoviesRepository.loadAllMovieFromDb()
-//                }
                 withContext(scope.coroutineContext) {
-                    MoviesRepository.loadMoviesFromNet().apply {
+                    MoviesRepository.loadUpcomingMoviesFromNet().apply {
                         newMovieList = MoviesRepository.getUpcomingMovies()
                     }
                 }
 
-//                val newMovie = findNewMovie(oldMovieList, newMovieList)
-                val newMovie = newMovieList.random()
+                val newMovie = newMovieList.distinctBy { it.ratings }.first()
 
                 buildNotificationChannel()
 
@@ -68,17 +63,6 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
 
     }
 
-    private fun findNewMovie(oldMovieList: List<Movie>, newMovieList: List<Movie>): Movie {
-        var newMovie: Movie? = null
-        newMovieList.forEach { new ->
-            val isNewMovieExisting = !oldMovieList.any { it.id == new.id }
-            if (isNewMovieExisting) {
-                newMovie = new
-                return@forEach
-            }
-        }
-        return newMovie ?: Movie(id = 0)
-    }
 
     private fun buildNotification(movie: Movie): NotificationCompat.Builder {
         val uri = "${context.getString(R.string.base_deep_link)}${movie.id}".toUri()

@@ -10,10 +10,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.*
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
+import com.johnsondev.doboshacademyapp.adapters.OnGenreClickListener
 import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
+import com.johnsondev.doboshacademyapp.adapters.PopGenresAdapter
+import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.services.MovieDbUpdateWorker
 import com.johnsondev.doboshacademyapp.utilities.*
+import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_KEY
+import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.PERIODIC_UPDATE_WORK
 import com.johnsondev.doboshacademyapp.utilities.Constants.POPULAR_SPEC_TYPE
@@ -34,13 +39,17 @@ class MoviesListFragment : BaseFragment() {
     private lateinit var topRatedMoviesAdapter: MoviesAdapter
     private lateinit var rvUpcomingMovies: RecyclerView
     private lateinit var upcomingMoviesAdapter: MoviesAdapter
+    private lateinit var rvPopGenres: RecyclerView
+    private lateinit var popGenresAdapter: PopGenresAdapter
     private lateinit var popularSpecificListBtn: View
     private lateinit var topRatedSpecificListBtn: View
     private lateinit var upcomingSpecificListBtn: View
+    private lateinit var popGenresSpecificListView: View
     private lateinit var tvPopularList: TextView
     private lateinit var tvTopRatedList: TextView
     private lateinit var tvUpcomingList: TextView
     private lateinit var swipeToRefresh: SwipeRefreshLayout
+    private lateinit var unavailableListPlaceholder: View
     private lateinit var listViewModel: MoviesListViewModel
     private val scope = CoroutineScope(Dispatchers.IO + Job())
     private lateinit var checkInternetConnection: InternetConnectionManager
@@ -54,9 +63,11 @@ class MoviesListFragment : BaseFragment() {
         )[MoviesListViewModel::class.java]
 
         swipeToRefresh = view.findViewById(R.id.swipe_layout)
+        unavailableListPlaceholder = view.findViewById(R.id.unavailable_list_placeholder)
         popularSpecificListBtn = view.findViewById(R.id.popular_spec_list)
         topRatedSpecificListBtn = view.findViewById(R.id.top_rated_spec_list)
         upcomingSpecificListBtn = view.findViewById(R.id.upcoming_spec_list)
+        popGenresSpecificListView = view.findViewById(R.id.pop_genres_spec_list)
         tvPopularList = view.findViewById(R.id.popular_tv)
         tvTopRatedList = view.findViewById(R.id.top_rated_tv)
         tvUpcomingList = view.findViewById(R.id.upcoming_tv)
@@ -66,12 +77,15 @@ class MoviesListFragment : BaseFragment() {
         rvPopularMovies = view.findViewById(R.id.popular_movies_rv)
         rvTopRatedMovies = view.findViewById(R.id.top_rated_movies_rv)
         rvUpcomingMovies = view.findViewById(R.id.upcoming_movies_rv)
-        popularMoviesAdapter = MoviesAdapter(view.context, clickListener, false)
-        topRatedMoviesAdapter = MoviesAdapter(view.context, clickListener, false)
-        upcomingMoviesAdapter = MoviesAdapter(view.context, clickListener, false)
+        rvPopGenres = view.findViewById(R.id.pop_genres_rv)
+        popularMoviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
+        topRatedMoviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
+        upcomingMoviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
+        popGenresAdapter = PopGenresAdapter(view.context, genreClickListener)
         rvPopularMovies.adapter = popularMoviesAdapter
         rvTopRatedMovies.adapter = topRatedMoviesAdapter
         rvUpcomingMovies.adapter = upcomingMoviesAdapter
+        rvPopGenres.adapter = popGenresAdapter
         checkInternetConnection = InternetConnectionManager(requireContext())
         initWorkManager()
 
@@ -86,6 +100,7 @@ class MoviesListFragment : BaseFragment() {
             getPopularMovies()
             getTopRatedMovies()
             getUpcomingMovies()
+            loadGenresList()
         }
     }
 
@@ -104,8 +119,20 @@ class MoviesListFragment : BaseFragment() {
                 scope.launch {
                     listViewModel.loadMoviesFromNet().apply {
                         swipeToRefresh.isRefreshing = false
+                        withContext(Dispatchers.Main) {
+                            unavailableListPlaceholder.visibility = View.GONE
+                            popularSpecificListBtn.visibility = View.VISIBLE
+                            topRatedSpecificListBtn.visibility = View.VISIBLE
+                            upcomingSpecificListBtn.visibility = View.VISIBLE
+                            popGenresSpecificListView.visibility = View.VISIBLE
+                            rvPopularMovies.visibility = View.VISIBLE
+                            rvTopRatedMovies.visibility = View.VISIBLE
+                            rvUpcomingMovies.visibility = View.VISIBLE
+                            rvPopGenres.visibility = View.VISIBLE
+                        }
                     }
                 }
+
             }
         }
 
@@ -130,6 +157,7 @@ class MoviesListFragment : BaseFragment() {
         upcomingSpecificListBtn.setOnClickListener {
             val bundle = Bundle()
             bundle.putString(SPECIFIC_LIST_TYPE, UPCOMING_SPEC_TYPE)
+
             findNavController().navigate(
                 R.id.action_moviesListFragment_to_specificListFragment,
                 bundle
@@ -144,13 +172,26 @@ class MoviesListFragment : BaseFragment() {
             topRatedMoviesAdapter.setMovies(it)
         }
 
-        listViewModel.upcomingMoviesList.observe(viewLifecycleOwner) { movie ->
-            upcomingMoviesAdapter.setMovies(movie)
+        listViewModel.upcomingMoviesList.observe(viewLifecycleOwner) {
+            upcomingMoviesAdapter.setMovies(it)
         }
 
-        listViewModel.error.observe(viewLifecycleOwner){
-            if(it != null){
+        listViewModel.getGenresList().observe(viewLifecycleOwner) {
+            popGenresAdapter.setGenresList(it)
+        }
+
+        listViewModel.error.observe(viewLifecycleOwner) {
+            if (it != null) {
                 onError(it)
+                unavailableListPlaceholder.visibility = View.VISIBLE
+                popularSpecificListBtn.visibility = View.GONE
+                topRatedSpecificListBtn.visibility = View.GONE
+                upcomingSpecificListBtn.visibility = View.GONE
+                popGenresSpecificListView.visibility = View.GONE
+                rvPopularMovies.visibility = View.GONE
+                rvTopRatedMovies.visibility = View.GONE
+                rvUpcomingMovies.visibility = View.GONE
+                rvPopGenres.visibility = View.GONE
             }
         }
 
@@ -176,22 +217,30 @@ class MoviesListFragment : BaseFragment() {
 
     }
 
-
-    private fun doOnClick(movie: Movie) {
-
-        val bundleWithMovie = Bundle()
-        bundleWithMovie.putInt(MOVIE_KEY, movie.id)
-        findNavController().navigate(
-            R.id.action_moviesListFragment_to_moviesDetailsFragment,
-            bundleWithMovie
-        )
-    }
-
-    private val clickListener = object : OnRecyclerItemClicked {
+    private val movieClickListener = object : OnRecyclerItemClicked {
         override fun onClick(movie: Movie) {
-            doOnClick(movie)
+            val bundleWithMovie = Bundle()
+            bundleWithMovie.putInt(MOVIE_KEY, movie.id)
+            findNavController().navigate(
+                R.id.action_moviesListFragment_to_moviesDetailsFragment,
+                bundleWithMovie
+            )
         }
     }
+
+    private val genreClickListener = object : OnGenreClickListener {
+        override fun onClick(genre: Genre) {
+            val bundleWithGenre = Bundle()
+            bundleWithGenre.putParcelable(GENRE_KEY, genre)
+            bundleWithGenre.putString(SPECIFIC_LIST_TYPE, GENRE_SPEC_TYPE)
+            findNavController().navigate(
+                R.id.action_moviesListFragment_to_specificListFragment,
+                bundleWithGenre
+            )
+
+        }
+    }
+
 
 }
 

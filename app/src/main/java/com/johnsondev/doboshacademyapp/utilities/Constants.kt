@@ -20,7 +20,7 @@ object Constants {
 
     const val CONNECTION_ERROR_EXTRA = "connection_error_extra"
     const val CONNECTION_ERROR_ARG = "connection_error_arg"
-    const val MOVIE_KEY = "movie_key"
+
     const val PREF_UPDATE_TIME = "pref_update_time"
     const val PERIODIC_UPDATE_WORK = "periodic_update_work"
 
@@ -28,10 +28,12 @@ object Constants {
     const val POPULAR_SPEC_TYPE = "popular_spec_type"
     const val TOP_RATED_SPEC_TYPE = "top_rated_spec_type"
     const val UPCOMING_SPEC_TYPE = "upcoming_spec_type"
+    const val GENRE_SPEC_TYPE = "genre_spec_type"
 
-    const val MOVIE_ID = "movie_id"
     const val ACTOR_DETAILS_ID = "actor_details_id"
     const val TRAILERS_KEY = "trailers_key"
+    const val MOVIE_KEY = "movie_key"
+    const val GENRE_KEY = "genre_key"
 
     const val POPULAR_MOVIES_TYPE: String = "popular"
     const val TOP_RATED_MOVIES_TYPE: String = "topRated"

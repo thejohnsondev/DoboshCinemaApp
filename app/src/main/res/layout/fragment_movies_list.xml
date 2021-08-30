@@ -45,6 +45,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/search_box"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/search_field_height"
                     android:layout_marginStart="@dimen/dp_16"
@@ -55,26 +56,27 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/search_tv" >
+                    app:layout_constraintTop_toBottomOf="@id/search_tv">
 
                     <ImageView
                         android:id="@+id/search_icon"
                         android:layout_width="@dimen/dp_20"
                         android:layout_height="@dimen/dp_20"
-                        android:src="@drawable/ic_search_icon"
                         android:layout_marginStart="@dimen/dp_10"
+                        android:src="@drawable/ic_search_icon"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
+                        android:id="@+id/search_edit_text"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/dp_10"
                         android:layout_marginEnd="@dimen/dp_10"
                         android:background="@android:color/transparent"
-                        android:imeOptions="actionSearch"
                         android:hint="@string/movies_actors"
+                        android:imeOptions="actionSearch"
                         android:lines="1"
                         android:maxLines="1"
                         android:scrollHorizontally="true"
@@ -90,9 +92,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/popular_spec_list"
@@ -132,18 +132,39 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/popular_movies_rv"
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:id="@+id/popular_frame"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/dp_4"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/popular_spec_list"
-                tools:listitem="@layout/movie_rv_item" />
+                app:layout_constraintTop_toBottomOf="@+id/popular_spec_list">
+
+                <androidx.recyclerview.widget.RecyclerView
+
+                    android:id="@+id/popular_movies_rv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp_4"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/popular_spec_list"
+                    tools:listitem="@layout/movie_rv_item" />
+
+                <include
+                    android:id="@+id/unavailable_list_placeholder"
+                    layout="@layout/internet_unavailable_placeholder"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/search_group" />
+
+            </FrameLayout>
+
+
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/top_rated_spec_list"
@@ -156,7 +177,8 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="@dimen/dp_8"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/popular_movies_rv">
+                app:layout_constraintTop_toBottomOf="@+id/popular_frame">
+
 
                 <TextView
                     android:id="@+id/top_rated_tv"
@@ -187,13 +209,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingStart="@dimen/dp_4"
-                android:paddingEnd="@dimen/dp_4"
+                android:padding="@dimen/dp_4"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/top_rated_spec_list"
                 tools:listitem="@layout/movie_rv_item" />
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/upcoming_spec_list"
@@ -231,18 +253,57 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/upcoming_movies_rv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingStart="@dimen/dp_4"
-                android:paddingEnd="@dimen/dp_4"
+                android:padding="@dimen/dp_4"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/upcoming_spec_list"
                 tools:listitem="@layout/movie_rv_item" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/pop_genres_spec_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="8dp"
+                android:paddingBottom="@dimen/dp_8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/upcoming_movies_rv">
+
+                <TextView
+                    android:id="@+id/pop_genres_tv"
+                    style="@style/TitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:text="@string/popular_genres"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/pop_genres_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp_4"
+                android:layout_marginBottom="@dimen/bottom_bar_height"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pop_genres_spec_list"
+                tools:listitem="@layout/genre_rv_item" />
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

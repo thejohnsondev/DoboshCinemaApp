@@ -1,6 +1,7 @@
 package com.johnsondev.doboshacademyapp.data.network.api
 
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
+import com.johnsondev.doboshacademyapp.data.network.dto.GenresListResponse
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieDto
 import com.johnsondev.doboshacademyapp.data.network.response.*
 import retrofit2.http.GET
@@ -39,5 +40,9 @@ interface MovieApi {
         @Query("language") lang: String
     ): MovieVideosResponse
 
+    @GET("genre/movie/list")
+    suspend fun getGenresList(): GenresListResponse
 
+    @GET("discover/movie")
+    suspend fun getMoviesListByGenreId(@Query("with_genres")id: Int): MovieResponse
 }

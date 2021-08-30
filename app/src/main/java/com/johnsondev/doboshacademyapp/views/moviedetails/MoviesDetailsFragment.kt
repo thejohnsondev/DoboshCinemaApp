@@ -19,7 +19,6 @@ import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_DETAILS_ID
-import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.TRAILERS_KEY
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
@@ -48,6 +47,7 @@ class MoviesDetailsFragment : BaseFragment() {
     private var addToCalendarBtn: Button? = null
     private var backBtn: TextView? = null
     private var watchTheTrailerBtn: Button? = null
+    private lateinit var unavailableMoviePlaceholder: View
     private var date: Calendar? = null
     private lateinit var detailsViewModel: MovieDetailsViewModel
     private val scope = CoroutineScope(Dispatchers.IO + Job())
@@ -69,6 +69,7 @@ class MoviesDetailsFragment : BaseFragment() {
         addToCalendarBtn = view.findViewById(R.id.add_to_calendar_btn)
         backBtn = view.findViewById(R.id.back_btn)
         watchTheTrailerBtn = view.findViewById(R.id.watch_the_trailer_btn)
+        unavailableMoviePlaceholder = view.findViewById(R.id.unavailable_movie_details_placeholder)
 
         adapter = ActorsAdapter(requireContext(), clickListener)
         rvActors = view.findViewById(R.id.rv_actors)
@@ -82,26 +83,13 @@ class MoviesDetailsFragment : BaseFragment() {
     override fun loadData() {
         date = Calendar.getInstance()
 
-//        val movieId = arguments?.getInt(MOVIE_ID)
         val movieId = arguments?.getInt(MOVIE_KEY)
-
-//        else {
-//            arguments?.getParcelable(MOVIE_KEY)
-//        }
-
-//        if (detailsViewModel.checkInternetConnection(requireContext())) {
 
         if (movieId != 0 && movieId != null) {
             detailsViewModel.loadMovieFromNetById(movieId)
             detailsViewModel.loadActorsForMovieById(movieId)
             detailsViewModel.loadMovieVideosById(movieId)
         }
-
-//        } else {
-//            showMessage(getString(R.string.unable_load_cast))
-//            rvActors?.isVisible = false
-//
-//        }
 
     }
 
@@ -118,16 +106,12 @@ class MoviesDetailsFragment : BaseFragment() {
         }
 
         watchTheTrailerBtn?.setOnClickListener {
-//            if (detailsViewModel.checkInternetConnection(requireContext())) {
             val bundle = Bundle()
             bundle.putParcelableArrayList(TRAILERS_KEY, movieVideos)
             findNavController().navigate(
                 R.id.action_moviesDetailsFragment_to_movieTrailersFragment,
                 bundle
             )
-//            } else {
-//                showMessage(getString(R.string.internet_connection_error))
-//            }
         }
 
         backBtn?.setOnClickListener {
@@ -176,8 +160,10 @@ class MoviesDetailsFragment : BaseFragment() {
                 addToCalendarBtn?.isVisible = false
                 rvActors?.adapter = null
                 watchTheTrailerBtn?.isVisible = false
+                unavailableMoviePlaceholder.visibility = View.VISIBLE
             }
         }
+
     }
 
     private val clickListener = object : OnActorItemClickListener {

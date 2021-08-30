@@ -15,7 +15,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.utilities.Constants
-import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ID
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 
 

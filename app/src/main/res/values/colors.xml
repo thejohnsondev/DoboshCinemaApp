@@ -15,4 +15,5 @@
     <color name="gray_light">#BBC5D3</color>
     <color name="main_color_light">#222232</color>
     <color name="search_bg_color">#303042</color>
+    <color name="genre_bg_color">#343C47</color>
 </resources>
