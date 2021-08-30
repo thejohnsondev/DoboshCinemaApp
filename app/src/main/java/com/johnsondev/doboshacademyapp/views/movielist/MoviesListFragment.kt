@@ -18,9 +18,11 @@ import com.johnsondev.doboshacademyapp.utilities.*
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_SPEC_TYPE
+import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.PERIODIC_UPDATE_WORK
 import com.johnsondev.doboshacademyapp.utilities.Constants.POPULAR_SPEC_TYPE
+import com.johnsondev.doboshacademyapp.utilities.Constants.POP_ACTORS_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
@@ -46,6 +48,7 @@ class MoviesListFragment : BaseFragment() {
     private lateinit var topRatedSpecificListBtn: View
     private lateinit var upcomingSpecificListBtn: View
     private lateinit var popGenresSpecificListView: View
+    private lateinit var popActorsSpecificListBtn: View
     private lateinit var tvPopularList: TextView
     private lateinit var tvTopRatedList: TextView
     private lateinit var tvUpcomingList: TextView
@@ -69,6 +72,7 @@ class MoviesListFragment : BaseFragment() {
         topRatedSpecificListBtn = view.findViewById(R.id.top_rated_spec_list)
         upcomingSpecificListBtn = view.findViewById(R.id.upcoming_spec_list)
         popGenresSpecificListView = view.findViewById(R.id.pop_genres_spec_list)
+        popActorsSpecificListBtn = view.findViewById(R.id.pop_actors_spec_list)
         tvPopularList = view.findViewById(R.id.popular_tv)
         tvTopRatedList = view.findViewById(R.id.top_rated_tv)
         tvUpcomingList = view.findViewById(R.id.upcoming_tv)
@@ -84,7 +88,7 @@ class MoviesListFragment : BaseFragment() {
         topRatedMoviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
         upcomingMoviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
         popGenresAdapter = PopGenresAdapter(view.context, genreClickListener)
-        popActorsAdapter = ActorsAdapter(view.context, actorClickListener)
+        popActorsAdapter = ActorsAdapter(view.context, actorClickListener, ITEM_TYPE_MINI)
         rvPopularMovies.adapter = popularMoviesAdapter
         rvTopRatedMovies.adapter = topRatedMoviesAdapter
         rvUpcomingMovies.adapter = upcomingMoviesAdapter
@@ -166,6 +170,16 @@ class MoviesListFragment : BaseFragment() {
 
             findNavController().navigate(
                 R.id.action_moviesListFragment_to_specificListFragment,
+                bundle
+            )
+        }
+
+        popActorsSpecificListBtn.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString(SPECIFIC_LIST_TYPE, POP_ACTORS_SPEC_TYPE)
+
+            findNavController().navigate(
+                R.id.action_moviesListFragment_to_specificActorsListFragment,
                 bundle
             )
         }

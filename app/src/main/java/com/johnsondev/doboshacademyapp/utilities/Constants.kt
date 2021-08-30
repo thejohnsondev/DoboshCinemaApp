@@ -29,6 +29,10 @@ object Constants {
     const val TOP_RATED_SPEC_TYPE = "top_rated_spec_type"
     const val UPCOMING_SPEC_TYPE = "upcoming_spec_type"
     const val GENRE_SPEC_TYPE = "genre_spec_type"
+    const val POP_ACTORS_SPEC_TYPE = "pop_actors_spec_type"
+
+    const val ITEM_TYPE_MINI = 0
+    const val ITEM_TYPE_HORIZONTAL = 1
 
     const val ACTOR_KEY = "actor_key"
     const val TRAILERS_KEY = "trailers_key"

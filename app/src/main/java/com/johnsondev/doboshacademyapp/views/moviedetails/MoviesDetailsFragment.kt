@@ -18,6 +18,7 @@ import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
+import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.TRAILERS_KEY
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
@@ -68,7 +69,7 @@ class MoviesDetailsFragment : BaseFragment() {
         watchTheTrailerBtn = view.findViewById(R.id.watch_the_trailer_btn)
         unavailableMoviePlaceholder = view.findViewById(R.id.unavailable_movie_details_placeholder)
 
-        adapter = ActorsAdapter(requireContext(), clickListener)
+        adapter = ActorsAdapter(requireContext(), clickListener, ITEM_TYPE_MINI)
         rvActors = view.findViewById(R.id.rv_actors)
         rvActors?.adapter = adapter
         rvActors?.setHasFixedSize(true)

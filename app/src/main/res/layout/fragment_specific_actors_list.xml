@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
-    tools:context=".views.specificlist.SpecificListFragment">
+    tools:context=".views.specificmovieslist.SpecificMoviesListFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/back_to_main_view_group"
@@ -25,20 +25,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_arrow_back_24"
-            app:layout_constraintBottom_toBottomOf="@+id/spec_list_type_tv"
-            app:layout_constraintEnd_toStartOf="@+id/spec_list_type_tv"
-            app:layout_constraintTop_toTopOf="@+id/spec_list_type_tv"
+            app:layout_constraintBottom_toBottomOf="@+id/spec_actors_list_type_tv"
+            app:layout_constraintEnd_toStartOf="@+id/spec_actors_list_type_tv"
+            app:layout_constraintTop_toTopOf="@+id/spec_actors_list_type_tv"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/dp_16"
             android:contentDescription="TODO" />
 
         <TextView
-            android:id="@+id/spec_list_type_tv"
+            android:id="@+id/spec_actors_list_type_tv"
             style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_16"
-            android:text="@string/popular_movies"
+            android:text="@string/popular_actors"
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@id/back_to_main_btn"
             app:layout_constraintTop_toTopOf="parent" />
@@ -47,19 +47,19 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_spec_movies_list"
-        android:layout_width="wrap_content"
+        android:id="@+id/rv_spec_actors_list"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
         android:padding="@dimen/dp_8"
         android:layout_marginBottom="@dimen/dp_2"
-        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:splitMotionEvents="false"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/back_to_main_view_group"
-        tools:spanCount="2"
-        tools:listitem="@layout/movie_rv_item" />
+        tools:listitem="@layout/actor_rv_item_horizontal" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

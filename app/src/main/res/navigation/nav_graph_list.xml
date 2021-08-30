@@ -30,6 +30,13 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_moviesListFragment_to_specificActorsListFragment"
+            app:destination="@id/specificActorsListFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
     <fragment
         android:id="@+id/moviesDetailsFragment"
@@ -52,9 +59,9 @@
     </fragment>
     <fragment
         android:id="@+id/specificListFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.specificlist.SpecificListFragment"
+        android:name="com.johnsondev.doboshacademyapp.views.specificmovieslist.SpecificMoviesListFragment"
         android:label="fragment_specific_list"
-        tools:layout="@layout/fragment_specific_list" >
+        tools:layout="@layout/fragment_specific_movies_list" >
         <action
             android:id="@+id/action_specificListFragment_to_moviesDetailsFragment"
             app:destination="@id/moviesDetailsFragment"
@@ -95,4 +102,16 @@
         android:name="com.johnsondev.doboshacademyapp.views.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/specificActorsListFragment"
+        android:name="com.johnsondev.doboshacademyapp.views.specificactorslist.SpecificActorsListFragment"
+        android:label="SpecificActorsListFragment" >
+        <action
+            android:id="@+id/action_specificActorsListFragment_to_actorDetailsFragment"
+            app:destination="@id/actorDetailsFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+    </fragment>
 </navigation>

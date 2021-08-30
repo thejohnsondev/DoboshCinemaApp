@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.views.specificlist
+package com.johnsondev.doboshacademyapp.views.specificmovieslist
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -25,7 +25,7 @@ import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
 
 
-class SpecificListFragment : BaseFragment() {
+class SpecificMoviesListFragment : BaseFragment() {
 
     private lateinit var tvSpecListType: TextView
     private lateinit var rvSpecMoviesList: RecyclerView
@@ -49,16 +49,14 @@ class SpecificListFragment : BaseFragment() {
 
     }
 
-    override fun layoutId(): Int = R.layout.fragment_specific_list
+    override fun layoutId(): Int = R.layout.fragment_specific_movies_list
 
     override fun loadData() {
         specType = arguments?.getString(SPECIFIC_LIST_TYPE)!!
-        Log.d("TAG", "spec type == $specType")
         when (specType) {
             GENRE_SPEC_TYPE -> {
 
                 genre = arguments?.getParcelable(GENRE_KEY)
-                Log.d("TAG", genre?.name!!)
                 moviesListViewModel.loadMoviesByGenreId(genre?.id ?: 0)
             }
         }
@@ -83,25 +81,21 @@ class SpecificListFragment : BaseFragment() {
             POPULAR_SPEC_TYPE -> {
                 moviesListViewModel.getPopularMovies().observe(viewLifecycleOwner) {
                     adapter.setMovies(it)
-                    Log.d("TAG", "spec fragment popular")
                 }
             }
             TOP_RATED_SPEC_TYPE -> {
                 moviesListViewModel.getTopRatedMovies().observe(viewLifecycleOwner) {
                     adapter.setMovies(it)
-                    Log.d("TAG", "spec fragment top")
                 }
             }
             UPCOMING_SPEC_TYPE -> {
                 moviesListViewModel.getUpcomingMovies().observe(viewLifecycleOwner) {
                     adapter.setMovies(it)
-                    Log.d("TAG", "spec fragment upcoming")
                 }
             }
             GENRE_SPEC_TYPE -> {
                 moviesListViewModel.getMoviesByGenre().observe(viewLifecycleOwner) {
                     adapter.setMovies(it)
-                    Log.d("TAG", "spec fragment genre")
                 }
             }
         }

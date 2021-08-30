@@ -178,6 +178,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/images"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:orientation="horizontal"
+                android:splitMotionEvents="false"
                 tools:listitem="@layout/actor_image_rv_item"/>
 
 
@@ -233,6 +234,7 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/dp_16"
+                android:splitMotionEvents="false"
                 tools:listitem="@layout/movie_rv_item_mini"
                 app:layout_constraintTop_toBottomOf="@id/movies"
                 app:layout_constraintStart_toStartOf="parent"

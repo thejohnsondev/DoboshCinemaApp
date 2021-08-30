@@ -59,5 +59,6 @@
     <string name="popular_genres">Popular genres</string>
     <string name="comedy">Comedy</string>
     <string name="popular_actors">Popular actors</string>
+    <string name="actors_list">Actors list</string>
 
 </resources>
