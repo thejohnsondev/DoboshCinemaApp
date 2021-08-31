@@ -2,6 +2,7 @@ package com.johnsondev.doboshacademyapp.data.network.api
 
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.data.network.dto.GenresListResponse
+import com.johnsondev.doboshacademyapp.data.network.dto.MovieDetailsDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieDto
 import com.johnsondev.doboshacademyapp.data.network.response.*
 import retrofit2.http.GET
@@ -20,7 +21,7 @@ interface MovieApi {
     suspend fun getUpcoming(): MovieResponse
 
     @GET("movie/{movie_id}")
-    suspend fun getMovieById(@Path(value = "movie_id") id: Int): MovieDto
+    suspend fun getMovieById(@Path(value = "movie_id") id: Int): MovieDetailsDto
 
     @GET("movie/{movie_id}/credits")
     suspend fun getActors(@Path(value = "movie_id") id: Int): CastResponse

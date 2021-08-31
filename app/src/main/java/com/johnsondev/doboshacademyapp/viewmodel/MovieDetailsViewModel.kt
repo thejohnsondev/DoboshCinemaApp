@@ -22,8 +22,10 @@ import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.models.MovieDetails
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
+import com.johnsondev.doboshacademyapp.data.network.dto.MovieDetailsDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
@@ -50,7 +52,7 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
     private var _averageColorBody = MutableLiveData<Int>()
     private var _averageColorText = MutableLiveData<Int>()
 
-    private var _currentMovie = MutableLiveData<Movie>()
+    private var _currentMovie = MutableLiveData<MovieDetails>()
 
     private var _movieVideos = MutableLiveData<List<MovieVideoDto>>()
 
@@ -84,7 +86,7 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
         }
     }
 
-    fun getCurrentMovieFromNet(): LiveData<Movie> {
+    fun getCurrentMovieFromNet(): LiveData<MovieDetails> {
         _currentMovie = MoviesRepository.getCurrentMovie()
         return _currentMovie
     }

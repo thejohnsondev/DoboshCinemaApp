@@ -2,6 +2,7 @@ package com.johnsondev.doboshacademyapp.views.moviedetails
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -22,6 +23,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.TRAILERS_KEY
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
+import com.johnsondev.doboshacademyapp.utilities.showMessage
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 import kotlinx.coroutines.*
 import java.util.*
@@ -134,6 +136,20 @@ class MoviesDetailsFragment : BaseFragment() {
                 fallback(R.drawable.movie_placeholder)
                 error(R.drawable.movie_placeholder)
             }
+
+            Log.d("TAG", "movie details: budget${movie.budget}")
+            Log.d("TAG", "movie details: revenue${movie.revenue}")
+            Log.d("TAG", "movie details: origLanguage${movie.origLanguage}")
+            Log.d("TAG", "movie details: origTitle${movie.origTitle}")
+            Log.d("TAG", "movie details: productionCompanies${movie.productionCompanies}")
+            Log.d("TAG", "movie details: productionCountries${movie.productionCountries}")
+            Log.d("TAG", "movie details: releaseDate${movie.releaseDate}")
+            Log.d("TAG", "movie details: status${movie.status}")
+            Log.d("TAG", "movie details: tagLine${movie.tagLine}")
+
+            showMessage("origTitle${movie.origTitle}")
+            showMessage("status${movie.status}")
+
         }
 
         detailsViewModel.getActorsForCurrentMovie().observe(viewLifecycleOwner) {

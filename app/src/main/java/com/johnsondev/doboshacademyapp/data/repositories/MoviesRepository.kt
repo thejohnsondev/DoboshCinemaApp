@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.models.MovieDetails
 import com.johnsondev.doboshacademyapp.data.network.NetworkService
+import com.johnsondev.doboshacademyapp.data.network.dto.MovieDetailsDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import com.johnsondev.doboshacademyapp.data.network.exception.ConnectionErrorException
 import com.johnsondev.doboshacademyapp.data.network.exception.UnexpectedErrorException
@@ -29,7 +31,7 @@ object MoviesRepository {
     private var actorImgAverageColorText = MutableLiveData<Int>()
 
     private var movieVideos = MutableLiveData<List<MovieVideoDto>>()
-    private var currentMovie = MutableLiveData<Movie>()
+    private var currentMovieDetails = MutableLiveData<MovieDetails>()
 
     suspend fun loadMovieVideosById(id: Int) {
         try {
@@ -42,7 +44,7 @@ object MoviesRepository {
 
     suspend fun loadMovieById(id: Int) {
         try {
-            currentMovie.value = DtoMapper.convertMovieFromDto(movieApi.getMovieById(id))
+            currentMovieDetails.value = DtoMapper.convertMovieDetailsFromDto(movieApi.getMovieById(id))
         } catch (e: Exception) {
             handleExceptions(e)
         }
@@ -86,7 +88,7 @@ object MoviesRepository {
 
     fun getMovieVideos(): MutableLiveData<List<MovieVideoDto>> = movieVideos
 
-    fun getCurrentMovie(): MutableLiveData<Movie> = currentMovie
+    fun getCurrentMovie(): MutableLiveData<MovieDetails> = currentMovieDetails
 
     fun setAverageColor(body: Int, text: Int) {
         actorImgAverageColorBody.postValue(body)
@@ -100,7 +102,7 @@ object MoviesRepository {
         try {
             popularMoviesList = movieApi.getPopular().results.distinct().map {
                 DtoMapper.convertMovieFromDto(
-                    movieApi.getMovieById(it.id)
+                    it
                 )
             }
         } catch (e: Exception) {
@@ -113,7 +115,7 @@ object MoviesRepository {
         try {
             topRatedMoviesList = movieApi.getTopRated().results.distinct().map {
                 DtoMapper.convertMovieFromDto(
-                    movieApi.getMovieById(it.id)
+                    it
                 )
             }
         } catch (e: Exception) {
@@ -126,7 +128,7 @@ object MoviesRepository {
         try {
             upcomingMoviesList = movieApi.getUpcoming().results.distinct().map {
                 DtoMapper.convertMovieFromDto(
-                    movieApi.getMovieById(it.id)
+                    it
                 )
             }
         } catch (e: Exception) {

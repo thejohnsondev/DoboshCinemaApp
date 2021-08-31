@@ -36,27 +36,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 scope.launch {
                     try {
                         MoviesRepository.loadPopularMoviesFromNet()
-                    } catch (e: Exception) {
-                        when (e) {
-                            is ConnectionErrorException -> {
-                                openNextActivity(mainActivityIntent)
-                            }
-                        }
-                    }
-                }
-                scope.launch {
-                    try {
                         MoviesRepository.loadTopRatedMoviesFromNet()
-                    } catch (e: Exception) {
-                        when (e) {
-                            is ConnectionErrorException -> {
-                                openNextActivity(mainActivityIntent)
-                            }
-                        }
-                    }
-                }
-                scope.launch {
-                    try {
                         MoviesRepository.loadUpcomingMoviesFromNet()
                     } catch (e: Exception) {
                         when (e) {
