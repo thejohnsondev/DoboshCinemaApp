@@ -100,7 +100,7 @@ object MoviesRepository {
         try {
             popularMoviesList = movieApi.getPopular().results.distinct().map {
                 DtoMapper.convertMovieFromDto(
-                    movieApi.getMovieById(it.id)
+                    it
                 )
             }
         } catch (e: Exception) {
@@ -113,7 +113,7 @@ object MoviesRepository {
         try {
             topRatedMoviesList = movieApi.getTopRated().results.distinct().map {
                 DtoMapper.convertMovieFromDto(
-                    movieApi.getMovieById(it.id)
+                    it
                 )
             }
         } catch (e: Exception) {
@@ -126,7 +126,7 @@ object MoviesRepository {
         try {
             upcomingMoviesList = movieApi.getUpcoming().results.distinct().map {
                 DtoMapper.convertMovieFromDto(
-                    movieApi.getMovieById(it.id)
+                    it
                 )
             }
         } catch (e: Exception) {
@@ -151,7 +151,7 @@ object MoviesRepository {
     private fun handleExceptions(e: Exception) {
         throw when (e) {
             is IOException, is HttpException, is TimeoutException -> ConnectionErrorException()
-            else -> UnexpectedErrorException()
+            else -> e
         }
     }
 
