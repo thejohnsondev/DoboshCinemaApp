@@ -22,16 +22,7 @@ object DtoMapper {
             minimumAge = if (movieDto.adult == true) 16 else 13,
             runtime = movieDto.runtime,
             genres = movieDto.genres?.map { convertGenreFromDto(it) },
-            actors = emptyList(),
-            budget = movieDto.budget ?: 0,
-            revenue = movieDto.revenue ?: 0,
-            origLanguage = movieDto.origLanguage ?: "missing info",
-            origTitle = movieDto.origTitle ?: "missing info",
-            productionCompanies = movieDto.productionCompanies,
-            productionCountries = movieDto.productionCountries,
-            releaseDate = movieDto.releaseDate ?: "missing info",
-            status = movieDto.status ?: "missing info",
-            tagLine = movieDto.tagLine ?: "missing info"
+            actors = emptyList()
         )
     }
 

@@ -9,41 +9,23 @@ import kotlinx.serialization.SerialName
 @Parcelize
 data class MovieDto(
     @SerialName("id")
-    var id: Int,
+    val id: Int,
     @SerialName("title")
-    var title: String?,
+    val title: String?,
     @SerialName("poster_path")
-    var poster: String?,
+    val poster: String?,
     @SerialName("backdrop_path")
-    var backdropImg: String?,
+    val backdropImg: String?,
     @SerialName("runtime")
     var runtime: Int? = null,
     @SerialName("genres")
     var genres: @RawValue List<GenreDto>? = null,
     @SerialName("vote_average")
-    var rating: Float?,
+    val rating: Float?,
     @SerialName("vote_count")
-    var voteCount: Int?,
+    val voteCount: Int?,
     @SerialName("overview")
-    var overview: String?,
+    val overview: String?,
     @SerialName("adult")
-    var adult: Boolean?,
-    @SerialName("budget")
-    var budget: Int?,
-    @SerialName("revenue")
-    var revenue: Int?,
-    @SerialName("original_language")
-    var origLanguage: String?,
-    @SerialName("original_title")
-    var origTitle: String?,
-    @SerialName("production_companies")
-    var productionCompanies: @RawValue List<ProductionCompanyDto>? = null,
-    @SerialName("production_countries")
-    var productionCountries: @RawValue List<ProductionCountryDto>? = null,
-    @SerialName("release_date")
-    var releaseDate: String?,
-    @SerialName("status")
-    var status: String?,
-    @SerialName("tagline")
-    var tagLine: String?
+    val adult: Boolean?
 ) : Parcelable

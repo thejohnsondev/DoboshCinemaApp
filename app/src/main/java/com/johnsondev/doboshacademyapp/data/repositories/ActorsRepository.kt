@@ -1,10 +1,13 @@
 package com.johnsondev.doboshacademyapp.data.repositories
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.NetworkService
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
+import com.johnsondev.doboshacademyapp.data.network.dto.ActorDto
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
 import com.johnsondev.doboshacademyapp.data.network.exception.ConnectionErrorException
 import com.johnsondev.doboshacademyapp.data.network.exception.UnexpectedErrorException
@@ -25,7 +28,7 @@ object ActorsRepository {
 
     suspend fun loadActors(movieId: Int) {
         try {
-            actors.postValue(movieApi.getMovieCast(movieId).cast.distinct().map {
+            actors.postValue(movieApi.getActors(movieId).cast.distinct().map {
                 DtoMapper.convertActorFromDto(it)
             })
         }catch (e: Exception){
