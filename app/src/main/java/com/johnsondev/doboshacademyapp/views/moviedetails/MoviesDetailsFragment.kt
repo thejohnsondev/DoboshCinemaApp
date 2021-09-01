@@ -2,7 +2,6 @@ package com.johnsondev.doboshacademyapp.views.moviedetails
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -87,7 +86,7 @@ class MoviesDetailsFragment : BaseFragment() {
 
         if (movieId != 0 && movieId != null) {
             detailsViewModel.loadMovieFromNetById(movieId)
-            detailsViewModel.loadActorsForMovieById(movieId)
+            detailsViewModel.loadCastForMovieById(movieId)
             detailsViewModel.loadMovieVideosById(movieId)
         }
 
@@ -137,15 +136,7 @@ class MoviesDetailsFragment : BaseFragment() {
                 error(R.drawable.movie_placeholder)
             }
 
-            Log.d("TAG", "movie details: budget${movie.budget}")
-            Log.d("TAG", "movie details: revenue${movie.revenue}")
-            Log.d("TAG", "movie details: origLanguage${movie.origLanguage}")
-            Log.d("TAG", "movie details: origTitle${movie.origTitle}")
-            Log.d("TAG", "movie details: productionCompanies${movie.productionCompanies}")
-            Log.d("TAG", "movie details: productionCountries${movie.productionCountries}")
-            Log.d("TAG", "movie details: releaseDate${movie.releaseDate}")
-            Log.d("TAG", "movie details: status${movie.status}")
-            Log.d("TAG", "movie details: tagLine${movie.tagLine}")
+
 
             showMessage("origTitle${movie.origTitle}")
             showMessage("status${movie.status}")
@@ -154,6 +145,10 @@ class MoviesDetailsFragment : BaseFragment() {
 
         detailsViewModel.getActorsForCurrentMovie().observe(viewLifecycleOwner) {
             adapter?.setActors(it)
+        }
+
+        detailsViewModel.getCrewForCurrentMovie().observe(viewLifecycleOwner) {
+            showMessage("${it[0].name} ${it[0].job} ${it.size }")
         }
 
         detailsViewModel.getMovieVideos().observe(viewLifecycleOwner) {
@@ -199,7 +194,6 @@ class MoviesDetailsFragment : BaseFragment() {
 
 
     }
-
 
 
 }

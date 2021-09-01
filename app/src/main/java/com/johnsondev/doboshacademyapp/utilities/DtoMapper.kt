@@ -1,13 +1,7 @@
 package com.johnsondev.doboshacademyapp.utilities
 
-import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.Genre
-import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.data.models.MovieDetails
-import com.johnsondev.doboshacademyapp.data.network.dto.ActorDto
-import com.johnsondev.doboshacademyapp.data.network.dto.GenreDto
-import com.johnsondev.doboshacademyapp.data.network.dto.MovieDetailsDto
-import com.johnsondev.doboshacademyapp.data.network.dto.MovieDto
+import com.johnsondev.doboshacademyapp.data.models.*
+import com.johnsondev.doboshacademyapp.data.network.dto.*
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 
 object DtoMapper {
@@ -64,5 +58,12 @@ object DtoMapper {
             picture = "${POSTER_PATH}${actorDto.profileImg}"
         )
     }
+
+    fun convertCrewMemberFromDto(crewMemberDto: CrewMemberDto) = CrewMember(
+        id = crewMemberDto.id,
+        name = crewMemberDto.name,
+        picture = "${POSTER_PATH}${crewMemberDto.profileImg}",
+        job = crewMemberDto.job
+    )
 
 }

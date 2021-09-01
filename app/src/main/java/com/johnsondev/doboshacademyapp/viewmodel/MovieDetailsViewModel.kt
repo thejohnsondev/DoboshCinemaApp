@@ -12,7 +12,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
@@ -21,11 +20,11 @@ import com.bumptech.glide.request.transition.Transition
 import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Actor
+import com.johnsondev.doboshacademyapp.data.models.CrewMember
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.models.MovieDetails
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
-import com.johnsondev.doboshacademyapp.data.network.dto.MovieDetailsDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
@@ -37,13 +36,13 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_DESCRIPT
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_END_TIME
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.base.BaseViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import java.util.*
 
 class MovieDetailsViewModel(application: Application) : BaseViewModel(application) {
 
-    private var _mutableActorList = MutableLiveData<List<Actor>>()
+    private var _actorList = MutableLiveData<List<Actor>>()
+    private var _crewList = MutableLiveData<List<CrewMember>>()
 
     private var _actorDetails = MutableLiveData<ActorDetailsDto>()
     private var _actorMovieCredits = MutableLiveData<List<Movie>>()
@@ -57,23 +56,22 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
     private var _movieVideos = MutableLiveData<List<MovieVideoDto>>()
 
 
-
     fun loadMovieFromNetById(id: Int) {
-        viewModelScope.launch (exceptionHandler()){
+        viewModelScope.launch(exceptionHandler()) {
             MoviesRepository.loadMovieById(id)
             mutableError.value = null
         }
     }
 
-    fun loadActorsForMovieById(movieId: Int) {
-        viewModelScope.launch (exceptionHandler()){
-            ActorsRepository.loadActors(movieId)
+    fun loadCastForMovieById(movieId: Int) {
+        viewModelScope.launch(exceptionHandler()) {
+            ActorsRepository.loadCast(movieId)
             mutableError.value = null
         }
     }
 
     fun loadActorDetailsById(id: Int) {
-        viewModelScope.launch(exceptionHandler()){
+        viewModelScope.launch(exceptionHandler()) {
             ActorsRepository.loadActorDetailsById(id)
             mutableError.value = null
         }
@@ -93,8 +91,13 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
 
 
     fun getActorsForCurrentMovie(): LiveData<List<Actor>> {
-        _mutableActorList = ActorsRepository.getActorsForCurrentMovie()
-        return _mutableActorList
+        _actorList = ActorsRepository.getActorsForCurrentMovie()
+        return _actorList
+    }
+
+    fun getCrewForCurrentMovie(): LiveData<List<CrewMember>> {
+        _crewList = ActorsRepository.getCrewForCurrentMovie()
+        return _crewList
     }
 
 
@@ -154,7 +157,6 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
     }
 
 
-
     fun getActorDetails(): LiveData<ActorDetailsDto> {
         _actorDetails = ActorsRepository.getActorDetails()
         return _actorDetails
@@ -212,7 +214,6 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
         val internetConnectionManager = InternetConnectionManager(context)
         return internetConnectionManager.isNetworkAvailable()
     }
-
 
 
     fun getMovieVideos(): LiveData<List<MovieVideoDto>> {
