@@ -10,7 +10,7 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Genre
 import org.w3c.dom.Text
 
-class PopGenresAdapter(
+class GenresAdapter(
     context: Context,
     private val clickListener: OnGenreClickListener
 ) : RecyclerView.Adapter<PopGenresViewHolder>() {

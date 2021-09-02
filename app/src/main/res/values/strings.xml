@@ -62,5 +62,7 @@
     <string name="actors_list">Actors list</string>
     <string name="movie_release_year_placeholder">(%s)</string>
     <string name="movie_time_in_h">%dH %dMIN</string>
+    <string name="genres">Genres</string>
+    <string name="movie_title_placeholder">%s(%s)</string>
 
 </resources>

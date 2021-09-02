@@ -1,45 +1,30 @@
 package com.johnsondev.doboshacademyapp.views.moviedetails
 
-import android.icu.text.CaseMap
-import android.media.Image
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.BlurTransformation
-import coil.transform.GrayscaleTransformation
 import com.johnsondev.doboshacademyapp.R
-import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
+import com.johnsondev.doboshacademyapp.adapters.GenresAdapter
+import com.johnsondev.doboshacademyapp.adapters.OnGenreClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
+import com.johnsondev.doboshacademyapp.data.models.Genre
+import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
-import com.johnsondev.doboshacademyapp.utilities.Constants.BACKDROP_KEY
-import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
-import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_KEY
-import com.johnsondev.doboshacademyapp.utilities.Constants.TRAILERS_KEY
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
-import com.johnsondev.doboshacademyapp.utilities.showMessage
 import com.johnsondev.doboshacademyapp.utilities.timeToHFromMin
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 import kotlinx.coroutines.*
-import org.w3c.dom.Text
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MoviesDetailsFragment : BaseFragment() {
 
@@ -65,12 +50,13 @@ class MoviesDetailsFragment : BaseFragment() {
     private lateinit var ivBackdrop: ImageView
     private lateinit var ivPoster: ImageView
     private lateinit var tvTitle: TextView
-
     private lateinit var tvTagline: TextView
     private lateinit var tvTimeInH: TextView
     private lateinit var rbMovieRating: RatingBar
     private lateinit var tvReviews: TextView
     private lateinit var tvAge: TextView
+    private lateinit var rvMovieGenres: RecyclerView
+    private lateinit var movieGenresAdapter: GenresAdapter
 
     private lateinit var detailsViewModel: MovieDetailsViewModel
     private val scope = CoroutineScope(Dispatchers.IO + Job())
@@ -102,12 +88,14 @@ class MoviesDetailsFragment : BaseFragment() {
         ivBackdrop = view.findViewById(R.id.iv_backdrop)
         ivPoster = view.findViewById(R.id.iv_poster)
         tvTitle = view.findViewById(R.id.tv_title)
-
         tvTagline = view.findViewById(R.id.tv_tagline)
         tvTimeInH = view.findViewById(R.id.tv_time_in_h)
         rbMovieRating = view.findViewById(R.id.rb_rating)
         tvReviews = view.findViewById(R.id.tv_reviews)
         tvAge = view.findViewById(R.id.tv_age)
+        rvMovieGenres = view.findViewById(R.id.rv_movie_genres)
+        movieGenresAdapter = GenresAdapter(view.context, onGenreClickListener)
+        rvMovieGenres.adapter = movieGenresAdapter
 
     }
 
@@ -209,6 +197,8 @@ class MoviesDetailsFragment : BaseFragment() {
             tvReviews.text = movieReviews
             tvAge.text = getString(R.string.plus, movie.minimumAge)
 
+            movieGenresAdapter.setGenresList(movie.genres!!)
+
 
         })
 
@@ -253,6 +243,22 @@ class MoviesDetailsFragment : BaseFragment() {
         override fun onClick(actor: Actor) {
             doOnClick(actor)
         }
+    }
+
+    private val onGenreClickListener = object : OnGenreClickListener {
+
+        override fun onClick(genre: Genre) {
+            val bundleWithGenre = Bundle()
+            bundleWithGenre.putParcelable(Constants.GENRE_KEY, genre)
+            bundleWithGenre.putString(Constants.SPECIFIC_LIST_TYPE, Constants.GENRE_SPEC_TYPE)
+            findNavController().navigate(
+                R.id.action_moviesDetailsFragment_to_specificListFragment,
+                bundleWithGenre
+            )
+        }
+
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

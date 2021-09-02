@@ -41,7 +41,7 @@ class MoviesListFragment : BaseFragment() {
     private lateinit var rvUpcomingMovies: RecyclerView
     private lateinit var upcomingMoviesAdapter: MoviesAdapter
     private lateinit var rvPopGenres: RecyclerView
-    private lateinit var popGenresAdapter: PopGenresAdapter
+    private lateinit var popGenresAdapter: GenresAdapter
     private lateinit var rvPopActors: RecyclerView
     private lateinit var popActorsAdapter: ActorsAdapter
     private lateinit var popularSpecificListBtn: View
@@ -87,7 +87,7 @@ class MoviesListFragment : BaseFragment() {
         popularMoviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
         topRatedMoviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
         upcomingMoviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
-        popGenresAdapter = PopGenresAdapter(view.context, genreClickListener)
+        popGenresAdapter = GenresAdapter(view.context, genreClickListener)
         popActorsAdapter = ActorsAdapter(view.context, actorClickListener, ITEM_TYPE_MINI)
         rvPopularMovies.adapter = popularMoviesAdapter
         rvTopRatedMovies.adapter = topRatedMoviesAdapter

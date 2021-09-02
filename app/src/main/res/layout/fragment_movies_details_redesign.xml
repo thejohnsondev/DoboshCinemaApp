@@ -7,6 +7,8 @@
     android:background="@drawable/bg"
     android:transitionName="trans_name">
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -50,10 +52,9 @@
             android:layout_height="160dp"
             android:layout_marginStart="@dimen/dp_24"
             android:background="@drawable/round_outline_10"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.35000002"
+            app:layout_constraintBottom_toBottomOf="@id/iv_backdrop"
             tools:src="@color/design_default_color_primary" />
 
         <TextView
@@ -162,6 +163,52 @@
             android:src="@drawable/ic_more"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_reviews" />
+
+        <TextView
+            android:id="@+id/genres_text"
+            style="@style/HeaderText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_24"
+            android:text="@string/genres"
+            android:textSize="20sp"
+            android:layout_marginStart="@dimen/dp_16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_poster" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_movie_genres"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_4"
+            android:splitMotionEvents="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="@id/more_btn"
+            app:layout_constraintStart_toStartOf="@+id/genres_text"
+            app:layout_constraintTop_toBottomOf="@+id/genres_text"
+            tools:listitem="@layout/genre_rv_item" />
+
+        <ImageView
+            android:id="@+id/mask_before"
+            android:layout_width="@dimen/dp_36"
+            android:layout_height="0dp"
+            android:rotation="90"
+            android:src="@drawable/mask"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_movie_genres"
+            app:layout_constraintStart_toStartOf="@+id/rv_movie_genres"
+            app:layout_constraintTop_toBottomOf="@+id/genres_text" />
+
+        <ImageView
+            android:id="@+id/mask_after"
+            android:layout_width="@dimen/dp_36"
+            android:layout_height="0dp"
+            android:rotation="-90"
+            android:src="@drawable/mask"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_movie_genres"
+            app:layout_constraintEnd_toEndOf="@+id/rv_movie_genres"
+            app:layout_constraintTop_toBottomOf="@+id/genres_text" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

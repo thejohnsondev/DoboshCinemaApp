@@ -55,8 +55,9 @@ class SpecificMoviesListFragment : BaseFragment() {
         specType = arguments?.getString(SPECIFIC_LIST_TYPE)!!
         when (specType) {
             GENRE_SPEC_TYPE -> {
-
+                Log.d("TAG", "spec type -- $specType")
                 genre = arguments?.getParcelable(GENRE_KEY)
+                Log.d("TAG", "genre -- ${genre?.name!!}")
                 moviesListViewModel.loadMoviesByGenreId(genre?.id ?: 0)
             }
         }
