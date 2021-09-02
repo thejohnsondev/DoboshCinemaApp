@@ -1,6 +1,7 @@
 package com.johnsondev.doboshacademyapp.utilities.base
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,6 @@ abstract class BaseFragment : Fragment() {
     abstract fun bindViews(view: View)
     abstract fun initListenersAndObservers(view: View)
 
-    protected fun onError(errorMessage: String) = showMessage(errorMessage)
+    protected fun onError(errorMessage: String) = Log.d("ERR", errorMessage)
 
 }

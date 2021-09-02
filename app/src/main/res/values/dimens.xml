@@ -24,6 +24,7 @@
     <dimen name="sp_8">8sp</dimen>
     <dimen name="dp_14">14dp</dimen>
     <dimen name="sp_22">22sp</dimen>
+    <dimen name="sp_20">20sp</dimen>
     <dimen name="dp_133">133dp</dimen>
     <dimen name="dp_200">200dp</dimen>
     <dimen name="dp_120">120dp</dimen>
@@ -37,6 +38,7 @@
     <dimen name="dp_20">20dp</dimen>
     <dimen name="dp_48">48dp</dimen>
     <dimen name="bottom_bar_height">56dp</dimen>
+    <dimen name="dp_100">100dp</dimen>
 
 
     <integer name="shared_element_transition_duration">500</integer>

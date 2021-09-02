@@ -3,9 +3,15 @@
 
     <style name="TitleText">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/text_size_14</item>
         <item name="android:textColor">@color/text_color_light</item>
+    </style>
+
+    <style name="TaglineText">
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">@font/roboto_light</item>
+        <item name="android:textColor">@color/gray_middle</item>
+        <item name="android:textStyle">italic</item>
     </style>
 
     <style name="DescriptionText">

@@ -23,8 +23,10 @@ import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.CrewMember
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.models.MovieDetails
+import com.johnsondev.doboshacademyapp.data.network.api.MovieApi
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
+import com.johnsondev.doboshacademyapp.data.network.dto.MovieImageDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
@@ -52,8 +54,8 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
     private var _averageColorText = MutableLiveData<Int>()
 
     private var _currentMovie = MutableLiveData<MovieDetails>()
-
     private var _movieVideos = MutableLiveData<List<MovieVideoDto>>()
+    private var _movieImages = MutableLiveData<Map<String, List<MovieImageDto>>>()
 
 
     fun loadMovieFromNetById(id: Int) {
@@ -83,6 +85,19 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
             mutableError.value = null
         }
     }
+
+    fun loadMovieImagesById(id: Int) {
+        viewModelScope.launch(exceptionHandler()) {
+            MoviesRepository.loadMovieImages(id)
+            mutableError.value = null
+        }
+    }
+
+    fun getMovieImagesForCurrentMovie(): LiveData<Map<String, List<MovieImageDto>>> {
+        _movieImages = MoviesRepository.getMovieImages()
+        return _movieImages
+    }
+
 
     fun getCurrentMovieFromNet(): LiveData<MovieDetails> {
         _currentMovie = MoviesRepository.getCurrentMovie()

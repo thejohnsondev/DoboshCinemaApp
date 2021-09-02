@@ -37,7 +37,7 @@
     <string name="actor_details">Actor details</string>
     <string name="actor_name">Actor Name</string>
     <string name="birth_day">Birth day:</string>
-    <string name="_1983_11_15">1983-11-15</string>
+    <string name="_1983_11_15">1983–11–15</string>
     <string name="death_day">Death day:</string>
     <string name="symb_min">-</string>
     <string name="place_of_birth">Place of birth:</string>
@@ -60,5 +60,7 @@
     <string name="comedy">Comedy</string>
     <string name="popular_actors">Popular actors</string>
     <string name="actors_list">Actors list</string>
+    <string name="movie_release_year_placeholder">(%s)</string>
+    <string name="movie_time_in_h">%dH %dMIN</string>
 
 </resources>

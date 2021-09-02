@@ -7,10 +7,13 @@ import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.models.MovieDetails
 import com.johnsondev.doboshacademyapp.data.network.NetworkService
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieDetailsDto
+import com.johnsondev.doboshacademyapp.data.network.dto.MovieImageDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import com.johnsondev.doboshacademyapp.data.network.exception.ConnectionErrorException
 import com.johnsondev.doboshacademyapp.data.network.exception.UnexpectedErrorException
+import com.johnsondev.doboshacademyapp.utilities.Constants.BACKDROP_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.LANG_RU
+import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_KEY
 import com.johnsondev.doboshacademyapp.utilities.DtoMapper
 import retrofit2.HttpException
 import java.io.IOException
@@ -30,8 +33,24 @@ object MoviesRepository {
     private var actorImgAverageColorBody = MutableLiveData<Int>()
     private var actorImgAverageColorText = MutableLiveData<Int>()
 
-    private var movieVideos = MutableLiveData<List<MovieVideoDto>>()
+
     private var currentMovieDetails = MutableLiveData<MovieDetails>()
+    private var movieVideos = MutableLiveData<List<MovieVideoDto>>()
+    private var movieImages = MutableLiveData<Map<String, List<MovieImageDto>>>()
+
+    suspend fun loadMovieImages(id: Int) {
+        try {
+            val movieImagesFromApi = movieApi.getMovieImages(id)
+            movieImages.postValue(
+                mapOf(
+                    POSTER_KEY to movieImagesFromApi.posters,
+                    BACKDROP_KEY to movieImagesFromApi.backdrops
+                )
+            )
+        } catch (e: Exception) {
+            handleExceptions(e)
+        }
+    }
 
     suspend fun loadMovieVideosById(id: Int) {
         try {
@@ -44,7 +63,8 @@ object MoviesRepository {
 
     suspend fun loadMovieById(id: Int) {
         try {
-            currentMovieDetails.value = DtoMapper.convertMovieDetailsFromDto(movieApi.getMovieById(id))
+            currentMovieDetails.value =
+                DtoMapper.convertMovieDetailsFromDto(movieApi.getMovieById(id))
         } catch (e: Exception) {
             handleExceptions(e)
         }
@@ -70,12 +90,12 @@ object MoviesRepository {
         }
     }
 
-    suspend fun loadPopularActorsList(){
+    suspend fun loadPopularActorsList() {
         try {
             popularActorsList.value = movieApi.getPopularActors().results.distinct().map {
                 DtoMapper.convertActorFromDto(it)
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             handleExceptions(e)
         }
     }
@@ -89,6 +109,8 @@ object MoviesRepository {
     fun getMovieVideos(): MutableLiveData<List<MovieVideoDto>> = movieVideos
 
     fun getCurrentMovie(): MutableLiveData<MovieDetails> = currentMovieDetails
+
+    fun getMovieImages(): MutableLiveData<Map<String, List<MovieImageDto>>> = movieImages
 
     fun setAverageColor(body: Int, text: Int) {
         actorImgAverageColorBody.postValue(body)
@@ -153,7 +175,7 @@ object MoviesRepository {
     private fun handleExceptions(e: Exception) {
         throw when (e) {
             is IOException, is HttpException, is TimeoutException -> ConnectionErrorException()
-            else -> UnexpectedErrorException()
+            else -> e
         }
     }
 

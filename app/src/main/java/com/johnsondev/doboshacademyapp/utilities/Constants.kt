@@ -39,6 +39,9 @@ object Constants {
     const val MOVIE_KEY = "movie_key"
     const val GENRE_KEY = "genre_key"
 
+    const val BACKDROP_KEY = "backdrop_key"
+    const val POSTER_KEY = "poster_key"
+
     const val POPULAR_MOVIES_TYPE: String = "popular"
     const val TOP_RATED_MOVIES_TYPE: String = "topRated"
     const val UPCOMING_MOVIES_TYPE: String = "upcoming"

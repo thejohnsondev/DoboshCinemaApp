@@ -58,4 +58,21 @@ fun animateView(
     return valueAnimator ?: ValueAnimator()
 }
 
+fun timeToHFromMin(timeInput: Int): Array<Int>{
+
+    var timeInMin = timeInput
+    var h = 0
+    var min = 0
+
+    while (timeInMin > 60){
+        h++
+        timeInMin -= 60
+        min = timeInMin
+    }
+
+    return arrayOf(h,min)
+
+
+}
+
 
