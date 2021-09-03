@@ -166,13 +166,11 @@
 
         <TextView
             android:id="@+id/genres_text"
-            style="@style/HeaderText"
+            style="@style/HeaderText1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_24"
             android:text="@string/genres"
-            android:textSize="20sp"
-            android:layout_marginStart="@dimen/dp_16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_poster" />
 
@@ -188,7 +186,7 @@
             app:layout_constraintEnd_toEndOf="@id/more_btn"
             app:layout_constraintStart_toStartOf="@+id/genres_text"
             app:layout_constraintTop_toBottomOf="@+id/genres_text"
-            tools:listitem="@layout/genre_rv_item" />
+            tools:listitem="@layout/single_word_rv_item" />
 
         <ImageView
             android:id="@+id/mask_before"
@@ -209,6 +207,59 @@
             app:layout_constraintBottom_toBottomOf="@+id/rv_movie_genres"
             app:layout_constraintEnd_toEndOf="@+id/rv_movie_genres"
             app:layout_constraintTop_toBottomOf="@+id/genres_text" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/movie_details_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/main_color"
+            app:tabTextColor="@color/gray"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/genre_color_red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_movie_genres">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_movie_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/information"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_movie_actors"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/actors"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_movie_recommendations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recommendations"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_movie_similar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/similar"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_movie_trailers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/trailers"/>
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/movie_view_pager"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/movie_details_tab_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

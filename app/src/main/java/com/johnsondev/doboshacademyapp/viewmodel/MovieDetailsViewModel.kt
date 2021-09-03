@@ -54,6 +54,7 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
     private var _averageColorText = MutableLiveData<Int>()
 
     private var _currentMovie = MutableLiveData<MovieDetails>()
+    val currentMovie: LiveData<MovieDetails> get() = _currentMovie
     private var _movieVideos = MutableLiveData<List<MovieVideoDto>>()
     private var _movieImages = MutableLiveData<Map<String, List<MovieImageDto>>>()
 

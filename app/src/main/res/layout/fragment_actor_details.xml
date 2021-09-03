@@ -195,6 +195,8 @@
             <TextView
                 android:id="@+id/tv_biography"
                 style="@style/DescriptionText"
+                android:textSize="@dimen/text_size_14"
+                android:textStyle="normal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"

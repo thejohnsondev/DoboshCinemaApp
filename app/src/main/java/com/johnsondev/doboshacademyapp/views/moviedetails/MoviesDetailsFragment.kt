@@ -6,24 +6,32 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import coil.transform.BlurTransformation
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.adapters.GenresAdapter
+import com.johnsondev.doboshacademyapp.adapters.MovieDetailsPagerAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnGenreClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Genre
+import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
+import com.johnsondev.doboshacademyapp.utilities.Constants.TAB_TITLES
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.timeToHFromMin
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
+import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsInfoFragment
 import kotlinx.coroutines.*
 
 class MoviesDetailsFragment : BaseFragment() {
@@ -58,8 +66,13 @@ class MoviesDetailsFragment : BaseFragment() {
     private lateinit var rvMovieGenres: RecyclerView
     private lateinit var movieGenresAdapter: GenresAdapter
 
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager2: ViewPager2
+
     private lateinit var detailsViewModel: MovieDetailsViewModel
     private val scope = CoroutineScope(Dispatchers.IO + Job())
+
+    private val fragmentsWithData = mutableMapOf<String, Fragment>()
 
 
     override fun initViews(view: View) {
@@ -96,6 +109,18 @@ class MoviesDetailsFragment : BaseFragment() {
         rvMovieGenres = view.findViewById(R.id.rv_movie_genres)
         movieGenresAdapter = GenresAdapter(view.context, onGenreClickListener)
         rvMovieGenres.adapter = movieGenresAdapter
+
+        tabLayout = view.findViewById(R.id.movie_details_tab_layout)
+        viewPager2 = view.findViewById(R.id.movie_view_pager)
+
+        viewPager2.adapter = MovieDetailsPagerAdapter(this)
+
+        TabLayoutMediator(tabLayout, viewPager2) { tab, pos ->
+            tab.text = TAB_TITLES[pos]
+            viewPager2.setCurrentItem(tab.position, true)
+        }.attach()
+
+
 
     }
 
@@ -139,6 +164,8 @@ class MoviesDetailsFragment : BaseFragment() {
 //        backBtn?.setOnClickListener {
 //            findNavController().popBackStack()
 //        }
+
+
 
         detailsViewModel.getCurrentMovieFromNet().observeOnce(this, { movie ->
 
@@ -197,7 +224,9 @@ class MoviesDetailsFragment : BaseFragment() {
             tvReviews.text = movieReviews
             tvAge.text = getString(R.string.plus, movie.minimumAge)
 
-            movieGenresAdapter.setGenresList(movie.genres!!)
+
+
+
 
 
         })
@@ -256,7 +285,6 @@ class MoviesDetailsFragment : BaseFragment() {
                 bundleWithGenre
             )
         }
-
 
 
     }

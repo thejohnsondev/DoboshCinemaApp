@@ -51,4 +51,6 @@ object Constants {
     const val LANG_ENG = "en-US"
     const val LANG_RU = "ru-RU"
 
+    val TAB_TITLES = arrayListOf("Information", "Actors", "Recommendations", "Similar", "Trailers")
+
 }
