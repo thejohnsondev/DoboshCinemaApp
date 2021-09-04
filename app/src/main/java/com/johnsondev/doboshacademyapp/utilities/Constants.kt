@@ -34,6 +34,10 @@ object Constants {
     const val ITEM_TYPE_MINI = 0
     const val ITEM_TYPE_HORIZONTAL = 1
 
+    const val IMAGES_LIST_TYPE = "images_list_type"
+    const val ITEM_TYPE_POSTER = 2
+    const val ITEM_TYPE_BACKDROP = 3
+
     const val ACTOR_KEY = "actor_key"
     const val TRAILERS_KEY = "trailers_key"
     const val MOVIE_KEY = "movie_key"

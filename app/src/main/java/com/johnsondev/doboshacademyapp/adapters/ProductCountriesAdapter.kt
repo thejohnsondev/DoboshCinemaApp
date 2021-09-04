@@ -9,13 +9,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Actor
+import com.johnsondev.doboshacademyapp.data.models.ProductionCountry
 import com.johnsondev.doboshacademyapp.data.network.dto.ProductionCountryDto
 
 class ProductCountriesAdapter(context: Context) :
     RecyclerView.Adapter<ProductCountriesViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var countriesList: List<ProductionCountryDto> = listOf()
+    private var countriesList: List<ProductionCountry> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductCountriesViewHolder {
         val view = inflater.inflate(R.layout.county_rv_item, parent, false)
@@ -30,7 +31,7 @@ class ProductCountriesAdapter(context: Context) :
 
     override fun getItemCount(): Int = countriesList.size
 
-    fun setCountries(list: List<ProductionCountryDto>){
+    fun setCountries(list: List<ProductionCountry>){
         countriesList = list
         notifyDataSetChanged()
     }
@@ -41,7 +42,7 @@ class ProductCountriesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemV
     private val tvCountryName: TextView = itemView.findViewById(R.id.tv_country_name)
     private val ivCountyFrag: ImageView = itemView.findViewById(R.id.iv_country_flag)
 
-    fun bind(productionCountry: ProductionCountryDto) {
+    fun bind(productionCountry: ProductionCountry) {
         tvCountryName.text = productionCountry.countryName
 
     }

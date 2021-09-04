@@ -134,6 +134,7 @@ class MoviesListFragment : BaseFragment() {
                             topRatedSpecificListBtn.visibility = View.VISIBLE
                             upcomingSpecificListBtn.visibility = View.VISIBLE
                             popGenresSpecificListView.visibility = View.VISIBLE
+                            popActorsSpecificListBtn.visibility = View.VISIBLE
                             rvPopularMovies.visibility = View.VISIBLE
                             rvTopRatedMovies.visibility = View.VISIBLE
                             rvUpcomingMovies.visibility = View.VISIBLE
@@ -212,6 +213,7 @@ class MoviesListFragment : BaseFragment() {
                 topRatedSpecificListBtn.visibility = View.GONE
                 upcomingSpecificListBtn.visibility = View.GONE
                 popGenresSpecificListView.visibility = View.GONE
+                popActorsSpecificListBtn.visibility = View.GONE
                 rvPopularMovies.visibility = View.GONE
                 rvTopRatedMovies.visibility = View.GONE
                 rvUpcomingMovies.visibility = View.GONE

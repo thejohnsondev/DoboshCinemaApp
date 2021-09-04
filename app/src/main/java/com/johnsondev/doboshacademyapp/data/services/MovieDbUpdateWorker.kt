@@ -43,7 +43,7 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
                     }
                 }
 
-                val newMovie = newMovieList.distinctBy { it.ratings }.first()
+                val newMovie = newMovieList.random()
 
                 buildNotificationChannel()
 

@@ -12,6 +12,7 @@
     <TextView
         android:id="@+id/crew_member_name"
         style="@style/HeaderText2"
+        android:textColor="@color/gray_middle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="normal"

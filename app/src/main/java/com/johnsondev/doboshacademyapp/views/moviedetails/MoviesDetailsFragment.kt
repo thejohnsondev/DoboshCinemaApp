@@ -22,7 +22,6 @@ import com.johnsondev.doboshacademyapp.adapters.MovieDetailsPagerAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnGenreClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Genre
-import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
@@ -31,7 +30,6 @@ import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.timeToHFromMin
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
-import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsInfoFragment
 import kotlinx.coroutines.*
 
 class MoviesDetailsFragment : BaseFragment() {
@@ -55,6 +53,7 @@ class MoviesDetailsFragment : BaseFragment() {
 //    private lateinit var unavailableMoviePlaceholder: View
 //    private var date: Calendar? = null
 
+    private lateinit var ivBackBtn: ImageView
     private lateinit var ivBackdrop: ImageView
     private lateinit var ivPoster: ImageView
     private lateinit var tvTitle: TextView
@@ -65,6 +64,7 @@ class MoviesDetailsFragment : BaseFragment() {
     private lateinit var tvAge: TextView
     private lateinit var rvMovieGenres: RecyclerView
     private lateinit var movieGenresAdapter: GenresAdapter
+
 
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager2: ViewPager2
@@ -98,8 +98,9 @@ class MoviesDetailsFragment : BaseFragment() {
 //        rvActors?.adapter = adapter
 //        rvActors?.setHasFixedSize(true)
 
-        ivBackdrop = view.findViewById(R.id.iv_backdrop)
-        ivPoster = view.findViewById(R.id.iv_poster)
+        ivBackBtn = view.findViewById(R.id.back_btn)
+        ivBackdrop = view.findViewById(R.id.iv_backdrop_rv_item)
+        ivPoster = view.findViewById(R.id.iv_poster_rv_item)
         tvTitle = view.findViewById(R.id.tv_title)
         tvTagline = view.findViewById(R.id.tv_tagline)
         tvTimeInH = view.findViewById(R.id.tv_time_in_h)
@@ -223,6 +224,7 @@ class MoviesDetailsFragment : BaseFragment() {
             rbMovieRating.progress = (movie.ratings * 2).toInt()
             tvReviews.text = movieReviews
             tvAge.text = getString(R.string.plus, movie.minimumAge)
+            movieGenresAdapter.setGenresList(movie.genres ?: emptyList())
 
 
 
@@ -264,6 +266,10 @@ class MoviesDetailsFragment : BaseFragment() {
 //                unavailableMoviePlaceholder.visibility = View.VISIBLE
             }
         })
+
+        ivBackBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
 

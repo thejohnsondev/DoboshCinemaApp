@@ -83,5 +83,7 @@
     <string name="media">Media</string>
     <string name="posters_count">%d posters</string>
     <string name="backdrops_count">%d backdrops</string>
+    <string name="posters">Posters</string>
+    <string name="backdropds">Backdrops</string>
 
 </resources>

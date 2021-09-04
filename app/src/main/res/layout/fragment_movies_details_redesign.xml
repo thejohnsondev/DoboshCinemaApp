@@ -8,10 +8,20 @@
     android:transitionName="trans_name">
 
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
+            android:src="@drawable/ic_baseline_arrow_back_24"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_16"/>
+
 
         <include
             android:id="@+id/unavailable_movie_details_placeholder"
@@ -23,7 +33,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/iv_backdrop"
+            android:id="@+id/iv_backdrop_rv_item"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
@@ -39,22 +49,22 @@
             android:layout_height="0dp"
             android:scaleType="fitXY"
             android:src="@drawable/mask"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_backdrop"
-            app:layout_constraintEnd_toEndOf="@+id/iv_backdrop"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_backdrop_rv_item"
+            app:layout_constraintEnd_toEndOf="@+id/iv_backdrop_rv_item"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/iv_backdrop"
-            app:layout_constraintTop_toTopOf="@+id/iv_backdrop"
+            app:layout_constraintStart_toStartOf="@+id/iv_backdrop_rv_item"
+            app:layout_constraintTop_toTopOf="@+id/iv_backdrop_rv_item"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
-            android:id="@+id/iv_poster"
+            android:id="@+id/iv_poster_rv_item"
             android:layout_width="106dp"
             android:layout_height="160dp"
             android:layout_marginStart="@dimen/dp_24"
             android:background="@drawable/round_outline_10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/iv_backdrop"
+            app:layout_constraintBottom_toBottomOf="@id/iv_backdrop_rv_item"
             tools:src="@color/design_default_color_primary" />
 
         <TextView
@@ -68,8 +78,8 @@
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/iv_poster"
-            app:layout_constraintTop_toTopOf="@+id/iv_poster"
+            app:layout_constraintStart_toEndOf="@+id/iv_poster_rv_item"
+            app:layout_constraintTop_toTopOf="@+id/iv_poster_rv_item"
             tools:text="Movie Name" />
 
         <TextView
@@ -117,8 +127,8 @@
             android:progressTint="@color/genre_color_red"
             android:layout_marginStart="@dimen/dp_12"
             android:secondaryProgressTint="@color/genre_color_red"
-            app:layout_constraintStart_toEndOf="@+id/iv_poster"
-            app:layout_constraintTop_toTopOf="@+id/iv_poster" />
+            app:layout_constraintStart_toEndOf="@+id/iv_poster_rv_item"
+            app:layout_constraintTop_toTopOf="@+id/iv_poster_rv_item" />
 
         <TextView
             android:id="@+id/tv_reviews"
@@ -140,8 +150,8 @@
             android:layout_marginEnd="88dp"
             android:layout_marginTop="142dp"
             android:background="@drawable/pg_shape"
-            app:layout_constraintEnd_toEndOf="@+id/iv_poster"
-            app:layout_constraintTop_toTopOf="@+id/iv_poster" />
+            app:layout_constraintEnd_toEndOf="@+id/iv_poster_rv_item"
+            app:layout_constraintTop_toTopOf="@+id/iv_poster_rv_item" />
 
         <TextView
             android:id="@+id/tv_age"
@@ -172,7 +182,7 @@
             android:layout_marginTop="@dimen/dp_24"
             android:text="@string/genres"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_poster" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_poster_rv_item" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -186,7 +196,7 @@
             app:layout_constraintEnd_toEndOf="@id/more_btn"
             app:layout_constraintStart_toStartOf="@+id/genres_text"
             app:layout_constraintTop_toBottomOf="@+id/genres_text"
-            tools:listitem="@layout/single_word_rv_item" />
+            tools:listitem="@layout/genre_rv_item" />
 
         <ImageView
             android:id="@+id/mask_before"

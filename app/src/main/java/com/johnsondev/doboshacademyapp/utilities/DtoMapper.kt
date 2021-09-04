@@ -6,6 +6,11 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 
 object DtoMapper {
 
+    fun convertCountryFromDto(productionCountryDto: ProductionCountryDto) = ProductionCountry(
+        countryCode = productionCountryDto.countryCode,
+        countryName = checkCountryName(productionCountryDto.countryName)
+    )
+
     fun convertMovieDetailsFromDto(movieDetailsDto: MovieDetailsDto) = MovieDetails(
         id = movieDetailsDto.id,
         title = movieDetailsDto.title ?: "missing title",
@@ -24,7 +29,7 @@ object DtoMapper {
         origTitle = movieDetailsDto.origTitle ?: "missing info",
         productionCompanies = movieDetailsDto.productionCompanies,
         productionCountries = movieDetailsDto.productionCountries,
-        releaseDate = movieDetailsDto.releaseDate ?: "missing info",
+        releaseDate = revertDate(movieDetailsDto.releaseDate ?: ""),
         status = movieDetailsDto.status ?: "missing info",
         tagLine = movieDetailsDto.tagLine ?: "missing info"
     )
