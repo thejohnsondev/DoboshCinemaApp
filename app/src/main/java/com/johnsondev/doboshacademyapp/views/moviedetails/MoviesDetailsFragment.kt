@@ -218,7 +218,7 @@ class MoviesDetailsFragment : BaseFragment() {
 //                "${timeToHFromMin(movie.runtime!!)[0]} H ${timeToHFromMin(movie.runtime!!)[1]} MIN"
             tvTimeInH.text = getString(
                 R.string.movie_time_in_h,
-                timeToHFromMin(movie.runtime!!)[0],
+                timeToHFromMin(movie.runtime)[0],
                 timeToHFromMin(movie.runtime)[1]
             )
             rbMovieRating.progress = (movie.ratings * 2).toInt()

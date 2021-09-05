@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import coil.clear
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.johnsondev.doboshacademyapp.R
@@ -111,19 +112,31 @@ class MovieDetailsInfoFragment : BaseFragment() {
 
         detailsViewModel.getMovieImagesForCurrentMovie().observeOnce(this, {
 
-            ivMediaPoster.load("$POSTER_PATH${it[POSTER_KEY]?.get(0)?.filePath}") {
-                crossfade(true)
-                error(R.drawable.ic_baseline_image_24)
-                placeholder(R.drawable.ic_baseline_image_24)
-                transformations(RoundedCornersTransformation(10f))
+            if (it[POSTER_KEY]?.size != 0) {
+                ivMediaPoster.load("$POSTER_PATH${it[POSTER_KEY]?.get(0)?.filePath}") {
+                    crossfade(true)
+                    error(R.drawable.ic_baseline_image_24)
+                    placeholder(R.drawable.ic_baseline_image_24)
+                    transformations(RoundedCornersTransformation(10f))
+                }
             }
 
-            ivMediaBackdrop.load("$POSTER_PATH${it[BACKDROP_KEY]?.get(0)?.filePath}") {
-                crossfade(true)
-                error(R.drawable.ic_baseline_image_24)
-                placeholder(R.drawable.ic_baseline_image_24)
-                transformations(RoundedCornersTransformation(10f))
+
+
+            if (it[BACKDROP_KEY]?.size != 0) {
+
+                ivMediaBackdrop.load("$POSTER_PATH${it[BACKDROP_KEY]?.get(0)?.filePath}") {
+                    crossfade(true)
+                    error(R.drawable.ic_baseline_image_24)
+                    placeholder(R.drawable.ic_baseline_image_24)
+                    transformations(RoundedCornersTransformation(10f))
+                }
+
             }
+
+
+
+
 
             tvPostersCount.text = getString(R.string.posters_count, it[POSTER_KEY]?.size)
             tvBackdrops.text = getString(R.string.backdrops_count, it[BACKDROP_KEY]?.size)

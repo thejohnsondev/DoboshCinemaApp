@@ -1,9 +1,8 @@
 package com.johnsondev.doboshacademyapp.data.network.api
 
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
-import com.johnsondev.doboshacademyapp.data.network.dto.GenresListResponse
+import com.johnsondev.doboshacademyapp.data.network.response.GenresListResponse
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieDetailsDto
-import com.johnsondev.doboshacademyapp.data.network.dto.MovieDto
 import com.johnsondev.doboshacademyapp.data.network.response.*
 import retrofit2.http.GET
 import retrofit2.http.Path

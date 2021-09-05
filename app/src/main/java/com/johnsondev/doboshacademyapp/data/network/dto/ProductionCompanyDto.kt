@@ -9,9 +9,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ProductionCompanyDto(
     @SerialName("id")
-    val id: Int?,
+    val id: Int = 0,
     @SerialName("logo_path")
-    val logoPath: String?,
+    val logoPath: String = "",
     @SerialName("name")
-    val name: String?
+    val name: String = ""
 ): Parcelable

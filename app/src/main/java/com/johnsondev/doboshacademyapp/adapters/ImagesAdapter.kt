@@ -11,6 +11,7 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieImageDto
+import com.johnsondev.doboshacademyapp.utilities.Constants.BACKDROP_PATH
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_BACKDROP
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_POSTER
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
@@ -81,7 +82,7 @@ class BackdropViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(image: MovieImageDto) {
 
-        backdropImageView.load("$POSTER_PATH${image.filePath}") {
+        backdropImageView.load("$BACKDROP_PATH${image.filePath}") {
             crossfade(true)
             error(R.drawable.ic_baseline_image_24)
             placeholder(R.drawable.ic_baseline_image_24)

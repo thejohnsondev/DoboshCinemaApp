@@ -85,5 +85,6 @@
     <string name="backdrops_count">%d backdrops</string>
     <string name="posters">Posters</string>
     <string name="backdropds">Backdrops</string>
+    <string name="people_count">%d people</string>
 
 </resources>

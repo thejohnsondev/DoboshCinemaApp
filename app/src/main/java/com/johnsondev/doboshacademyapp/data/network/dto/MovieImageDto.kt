@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MovieImageDto(
     @SerialName("aspect_ratio")
-    val aspectRatio: Double,
+    val aspectRatio: Double = 0.0,
     @SerialName("file_path")
-    val filePath: String,
+    val filePath: String = "",
     @SerialName("width")
-    val width: Int,
+    val width: Int = 0,
     @SerialName("height")
-    val height: Int
+    val height: Int = 0
 )

@@ -34,6 +34,7 @@ class SpecificImagesFragment : BaseFragment() {
     private lateinit var movieImagesAdapter: ImagesAdapter
     private lateinit var tvListType: TextView
     private var listType: Int? = null
+    private var spanCount: Int? = null
 
     override fun initViews(view: View) {
 
@@ -44,6 +45,8 @@ class SpecificImagesFragment : BaseFragment() {
         rvMovieImages = view.findViewById(R.id.rv_spec_images_list)
         movieImagesAdapter = ImagesAdapter(requireContext(), listType!!)
         tvListType = view.findViewById(R.id.spec_list_type_tv)
+        spanCount = if (listType == ITEM_TYPE_POSTER) 2 else 1
+        rvMovieImages.layoutManager = GridLayoutManager(requireContext(), spanCount!!)
         rvMovieImages.adapter = movieImagesAdapter
 
     }

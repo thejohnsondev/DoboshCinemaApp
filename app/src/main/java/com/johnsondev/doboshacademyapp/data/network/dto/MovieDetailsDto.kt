@@ -10,41 +10,41 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MovieDetailsDto(
     @SerialName("id")
-    val id: Int,
+    val id: Int = 0,
     @SerialName("title")
-    val title: String?,
+    val title: String = "",
     @SerialName("poster_path")
-    val poster: String?,
+    val poster: String = "",
     @SerialName("backdrop_path")
-    val backdropImg: String?,
+    val backdropImg: String = "",
     @SerialName("runtime")
-    var runtime: Int? = null,
+    var runtime: Int = 0,
     @SerialName("genres")
-    var genres: @RawValue List<GenreDto>? = null,
+    var genres: @RawValue List<GenreDto> = emptyList(),
     @SerialName("vote_average")
-    val rating: Float?,
+    val rating: Float = 0f,
     @SerialName("vote_count")
-    val voteCount: Int?,
+    val voteCount: Int = 0,
     @SerialName("overview")
-    val overview: String?,
+    val overview: String = "",
     @SerialName("adult")
-    val adult: Boolean?,
+    val adult: Boolean = false,
     @SerialName("budget")
-    var budget: Int?,
+    var budget: Int = 0,
     @SerialName("revenue")
-    var revenue: Int?,
+    var revenue: Int = 0,
     @SerialName("original_language")
-    var origLanguage: String?,
+    var origLanguage: String = "",
     @SerialName("original_title")
-    var origTitle: String?,
+    var origTitle: String = "",
     @SerialName("production_companies")
-    var productionCompanies: @RawValue List<ProductionCompanyDto>? = null,
+    var productionCompanies: @RawValue List<ProductionCompanyDto> = emptyList(),
     @SerialName("production_countries")
-    var productionCountries: @RawValue List<ProductionCountryDto>? = null,
+    var productionCountries: @RawValue List<ProductionCountryDto> = emptyList(),
     @SerialName("release_date")
-    var releaseDate: String?,
+    var releaseDate: String = "",
     @SerialName("status")
-    var status: String?,
+    var status: String = "",
     @SerialName("tagline")
-    var tagLine: String?
+    var tagLine: String = ""
 ) : Parcelable

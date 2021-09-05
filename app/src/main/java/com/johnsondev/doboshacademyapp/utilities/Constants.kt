@@ -5,7 +5,8 @@ import com.johnsondev.doboshacademyapp.BuildConfig
 object Constants {
 
     const val BASE_URL = "https://api.themoviedb.org/3/"
-    const val POSTER_PATH = "https://image.tmdb.org/t/p/w342"
+    const val POSTER_PATH = "https://image.tmdb.org/t/p/w500"
+    const val BACKDROP_PATH = "https://image.tmdb.org/t/p/w1280"
     const val API_KEY = BuildConfig.API_KEY
 
     const val CALENDAR_PATH = "vnd.android.cursor.item/event"

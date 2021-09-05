@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CrewMemberDto(
     @SerialName("id")
-    val id: Int,
+    val id: Int = 0,
     @SerialName("name")
-    val name: String,
+    val name: String = "",
     @SerialName("profile_path")
-    val profileImg: String?,
+    val profileImg: String = "",
     @SerialName("job")
-    val job: String
+    val job: String = ""
 )

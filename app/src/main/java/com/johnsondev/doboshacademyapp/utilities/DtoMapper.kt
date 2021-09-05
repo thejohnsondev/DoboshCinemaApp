@@ -19,7 +19,7 @@ object DtoMapper {
         backdrop = "${POSTER_PATH}${movieDetailsDto.backdropImg}",
         ratings = (movieDetailsDto.rating ?: 1f).div(2),
         numberOfRatings = movieDetailsDto.voteCount ?: 0,
-        minimumAge = if (movieDetailsDto.adult == true) 16 else 13,
+        minimumAge = if (movieDetailsDto.adult) 16 else 13,
         runtime = movieDetailsDto.runtime,
         genres = movieDetailsDto.genres?.map { convertGenreFromDto(it) },
         actors = emptyList(),
