@@ -63,7 +63,7 @@
     <string name="movie_release_year_placeholder">(%s)</string>
     <string name="movie_time_in_h">%dH %dMIN</string>
     <string name="genres">Genres</string>
-    <string name="movie_title_placeholder">%s(%s)</string>
+    <string name="movie_title_placeholder">%s (%s)</string>
     <string name="trailers">Trailers</string>
     <string name="similar">Similar</string>
     <string name="recommendations">Recommendations</string>

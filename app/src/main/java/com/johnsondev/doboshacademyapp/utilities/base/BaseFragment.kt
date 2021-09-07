@@ -11,6 +11,8 @@ import com.johnsondev.doboshacademyapp.utilities.showMessage
 
 abstract class BaseFragment : Fragment() {
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -19,16 +21,29 @@ abstract class BaseFragment : Fragment() {
         val view = inflater.inflate(layoutId(), container, false)
         postponeEnterTransition()
         initViews(view)
-        loadData()
-        bindViews(view)
-        initListenersAndObservers(view)
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.doOnPreDraw { startPostponedEnterTransition() }
+
     }
+
+    override fun onStart() {
+        super.onStart()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadData()
+        bindViews(requireView())
+        initListenersAndObservers(requireView())
+    }
+
+
 
     abstract fun initViews(view: View)
     abstract fun layoutId(): Int

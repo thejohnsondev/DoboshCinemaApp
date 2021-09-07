@@ -1,15 +1,10 @@
 package com.johnsondev.doboshacademyapp.views.activities
 
-import android.graphics.Color
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.view.WindowManager
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,21 +22,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d("TAG", "onCreate ----------------------------")
-
         initViews()
         initListeners()
         loadData(savedInstanceState)
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("TAG", "onDestroy ----------------------------")
 
-        navController = null
-
-    }
 
     private fun initViews(){
         val navHostFragment =
@@ -65,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             if (movieId != 0) {
                 bottomNavView.visibility = View.GONE
                 bundle.putInt(MOVIE_KEY, movieId)
-                navController?.setGraph(R.navigation.nav_graph_details, bundle)
+                navController?.setGraph(R.navigation.nav_graph_from_deeplink, bundle)
             } else {
                 bottomNavView.isVisible = true
                 navController?.setGraph(R.navigation.nav_graph_list, bundle)
@@ -101,6 +88,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun showNav() {
         bottomNavView.visibility = View.VISIBLE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        navController = null
     }
 
 

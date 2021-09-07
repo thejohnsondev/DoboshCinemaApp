@@ -30,6 +30,7 @@ import com.johnsondev.doboshacademyapp.utilities.animateView
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.showMessage
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
+import com.johnsondev.doboshacademyapp.views.movielist.MoviesListFragmentDirections
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -86,6 +87,8 @@ class ActorDetailsFragment : BaseFragment() {
         rvActorImages.adapter = actorImagesAdapter
 
         fragmentBackgroundLayout = view.findViewById(R.id.actor_details_background)
+
+
 
     }
 
@@ -217,11 +220,8 @@ class ActorDetailsFragment : BaseFragment() {
     }
 
     private fun doOnMovieClick(movie: Movie) {
-        val bundleWithMovieId = Bundle()
-        bundleWithMovieId.putInt(MOVIE_KEY, movie.id)
         findNavController().navigate(
-            R.id.action_actorDetailsFragment_to_moviesDetailsFragment,
-            bundleWithMovieId
+            ActorDetailsFragmentDirections.actionActorDetailsFragmentToDetailsActivity(movie.id)
         )
     }
 }

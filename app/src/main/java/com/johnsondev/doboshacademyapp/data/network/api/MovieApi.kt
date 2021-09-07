@@ -8,7 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface MovieApi {
+interface  MovieApi {
 
     @GET("movie/top_rated")
     suspend fun getTopRated(): MovieResponse
@@ -51,4 +51,6 @@ interface MovieApi {
 
     @GET("person/popular")
     suspend fun getPopularActors(): ActorsListResponse
+
+   
 }

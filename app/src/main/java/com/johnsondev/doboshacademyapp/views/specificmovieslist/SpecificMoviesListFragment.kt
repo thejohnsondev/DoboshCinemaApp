@@ -23,6 +23,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
+import com.johnsondev.doboshacademyapp.views.movielist.MoviesListFragmentDirections
 
 
 class SpecificMoviesListFragment : BaseFragment() {
@@ -42,9 +43,7 @@ class SpecificMoviesListFragment : BaseFragment() {
         backViewGroup = view.findViewById(R.id.back_to_main_view_group)
         adapter = MoviesAdapter(requireContext(), clickListener, false)
         rvSpecMoviesList.layoutManager = GridLayoutManager(requireContext(), calculateSpanCount())
-
         rvSpecMoviesList.adapter = adapter
-
         tvSpecListType = view.findViewById(R.id.spec_list_type_tv)
 
     }
@@ -55,9 +54,7 @@ class SpecificMoviesListFragment : BaseFragment() {
         specType = arguments?.getString(SPECIFIC_LIST_TYPE)!!
         when (specType) {
             GENRE_SPEC_TYPE -> {
-                Log.d("TAG", "spec type -- $specType")
                 genre = arguments?.getParcelable(GENRE_KEY)
-                Log.d("TAG", "genre -- ${genre?.name!!}")
                 moviesListViewModel.loadMoviesByGenreId(genre?.id ?: 0)
             }
         }
@@ -115,15 +112,9 @@ class SpecificMoviesListFragment : BaseFragment() {
     }
 
     private fun doOnClick(movie: Movie) {
-        val bundleWithMovie = Bundle()
-        bundleWithMovie.putInt(Constants.MOVIE_KEY, movie.id)
-
         findNavController().navigate(
-            R.id.action_specificListFragment_to_moviesDetailsFragment,
-            bundleWithMovie
+            SpecificMoviesListFragmentDirections.actionSpecificListFragmentToDetailsActivity(movie.id)
         )
-
-
     }
 
 }

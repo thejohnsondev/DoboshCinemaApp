@@ -126,6 +126,8 @@ class MoviesListFragment : BaseFragment() {
                 swipeToRefresh.isRefreshing = false
             } else {
                 scope.launch {
+                    listViewModel.loadGenresList()
+                    listViewModel.loadPopularActors()
                     listViewModel.loadMoviesFromNet().apply {
                         swipeToRefresh.isRefreshing = false
                         withContext(Dispatchers.Main) {
@@ -246,11 +248,8 @@ class MoviesListFragment : BaseFragment() {
 
     private val movieClickListener = object : OnRecyclerItemClicked {
         override fun onClick(movie: Movie) {
-            val bundleWithMovie = Bundle()
-            bundleWithMovie.putInt(MOVIE_KEY, movie.id)
             findNavController().navigate(
-                R.id.action_moviesListFragment_to_moviesDetailsFragment,
-                bundleWithMovie
+                MoviesListFragmentDirections.actionMoviesListFragmentToDetailsActivity(movie.id)
             )
         }
     }

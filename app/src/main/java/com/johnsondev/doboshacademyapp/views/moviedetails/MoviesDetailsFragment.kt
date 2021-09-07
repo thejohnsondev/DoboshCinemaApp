@@ -30,6 +30,7 @@ import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.timeToHFromMin
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
+import kotlinx.android.synthetic.main.fragment_movies_list.view.*
 import kotlinx.coroutines.*
 
 class MoviesDetailsFragment : BaseFragment() {
@@ -115,12 +116,14 @@ class MoviesDetailsFragment : BaseFragment() {
         viewPager2 = view.findViewById(R.id.movie_view_pager)
 
         viewPager2.adapter = MovieDetailsPagerAdapter(this)
+        viewPager2.offscreenPageLimit = 1
+
 
         TabLayoutMediator(tabLayout, viewPager2) { tab, pos ->
             tab.text = TAB_TITLES[pos]
             viewPager2.setCurrentItem(tab.position, true)
-        }.attach()
 
+        }.attach()
 
 
     }
@@ -167,7 +170,6 @@ class MoviesDetailsFragment : BaseFragment() {
 //        }
 
 
-
         detailsViewModel.getCurrentMovieFromNet().observeOnce(this, { movie ->
 
 //                view.context.getString(R.string.reviews, movie.numberOfRatings)
@@ -207,8 +209,11 @@ class MoviesDetailsFragment : BaseFragment() {
 
             ivPoster.clipToOutline = true
 
-            tvTitle.text = movie.title
-//            tvYear.text = "(${movie.releaseDate.substring(0, 3)})"
+            tvTitle.text = getString(
+                R.string.movie_title_placeholder,
+                movie.title,
+                movie.releaseDate.substring(6, 10)
+            )
 //            tvYear.text = getString(
 //                R.string.movie_release_year_placeholder,
 //                movie.releaseDate.substring(0, 4)
@@ -227,27 +232,14 @@ class MoviesDetailsFragment : BaseFragment() {
             movieGenresAdapter.setGenresList(movie.genres ?: emptyList())
 
 
-
-
-
-
         })
 
-        detailsViewModel.getActorsForCurrentMovie().observeOnce(this, {
 
-        })
-
-        detailsViewModel.getCrewForCurrentMovie().observeOnce(this, {
-
-        })
 
         detailsViewModel.getMovieVideos().observeOnce(this, {
 
         })
 
-        detailsViewModel.getMovieImagesForCurrentMovie().observeOnce(this, {
-
-        })
 
         detailsViewModel.error.observeOnce(this, {
             if (it != null) {

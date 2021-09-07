@@ -86,7 +86,7 @@ class ActorViewHolderMini(view: View) : RecyclerView.ViewHolder(view) {
 
 class ActorViewHolderHorizontal(view: View) : RecyclerView.ViewHolder(view) {
 
-    private val actorImg: CircleImageView = view.findViewById(R.id.actor_img_horizon)
+    private val actorImg: ImageView = view.findViewById(R.id.actor_img_horizon)
     private val actorName: TextView = view.findViewById(R.id.tv_actor_name_horizon)
 
     fun bind(actor: Actor) {
