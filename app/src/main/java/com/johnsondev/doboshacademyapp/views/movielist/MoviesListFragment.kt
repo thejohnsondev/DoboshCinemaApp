@@ -19,7 +19,6 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
-import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.PERIODIC_UPDATE_WORK
 import com.johnsondev.doboshacademyapp.utilities.Constants.POPULAR_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.POP_ACTORS_SPEC_TYPE
@@ -230,7 +229,6 @@ class MoviesListFragment : BaseFragment() {
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresCharging(true)
             .build()
 
         val updateWorkRequest =
@@ -246,7 +244,7 @@ class MoviesListFragment : BaseFragment() {
 
     }
 
-    private val movieClickListener = object : OnRecyclerItemClicked {
+    private val movieClickListener = object : OnMovieItemClickListener {
         override fun onClick(movie: Movie) {
             findNavController().navigate(
                 MoviesListFragmentDirections.actionMoviesListFragmentToDetailsActivity(movie.id)

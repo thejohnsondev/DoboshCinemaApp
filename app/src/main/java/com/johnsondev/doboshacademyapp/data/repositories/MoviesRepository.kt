@@ -7,6 +7,7 @@ import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.models.MovieDetails
 import com.johnsondev.doboshacademyapp.data.network.NetworkService
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieDetailsDto
+import com.johnsondev.doboshacademyapp.data.network.dto.MovieDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieImageDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import com.johnsondev.doboshacademyapp.data.network.exception.ConnectionErrorException
@@ -35,8 +36,20 @@ object MoviesRepository {
 
 
     private var currentMovieDetails = MutableLiveData<MovieDetails>()
+    private var movieRecommendations = MutableLiveData<List<Movie>>()
     private var movieVideos = MutableLiveData<List<MovieVideoDto>>()
     private var movieImages = MutableLiveData<Map<String, List<MovieImageDto>>>()
+
+    suspend fun loadRecommendationsByMovieId(id: Int) {
+        try {
+            movieRecommendations.postValue(
+                movieApi.getRecommendationsByMovieId(id).results.distinct().map {
+                    DtoMapper.convertMovieFromDto(it)
+                })
+        } catch (e: Exception) {
+            handleExceptions(e)
+        }
+    }
 
     suspend fun loadMovieImages(id: Int) {
         try {
@@ -111,6 +124,8 @@ object MoviesRepository {
     fun getCurrentMovie(): MutableLiveData<MovieDetails> = currentMovieDetails
 
     fun getMovieImages(): MutableLiveData<Map<String, List<MovieImageDto>>> = movieImages
+
+    fun getRecommendations(): MutableLiveData<List<Movie>> = movieRecommendations
 
     fun setAverageColor(body: Int, text: Int) {
         actorImgAverageColorBody.postValue(body)

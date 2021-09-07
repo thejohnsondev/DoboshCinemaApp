@@ -52,5 +52,6 @@ interface  MovieApi {
     @GET("person/popular")
     suspend fun getPopularActors(): ActorsListResponse
 
-   
+   @GET("movie/{movie_id}/recommendations")
+   suspend fun getRecommendationsByMovieId(@Path(value = "movie_id") id: Int): MovieResponse
 }

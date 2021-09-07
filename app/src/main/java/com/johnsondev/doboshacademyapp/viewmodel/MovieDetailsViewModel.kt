@@ -54,9 +54,9 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
     private var _averageColorText = MutableLiveData<Int>()
 
     private var _currentMovie = MutableLiveData<MovieDetails>()
-    val currentMovie: LiveData<MovieDetails> get() = _currentMovie
     private var _movieVideos = MutableLiveData<List<MovieVideoDto>>()
     private var _movieImages = MutableLiveData<Map<String, List<MovieImageDto>>>()
+    private var _movieRecommendations = MutableLiveData<List<Movie>>()
 
 
     fun loadMovieFromNetById(id: Int) {
@@ -92,6 +92,18 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
             MoviesRepository.loadMovieImages(id)
             mutableError.value = null
         }
+    }
+
+    fun loadRecommendationsByMovieId(id: Int){
+        viewModelScope.launch {
+            MoviesRepository.loadRecommendationsByMovieId(id)
+            mutableError.value = null
+        }
+    }
+
+    fun getRecommendations(): LiveData<List<Movie>>{
+        _movieRecommendations = MoviesRepository.getRecommendations()
+        return _movieRecommendations
     }
 
     fun getMovieImagesForCurrentMovie(): LiveData<Map<String, List<MovieImageDto>>> {

@@ -136,10 +136,14 @@ class MoviesDetailsFragment : BaseFragment() {
         val movieId = arguments?.getInt(MOVIE_KEY)
 
         if (movieId != 0 && movieId != null) {
-            detailsViewModel.loadMovieFromNetById(movieId)
-            detailsViewModel.loadCastForMovieById(movieId)
-            detailsViewModel.loadMovieVideosById(movieId)
-            detailsViewModel.loadMovieImagesById(movieId)
+            detailsViewModel.apply {
+                loadMovieFromNetById(movieId)
+                loadCastForMovieById(movieId)
+                loadMovieVideosById(movieId)
+                loadMovieImagesById(movieId)
+                loadRecommendationsByMovieId(movieId)
+            }
+
         }
 
     }

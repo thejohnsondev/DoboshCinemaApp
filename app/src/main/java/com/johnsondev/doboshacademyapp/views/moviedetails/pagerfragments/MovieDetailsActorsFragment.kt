@@ -35,7 +35,6 @@ class MovieDetailsActorsFragment : BaseFragment() {
             requireContext(), actorClickListener,
             ITEM_TYPE_HORIZONTAL
         )
-        rvMovieActors.setHasFixedSize(true)
         rvMovieActors.layoutManager = LinearLayoutManager(requireContext())
         rvMovieActors.adapter = movieActorsAdapter
     }

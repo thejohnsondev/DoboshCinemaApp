@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
@@ -80,10 +81,15 @@ fun revertDate(inputDate: String): String {
 }
 
 fun checkCountryName(countryName: String?): String {
-    return when(countryName){
+    return when (countryName) {
         "United States of America" -> "USA"
         else -> countryName ?: ""
     }
+}
+
+fun calculateSpanCount(context: Context): Int {
+    return if (context.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+        Constants.VERTICAL_SPAN_COUNT else Constants.HORIZONTAL_SPAN_COUNT
 }
 
 

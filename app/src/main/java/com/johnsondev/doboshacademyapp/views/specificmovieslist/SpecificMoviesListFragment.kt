@@ -1,8 +1,6 @@
 package com.johnsondev.doboshacademyapp.views.specificmovieslist
 
 import android.content.res.Configuration
-import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
@@ -11,7 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
-import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
+import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants
@@ -22,8 +20,8 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
+import com.johnsondev.doboshacademyapp.utilities.calculateSpanCount
 import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
-import com.johnsondev.doboshacademyapp.views.movielist.MoviesListFragmentDirections
 
 
 class SpecificMoviesListFragment : BaseFragment() {
@@ -42,7 +40,8 @@ class SpecificMoviesListFragment : BaseFragment() {
         rvSpecMoviesList = view.findViewById(R.id.rv_spec_movies_list)
         backViewGroup = view.findViewById(R.id.back_to_main_view_group)
         adapter = MoviesAdapter(requireContext(), clickListener, false)
-        rvSpecMoviesList.layoutManager = GridLayoutManager(requireContext(), calculateSpanCount())
+        rvSpecMoviesList.layoutManager =
+            GridLayoutManager(requireContext(), calculateSpanCount(requireContext()))
         rvSpecMoviesList.adapter = adapter
         tvSpecListType = view.findViewById(R.id.spec_list_type_tv)
 
@@ -100,16 +99,12 @@ class SpecificMoviesListFragment : BaseFragment() {
     }
 
 
-    private val clickListener = object : OnRecyclerItemClicked {
+    private val clickListener = object : OnMovieItemClickListener {
         override fun onClick(movie: Movie) {
             doOnClick(movie)
         }
     }
 
-    private fun calculateSpanCount(): Int {
-        return if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
-            Constants.VERTICAL_SPAN_COUNT else Constants.HORIZONTAL_SPAN_COUNT
-    }
 
     private fun doOnClick(movie: Movie) {
         findNavController().navigate(

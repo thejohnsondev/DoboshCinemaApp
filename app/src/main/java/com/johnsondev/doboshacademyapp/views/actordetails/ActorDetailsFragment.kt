@@ -1,7 +1,6 @@
 package com.johnsondev.doboshacademyapp.views.actordetails
 
 import android.os.Build
-import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -19,18 +18,16 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorImagesAdapter
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnImageClickListener
-import com.johnsondev.doboshacademyapp.adapters.OnRecyclerItemClicked
+import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
-import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 import com.johnsondev.doboshacademyapp.utilities.animateView
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.showMessage
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
-import com.johnsondev.doboshacademyapp.views.movielist.MoviesListFragmentDirections
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -79,7 +76,7 @@ class ActorDetailsFragment : BaseFragment() {
         deathDayView = view.findViewById(R.id.death_day)
         placeOfBirthView = view.findViewById(R.id.place_of_birth)
         rvActorDetailsMovies = view.findViewById(R.id.rv_actor_details_movies)
-        moviesAdapter = MoviesAdapter(view.context, movieClickListener, true)
+        moviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
         rvActorDetailsMovies.adapter = moviesAdapter
 
         rvActorImages = view.findViewById(R.id.rv_actor_images)
@@ -203,7 +200,7 @@ class ActorDetailsFragment : BaseFragment() {
             ContextCompat.getColor(requireContext(), R.color.main_color)
     }
 
-    private val movieClickListener = object : OnRecyclerItemClicked {
+    private val movieClickListener = object : OnMovieItemClickListener {
         override fun onClick(movie: Movie) {
             doOnMovieClick(movie)
         }

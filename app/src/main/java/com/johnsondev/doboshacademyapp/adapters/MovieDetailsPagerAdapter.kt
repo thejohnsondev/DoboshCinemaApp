@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsActorsFragment
 import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsInfoFragment
+import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsRecommendFragment
 
 class MovieDetailsPagerAdapter(
     fragment: Fragment
@@ -18,6 +19,7 @@ class MovieDetailsPagerAdapter(
         return when (position) {
             0 -> MovieDetailsInfoFragment()
             1 -> MovieDetailsActorsFragment()
+            2 -> MovieDetailsRecommendFragment()
             else -> MovieDetailsInfoFragment()
         }
     }
