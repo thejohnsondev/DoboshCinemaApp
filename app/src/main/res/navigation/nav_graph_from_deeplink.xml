@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/movieTrailersFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.movietrailers.MovieTrailersFragment"
+        android:name="com.johnsondev.doboshacademyapp.views.movietrailers.MovieDetailsTrailersFragment"
         android:label="fragment_movie_trailers"
         tools:layout="@layout/fragment_movie_trailers" />
     <fragment

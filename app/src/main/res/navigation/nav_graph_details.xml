@@ -38,7 +38,7 @@
             app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_moviesDetailsFragment_to_detailsActivity"
-            app:destination="@id/detailsActivity2" />
+            app:destination="@id/detailsActivity" />
     </fragment>
     <fragment
         android:id="@+id/specificImagesFragment"
@@ -53,7 +53,7 @@
         app:popExitAnim="@anim/slide_out" />
     <fragment
         android:id="@+id/movieTrailersFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.movietrailers.MovieTrailersFragment"
+        android:name="com.johnsondev.doboshacademyapp.views.movietrailers.MovieDetailsTrailersFragment"
         android:label="fragment_movie_trailers" />
     <action
         android:id="@+id/action_moviesDetailsFragment_to_movieTrailersFragment"
@@ -96,7 +96,7 @@
         android:label="fragment_specific_list">
         <action
             android:id="@+id/action_specificListFragment_to_detailsActivity"
-            app:destination="@id/detailsActivity2" />
+            app:destination="@id/detailsActivity" />
     </fragment>
     <fragment
         android:id="@+id/actorDetailsFragment"
@@ -104,16 +104,16 @@
         android:label="ActorDetailsFragment">
         <action
             android:id="@+id/action_actorDetailsFragment_to_detailsActivity"
-            app:destination="@id/detailsActivity2" />
+            app:destination="@id/detailsActivity" />
     </fragment>
     <activity
-        android:id="@+id/detailsActivity2"
+        android:id="@+id/detailsActivity"
         android:name="com.johnsondev.doboshacademyapp.views.moviedetails.DetailsActivity"
         android:label="activity_details"
-        tools:layout="@layout/activity_details" >
+        tools:layout="@layout/activity_details">
         <argument
             android:name="movieId"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="integer" />
     </activity>
 </navigation>

@@ -5,45 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_color"
-    tools:context=".views.movietrailers.MovieTrailersFragment">
+    tools:context=".views.movietrailers.MovieDetailsTrailersFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/back_to_movie_details_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:paddingTop="@dimen/dp_8"
-        android:paddingBottom="@dimen/dp_8"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/back_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_16"
-            android:contentDescription="@string/todo"
-            android:src="@drawable/ic_baseline_arrow_back_24"
-            app:layout_constraintBottom_toBottomOf="@+id/trailers_nav"
-            app:layout_constraintEnd_toStartOf="@+id/trailers_nav"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/trailers_nav" />
-
-        <TextView
-            android:id="@+id/trailers_nav"
-            style="@style/TitleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_16"
-            android:text="@string/movie_trailers"
-            android:textSize="20sp"
-            app:layout_constraintStart_toEndOf="@id/back_img"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_movie_trailers"
@@ -52,7 +15,7 @@
         android:splitMotionEvents="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/back_to_movie_details_btn"
+        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/movie_trailer_rv_item" />
 
 

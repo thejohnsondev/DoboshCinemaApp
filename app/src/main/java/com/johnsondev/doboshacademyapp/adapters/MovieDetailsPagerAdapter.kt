@@ -8,6 +8,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.SIMILAR_LIST_TYPE
 import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsActorsFragment
 import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsInfoFragment
 import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsRecommendFragment
+import com.johnsondev.doboshacademyapp.views.movietrailers.MovieDetailsTrailersFragment
 
 class MovieDetailsPagerAdapter(
     fragment: Fragment
@@ -23,7 +24,7 @@ class MovieDetailsPagerAdapter(
             1 -> MovieDetailsActorsFragment()
             2 -> MovieDetailsRecommendFragment(RECOMMENDATIONS_LIST_TYPE)
             3 -> MovieDetailsRecommendFragment(SIMILAR_LIST_TYPE)
-            else -> MovieDetailsInfoFragment()
+            else -> MovieDetailsTrailersFragment()
         }
     }
 }

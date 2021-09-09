@@ -13,7 +13,6 @@
         android:layout_marginTop="@dimen/dp_8"
         android:textSize="@dimen/sp_18"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -22,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_8"
+        android:background="@drawable/round_outline_10"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/trailer_title" />
 

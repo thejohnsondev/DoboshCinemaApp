@@ -219,6 +219,7 @@ class ActorDetailsFragment : BaseFragment() {
     private fun doOnMovieClick(movie: Movie) {
         findNavController().navigate(
             ActorDetailsFragmentDirections.actionActorDetailsFragmentToDetailsActivity(movie.id)
+
         )
     }
 }
