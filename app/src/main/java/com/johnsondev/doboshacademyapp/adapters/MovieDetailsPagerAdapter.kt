@@ -1,8 +1,10 @@
 package com.johnsondev.doboshacademyapp.adapters
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.johnsondev.doboshacademyapp.utilities.Constants
+import com.johnsondev.doboshacademyapp.utilities.Constants.RECOMMENDATIONS_LIST_TYPE
+import com.johnsondev.doboshacademyapp.utilities.Constants.SIMILAR_LIST_TYPE
 import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsActorsFragment
 import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsInfoFragment
 import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsRecommendFragment
@@ -19,7 +21,8 @@ class MovieDetailsPagerAdapter(
         return when (position) {
             0 -> MovieDetailsInfoFragment()
             1 -> MovieDetailsActorsFragment()
-            2 -> MovieDetailsRecommendFragment()
+            2 -> MovieDetailsRecommendFragment(RECOMMENDATIONS_LIST_TYPE)
+            3 -> MovieDetailsRecommendFragment(SIMILAR_LIST_TYPE)
             else -> MovieDetailsInfoFragment()
         }
     }

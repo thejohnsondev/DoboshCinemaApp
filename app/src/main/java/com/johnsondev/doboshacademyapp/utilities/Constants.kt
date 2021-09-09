@@ -51,6 +51,10 @@ object Constants {
     const val TOP_RATED_MOVIES_TYPE: String = "topRated"
     const val UPCOMING_MOVIES_TYPE: String = "upcoming"
 
+    const val RECOMMENDATIONS_LIST_TYPE: String = "recommendation_list_type"
+    const val SIMILAR_LIST_TYPE: String = "similar_list_type"
+
+
     const val MOVIES_DB_NAME = "moviesdatabase.db"
 
     const val LANG_ENG = "en-US"

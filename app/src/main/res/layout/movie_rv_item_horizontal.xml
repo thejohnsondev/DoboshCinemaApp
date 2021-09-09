@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:background="@color/main_color"
     android:transitionGroup="true"
     android:transitionName="trans_name">
 
@@ -65,26 +63,12 @@
         android:layout_marginTop="@dimen/dp_24"
         android:layout_marginEnd="@dimen/dp_16"
         android:ellipsize="end"
-        android:maxLines="1"
         android:textColor="@color/gray_light"
         android:textSize="@dimen/sp_18"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/movie_img"
         app:layout_constraintTop_toTopOf="@id/movie_card"
         tools:text="Movie title" />
-
-<!--    <TextView-->
-<!--        android:id="@+id/tv_movie_genres"-->
-<!--        style="@style/TaglineText"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginEnd="@dimen/dp_16"-->
-<!--        android:layout_marginTop="@dimen/dp_8"-->
-<!--        android:textColor="@color/gray_middle"-->
-<!--        android:text="3r3r"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="@id/movie_title"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/movie_title" />-->
 
     <View
         android:id="@+id/divider"

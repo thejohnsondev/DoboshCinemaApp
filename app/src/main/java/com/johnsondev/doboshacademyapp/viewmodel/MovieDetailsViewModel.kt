@@ -57,6 +57,7 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
     private var _movieVideos = MutableLiveData<List<MovieVideoDto>>()
     private var _movieImages = MutableLiveData<Map<String, List<MovieImageDto>>>()
     private var _movieRecommendations = MutableLiveData<List<Movie>>()
+    private var _similarMovies = MutableLiveData<List<Movie>>()
 
 
     fun loadMovieFromNetById(id: Int) {
@@ -99,6 +100,18 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
             MoviesRepository.loadRecommendationsByMovieId(id)
             mutableError.value = null
         }
+    }
+
+    fun loadSimilarMoviesById(movieId: Int){
+        viewModelScope.launch {
+            MoviesRepository.loadSimilarMoviesById(movieId)
+            mutableError.value = null
+        }
+    }
+
+    fun getSimilarMovies(): LiveData<List<Movie>>{
+        _similarMovies = MoviesRepository.getSimilarMovies()
+        return _similarMovies
     }
 
     fun getRecommendations(): LiveData<List<Movie>>{

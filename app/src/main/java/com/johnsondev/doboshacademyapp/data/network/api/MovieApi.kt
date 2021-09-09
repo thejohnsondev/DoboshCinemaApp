@@ -11,13 +11,13 @@ import retrofit2.http.Query
 interface  MovieApi {
 
     @GET("movie/top_rated")
-    suspend fun getTopRated(): MovieResponse
+    suspend fun getTopRated(): MoviesListResponse
 
     @GET("movie/popular")
-    suspend fun getPopular(): MovieResponse
+    suspend fun getPopular(): MoviesListResponse
 
     @GET("movie/upcoming")
-    suspend fun getUpcoming(): MovieResponse
+    suspend fun getUpcoming(): MoviesListResponse
 
     @GET("movie/{movie_id}")
     suspend fun getMovieById(@Path(value = "movie_id") id: Int): MovieDetailsDto
@@ -47,11 +47,14 @@ interface  MovieApi {
     suspend fun getGenresList(): GenresListResponse
 
     @GET("discover/movie")
-    suspend fun getMoviesListByGenreId(@Query("with_genres")id: Int): MovieResponse
+    suspend fun getMoviesListByGenreId(@Query("with_genres")id: Int): MoviesListResponse
 
     @GET("person/popular")
     suspend fun getPopularActors(): ActorsListResponse
 
    @GET("movie/{movie_id}/recommendations")
-   suspend fun getRecommendationsByMovieId(@Path(value = "movie_id") id: Int): MovieResponse
+   suspend fun getRecommendationsByMovieId(@Path(value = "movie_id") id: Int): MoviesListResponse
+
+   @GET("movie/{movie_id}/similar")
+   suspend fun getSimilarMoviesByMovieId(@Path(value = "movie_id") id: Int): MoviesListResponse
 }

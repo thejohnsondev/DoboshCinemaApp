@@ -37,8 +37,20 @@ object MoviesRepository {
 
     private var currentMovieDetails = MutableLiveData<MovieDetails>()
     private var movieRecommendations = MutableLiveData<List<Movie>>()
+    private var similarMovies = MutableLiveData<List<Movie>>()
     private var movieVideos = MutableLiveData<List<MovieVideoDto>>()
     private var movieImages = MutableLiveData<Map<String, List<MovieImageDto>>>()
+
+
+    suspend fun loadSimilarMoviesById(movieId: Int){
+        try {
+            similarMovies.postValue(movieApi.getSimilarMoviesByMovieId(movieId).results.distinct().map {
+                DtoMapper.convertMovieFromDto(it)
+            })
+        }catch (e: Exception){
+            handleExceptions(e)
+        }
+    }
 
     suspend fun loadRecommendationsByMovieId(id: Int) {
         try {
@@ -126,6 +138,8 @@ object MoviesRepository {
     fun getMovieImages(): MutableLiveData<Map<String, List<MovieImageDto>>> = movieImages
 
     fun getRecommendations(): MutableLiveData<List<Movie>> = movieRecommendations
+
+    fun getSimilarMovies(): MutableLiveData<List<Movie>> = similarMovies
 
     fun setAverageColor(body: Int, text: Int) {
         actorImgAverageColorBody.postValue(body)

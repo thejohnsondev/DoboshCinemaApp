@@ -9,13 +9,15 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_recommendations"
+        android:id="@+id/rv_details_movies_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:padding="@dimen/dp_8"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/movie_rv_item" />
+        tools:listitem="@layout/movie_rv_item_horizontal" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

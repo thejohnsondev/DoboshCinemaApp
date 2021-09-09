@@ -142,6 +142,7 @@ class MoviesDetailsFragment : BaseFragment() {
                 loadMovieVideosById(movieId)
                 loadMovieImagesById(movieId)
                 loadRecommendationsByMovieId(movieId)
+                loadSimilarMoviesById(movieId)
             }
 
         }
