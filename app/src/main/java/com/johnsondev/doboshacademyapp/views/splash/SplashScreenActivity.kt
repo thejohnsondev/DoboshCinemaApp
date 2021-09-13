@@ -11,6 +11,7 @@ import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
+import com.johnsondev.doboshacademyapp.views.moviedetails.DetailsActivity
 import com.johnsondev.doboshacademyapp.views.movielist.ListActivity
 import kotlinx.coroutines.*
 
@@ -26,8 +27,7 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val mainActivityIntent = Intent(this, ListActivity::class.java)
+        val listActivityIntent = Intent(this, ListActivity::class.java)
 
         checkInternetConnection = InternetConnectionManager(this)
         scope.launch {
@@ -40,22 +40,22 @@ class SplashScreenActivity : AppCompatActivity() {
                     } catch (e: Exception) {
                         when (e) {
                             is ConnectionErrorException -> {
-                                openNextActivity(mainActivityIntent)
+                                openNextActivity(listActivityIntent)
                             }
                         }
                     }
                 }.join()
                 if (intent != null) {
                     handleIntent(intent)
-                    mainActivityIntent.putExtra(MOVIE_KEY, movieId)
-                    startActivity(mainActivityIntent)
+                    listActivityIntent.putExtra(MOVIE_KEY, movieId)
+                    startActivity(listActivityIntent)
                     finish()
                 } else {
-                    startActivity(mainActivityIntent)
+                    startActivity(listActivityIntent)
                     finish()
                 }
             } else {
-                openNextActivity(mainActivityIntent)
+                openNextActivity(listActivityIntent)
             }
         }
     }

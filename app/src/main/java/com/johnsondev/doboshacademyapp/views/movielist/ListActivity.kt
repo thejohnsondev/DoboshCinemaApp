@@ -52,7 +52,7 @@ class ListActivity : AppCompatActivity() {
             if (movieId != 0) {
                 bottomNavView.visibility = View.GONE
                 bundle.putInt(MOVIE_KEY, movieId)
-                navController?.setGraph(R.navigation.nav_graph_from_deeplink, bundle)
+                navController?.setGraph(R.navigation.nav_graph_details, bundle)
             } else {
                 bottomNavView.isVisible = true
                 navController?.setGraph(R.navigation.nav_graph_list, bundle)
