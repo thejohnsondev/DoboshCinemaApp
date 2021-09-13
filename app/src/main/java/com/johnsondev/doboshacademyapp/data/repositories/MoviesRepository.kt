@@ -6,20 +6,13 @@ import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.models.MovieDetails
 import com.johnsondev.doboshacademyapp.data.network.NetworkService
-import com.johnsondev.doboshacademyapp.data.network.dto.MovieDetailsDto
-import com.johnsondev.doboshacademyapp.data.network.dto.MovieDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieImageDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
-import com.johnsondev.doboshacademyapp.data.network.exception.ConnectionErrorException
-import com.johnsondev.doboshacademyapp.data.network.exception.UnexpectedErrorException
 import com.johnsondev.doboshacademyapp.utilities.Constants.BACKDROP_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.LANG_RU
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_KEY
 import com.johnsondev.doboshacademyapp.utilities.DtoMapper
-import retrofit2.HttpException
-import java.io.IOException
-import java.util.concurrent.TimeoutException
-import kotlin.Exception
+import com.johnsondev.doboshacademyapp.utilities.handleExceptions
 
 object MoviesRepository {
 
@@ -41,13 +34,43 @@ object MoviesRepository {
     private var movieVideos = MutableLiveData<List<MovieVideoDto>>()
     private var movieImages = MutableLiveData<Map<String, List<MovieImageDto>>>()
 
+    private var moviesSearchResult = MutableLiveData<List<Movie>>()
+    private var actorsSearchResult = MutableLiveData<List<Actor>>()
 
-    suspend fun loadSimilarMoviesById(movieId: Int){
+
+    suspend fun searchQuery(query: String) {
         try {
-            similarMovies.postValue(movieApi.getSimilarMoviesByMovieId(movieId).results.distinct().map {
-                DtoMapper.convertMovieFromDto(it)
+            val searchResult = movieApi.multiSearch(query)
+            moviesSearchResult.postValue(searchResult.results.filter { it.mediaType == "movie" }
+                .distinct().map {
+                DtoMapper.convertMovieFromDto(movieApi.getMovieById(it.id))
             })
-        }catch (e: Exception){
+            actorsSearchResult.postValue(searchResult.results.filter { it.mediaType == "person" }
+                .distinct().map {
+                DtoMapper.convertActorFromDto(movieApi.getActor(it.id))
+            })
+//            if(!searchResult.movies.isNullOrEmpty()){
+//                moviesSearchResult.postValue(searchResult.movies.distinct().map {
+//                    DtoMapper.convertMovieFromDto(it)
+//                })
+//            }
+//            if(!searchResult.actors.isNullOrEmpty()){
+//                actorsSearchResult.postValue(searchResult.actors.distinct().map {
+//                    DtoMapper.convertActorFromDto(it)
+//                })
+//            }
+        } catch (e: Exception) {
+            handleExceptions(e)
+        }
+    }
+
+    suspend fun loadSimilarMoviesById(movieId: Int) {
+        try {
+            similarMovies.postValue(
+                movieApi.getSimilarMoviesByMovieId(movieId).results.distinct().map {
+                    DtoMapper.convertMovieFromDto(it)
+                })
+        } catch (e: Exception) {
             handleExceptions(e)
         }
     }
@@ -89,7 +112,7 @@ object MoviesRepository {
     suspend fun loadMovieById(id: Int) {
         try {
             currentMovieDetails.value =
-                DtoMapper.convertMovieDetailsFromDto(movieApi.getMovieById(id))
+                DtoMapper.convertMovieDetailsFromDto(movieApi.getMovieDetailsById(id))
         } catch (e: Exception) {
             handleExceptions(e)
         }
@@ -140,6 +163,10 @@ object MoviesRepository {
     fun getRecommendations(): MutableLiveData<List<Movie>> = movieRecommendations
 
     fun getSimilarMovies(): MutableLiveData<List<Movie>> = similarMovies
+
+    fun getMoviesSearchResult(): MutableLiveData<List<Movie>> = moviesSearchResult
+
+    fun getActorsSearchResult(): MutableLiveData<List<Actor>> = actorsSearchResult
 
     fun setAverageColor(body: Int, text: Int) {
         actorImgAverageColorBody.postValue(body)
@@ -199,13 +226,6 @@ object MoviesRepository {
 
     fun getUpcomingMovies(): List<Movie> {
         return upcomingMoviesList
-    }
-
-    private fun handleExceptions(e: Exception) {
-        throw when (e) {
-            is IOException, is HttpException, is TimeoutException -> ConnectionErrorException()
-            else -> e
-        }
     }
 
 

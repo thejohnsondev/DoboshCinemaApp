@@ -1,17 +1,16 @@
 package com.johnsondev.doboshacademyapp.utilities
 
 import android.animation.Animator
-import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.Configuration
-import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.graphics.drawable.toDrawable
-import androidx.preference.PreferenceManager
-import java.util.*
+import com.johnsondev.doboshacademyapp.data.network.exception.ConnectionErrorException
+import retrofit2.HttpException
+import java.io.IOException
+import java.util.concurrent.TimeoutException
 
 
 fun animateView(
@@ -90,6 +89,13 @@ fun checkCountryName(countryName: String?): String {
 fun calculateSpanCount(context: Context): Int {
     return if (context.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
         Constants.VERTICAL_SPAN_COUNT else Constants.HORIZONTAL_SPAN_COUNT
+}
+
+fun handleExceptions(e: Exception) {
+    throw when (e) {
+        is IOException, is HttpException, is TimeoutException -> ConnectionErrorException()
+        else -> e
+    }
 }
 
 

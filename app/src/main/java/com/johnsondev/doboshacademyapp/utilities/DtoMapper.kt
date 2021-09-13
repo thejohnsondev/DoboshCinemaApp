@@ -50,6 +50,7 @@ object DtoMapper {
         )
     }
 
+
     fun convertGenreFromDto(genreDto: GenreDto) = Genre(
         id = genreDto.id,
         name = genreDto.name
@@ -63,6 +64,7 @@ object DtoMapper {
             picture = "${POSTER_PATH}${actorDto.profileImg}"
         )
     }
+
 
     fun convertCrewMemberFromDto(crewMemberDto: CrewMemberDto) = CrewMember(
         id = crewMemberDto.id,

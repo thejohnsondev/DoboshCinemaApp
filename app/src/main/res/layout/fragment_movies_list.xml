@@ -5,7 +5,7 @@
     android:id="@+id/swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg">
+    android:background="@color/main_color">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -138,7 +138,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/popular_spec_list">
 
                 <androidx.recyclerview.widget.RecyclerView
-
                     android:id="@+id/popular_movies_rv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
