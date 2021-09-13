@@ -33,10 +33,17 @@
         <action
             android:id="@+id/action_moviesListFragment_to_detailsActivity"
             app:destination="@id/detailsActivity" />
+        <action
+            android:id="@+id/action_moviesListFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down" />
     </fragment>
     <fragment
         android:id="@+id/specificListFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.specificmovieslist.SpecificMoviesListFragment"
+        android:name="com.johnsondev.doboshacademyapp.views.movielist.SpecificMoviesListFragment"
         android:label="fragment_specific_list"
         tools:layout="@layout/fragment_specific_movies_list" >
         <action
@@ -55,7 +62,14 @@
         android:id="@+id/searchFragment"
         android:name="com.johnsondev.doboshacademyapp.views.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_actorDetailsFragment"
+            app:destination="@id/actorDetailsFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_detailsActivity"
+            app:destination="@id/detailsActivity" />
+    </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.johnsondev.doboshacademyapp.views.favorite.FavoriteFragment"
@@ -68,7 +82,7 @@
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/specificActorsListFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.specificactorslist.SpecificActorsListFragment"
+        android:name="com.johnsondev.doboshacademyapp.views.movielist.SpecificActorsListFragment"
         android:label="SpecificActorsListFragment" >
         <action
             android:id="@+id/action_specificActorsListFragment_to_actorDetailsFragment"

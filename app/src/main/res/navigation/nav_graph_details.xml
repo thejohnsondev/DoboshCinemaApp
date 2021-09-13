@@ -37,12 +37,12 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out" />
         <action
-            android:id="@+id/action_moviesDetailsFragment_to_detailsActivity"
+            android:id="@+id/action_moviesDetailsFragment_to_detailsActivity2"
             app:destination="@id/detailsActivity" />
     </fragment>
     <fragment
         android:id="@+id/specificImagesFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.specificimageslist.SpecificImagesFragment"
+        android:name="com.johnsondev.doboshacademyapp.views.moviedetails.SpecificImagesFragment"
         android:label="fragment_specific_images" />
     <action
         android:id="@+id/action_moviesDetailsFragment_to_specificImagesFragment"
@@ -53,7 +53,7 @@
         app:popExitAnim="@anim/slide_out" />
     <fragment
         android:id="@+id/movieTrailersFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.movietrailers.MovieDetailsTrailersFragment"
+        android:name="com.johnsondev.doboshacademyapp.views.moviedetails.MovieDetailsTrailersFragment"
         android:label="fragment_movie_trailers" />
     <action
         android:id="@+id/action_moviesDetailsFragment_to_movieTrailersFragment"
@@ -92,7 +92,7 @@
         app:popExitAnim="@anim/slide_out" />
     <fragment
         android:id="@+id/specificListFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.specificmovieslist.SpecificMoviesListFragment"
+        android:name="com.johnsondev.doboshacademyapp.views.movielist.SpecificMoviesListFragment"
         android:label="fragment_specific_list">
         <action
             android:id="@+id/action_specificListFragment_to_detailsActivity"

@@ -2,13 +2,12 @@ package com.johnsondev.doboshacademyapp.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.RECOMMENDATIONS_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SIMILAR_LIST_TYPE
 import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsActorsFragment
 import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsInfoFragment
 import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsRecommendFragment
-import com.johnsondev.doboshacademyapp.views.movietrailers.MovieDetailsTrailersFragment
+import com.johnsondev.doboshacademyapp.views.moviedetails.MovieDetailsTrailersFragment
 
 class MovieDetailsPagerAdapter(
     fragment: Fragment

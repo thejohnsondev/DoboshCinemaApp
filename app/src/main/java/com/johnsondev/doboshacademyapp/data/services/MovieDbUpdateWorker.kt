@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
-import com.johnsondev.doboshacademyapp.views.activities.SplashScreenActivity
+import com.johnsondev.doboshacademyapp.views.splash.SplashScreenActivity
 import kotlinx.coroutines.*
 
 class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :

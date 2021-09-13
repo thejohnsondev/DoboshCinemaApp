@@ -86,7 +86,6 @@ class ActorDetailsFragment : BaseFragment() {
         fragmentBackgroundLayout = view.findViewById(R.id.actor_details_background)
 
 
-
     }
 
     override fun layoutId(): Int = R.layout.fragment_actor_details

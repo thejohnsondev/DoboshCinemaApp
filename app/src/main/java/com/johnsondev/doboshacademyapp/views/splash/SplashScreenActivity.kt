@@ -1,9 +1,8 @@
-package com.johnsondev.doboshacademyapp.views.activities
+package com.johnsondev.doboshacademyapp.views.splash
 
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.johnsondev.doboshacademyapp.R
@@ -12,8 +11,8 @@ import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
+import com.johnsondev.doboshacademyapp.views.movielist.ListActivity
 import kotlinx.coroutines.*
-import java.util.*
 
 class SplashScreenActivity : AppCompatActivity() {
 
@@ -28,7 +27,7 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val mainActivityIntent = Intent(this, MainActivity::class.java)
+        val mainActivityIntent = Intent(this, ListActivity::class.java)
 
         checkInternetConnection = InternetConnectionManager(this)
         scope.launch {

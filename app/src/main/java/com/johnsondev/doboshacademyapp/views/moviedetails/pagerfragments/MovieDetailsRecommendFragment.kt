@@ -61,7 +61,7 @@ class MovieDetailsRecommendFragment(private val listType: String) : BaseFragment
     private val onMovieClickListener = object : OnMovieItemClickListener {
         override fun onClick(movie: Movie) {
             findNavController().navigate(
-                MoviesDetailsFragmentDirections.actionMoviesDetailsFragmentToDetailsActivity(movie.id)
+                MoviesDetailsFragmentDirections.actionMoviesDetailsFragmentToDetailsActivity2(movie.id)
             )
         }
 

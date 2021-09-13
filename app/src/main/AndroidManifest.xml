@@ -20,11 +20,11 @@
             android:name=".views.moviedetails.DetailsActivity"
             android:exported="true" />
         <activity
-            android:name=".views.activities.MainActivity"
+            android:name=".views.movielist.ListActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".views.activities.SplashScreenActivity"
+            android:name=".views.splash.SplashScreenActivity"
             android:launchMode="singleTop"
             android:theme="@style/SplashScreenTheme">
             <intent-filter>

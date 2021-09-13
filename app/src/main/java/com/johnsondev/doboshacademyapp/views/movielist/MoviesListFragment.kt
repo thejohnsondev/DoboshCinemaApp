@@ -14,7 +14,7 @@ import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.services.MovieDbUpdateWorker
-import com.johnsondev.doboshacademyapp.utilities.*
+import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_SPEC_TYPE
@@ -25,14 +25,17 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.POP_ACTORS_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
+import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
-import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
+import com.johnsondev.doboshacademyapp.utilities.showMessage
 import com.johnsondev.doboshacademyapp.viewmodel.MovieViewModelFactory
+import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 
 class MoviesListFragment : BaseFragment() {
 
+    private lateinit var searchBtn: View
     private lateinit var rvPopularMovies: RecyclerView
     private lateinit var popularMoviesAdapter: MoviesAdapter
     private lateinit var rvTopRatedMovies: RecyclerView
@@ -65,6 +68,7 @@ class MoviesListFragment : BaseFragment() {
             MovieViewModelFactory(activity?.application!!)
         )[MoviesListViewModel::class.java]
 
+        searchBtn = view.findViewById(R.id.search_box_btn)
         swipeToRefresh = view.findViewById(R.id.swipe_layout)
         unavailableListPlaceholder = view.findViewById(R.id.unavailable_list_placeholder)
         popularSpecificListBtn = view.findViewById(R.id.popular_spec_list)
@@ -148,6 +152,10 @@ class MoviesListFragment : BaseFragment() {
             }
         }
 
+        searchBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_moviesListFragment_to_searchFragment)
+        }
+
         popularSpecificListBtn.setOnClickListener {
             val bundle = Bundle()
             bundle.putString(SPECIFIC_LIST_TYPE, POPULAR_SPEC_TYPE)
@@ -222,6 +230,7 @@ class MoviesListFragment : BaseFragment() {
                 rvPopActors.visibility = View.GONE
             }
         }
+
 
     }
 

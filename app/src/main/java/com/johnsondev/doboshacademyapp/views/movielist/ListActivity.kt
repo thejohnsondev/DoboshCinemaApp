@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.views.activities
+package com.johnsondev.doboshacademyapp.views.movielist
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,7 +13,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 
 
-class MainActivity : AppCompatActivity() {
+class ListActivity : AppCompatActivity() {
 
     private var navController: NavController? = null
     lateinit var bottomNavView: BottomNavigationView

@@ -1,6 +1,5 @@
-package com.johnsondev.doboshacademyapp.views.specificmovieslist
+package com.johnsondev.doboshacademyapp.views.movielist
 
-import android.content.res.Configuration
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
@@ -12,7 +11,6 @@ import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.POPULAR_SPEC_TYPE

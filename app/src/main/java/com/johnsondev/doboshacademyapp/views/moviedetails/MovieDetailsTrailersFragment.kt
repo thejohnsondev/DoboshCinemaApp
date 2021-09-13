@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.views.movietrailers
+package com.johnsondev.doboshacademyapp.views.moviedetails
 
 import android.view.View
 import androidx.fragment.app.viewModels

@@ -1,11 +1,7 @@
-package com.johnsondev.doboshacademyapp.views.specificactorslist
+package com.johnsondev.doboshacademyapp.views.movielist
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -13,10 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
-import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_HORIZONTAL
 import com.johnsondev.doboshacademyapp.utilities.Constants.POP_ACTORS_SPEC_TYPE

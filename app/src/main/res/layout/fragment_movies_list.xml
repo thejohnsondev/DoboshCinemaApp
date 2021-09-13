@@ -45,13 +45,16 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/search_box"
+                    android:id="@+id/search_box_btn"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/search_field_height"
                     android:layout_marginStart="@dimen/dp_16"
                     android:layout_marginTop="@dimen/dp_8"
                     android:layout_marginEnd="@dimen/dp_16"
                     android:layout_marginBottom="@dimen/dp_8"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:background="@drawable/search_bg"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -68,27 +71,20 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <EditText
-                        android:id="@+id/search_edit_text"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                    <TextView
+                        android:id="@+id/search_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp_10"
                         android:layout_marginEnd="@dimen/dp_10"
                         android:background="@android:color/transparent"
-                        android:hint="@string/movies_actors"
-                        android:imeOptions="actionSearch"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:scrollHorizontally="true"
-                        android:singleLine="true"
+                        android:text="@string/movies_actors"
+                        android:textSize="@dimen/sp_20"
                         android:textColor="@color/gray_light"
                         android:textColorHint="@color/gray_light"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toEndOf="@+id/search_icon"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -307,7 +303,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/pop_actors_spec_list"
                 app:layout_constraintTop_toBottomOf="@+id/pop_genres_spec_list"
-                tools:listitem="@layout/single_word_rv_item" />
+                tools:listitem="@layout/genre_rv_item" />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout

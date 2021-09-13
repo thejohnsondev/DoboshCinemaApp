@@ -1,25 +1,15 @@
-package com.johnsondev.doboshacademyapp.views.specificimageslist
+package com.johnsondev.doboshacademyapp.views.moviedetails
 
-import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.GridLayout
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.johnsondev.doboshacademyapp.R
-import com.johnsondev.doboshacademyapp.adapters.ActorImagesAdapter
 import com.johnsondev.doboshacademyapp.adapters.ImagesAdapter
-import com.johnsondev.doboshacademyapp.adapters.ProductCompaniesAdapter
-import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.BACKDROP_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.IMAGES_LIST_TYPE
-import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_BACKDROP
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_POSTER
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_KEY
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
