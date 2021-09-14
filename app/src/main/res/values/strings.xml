@@ -86,5 +86,8 @@
     <string name="posters">Posters</string>
     <string name="backdropds">Backdrops</string>
     <string name="people_count">%d people</string>
+    <string name="nothing_found">Nothing found</string>
+    <string name="find_movies_or_actors">Find movies or actors</string>
+    <string name="error_on_loading">Error on loading</string>
 
 </resources>

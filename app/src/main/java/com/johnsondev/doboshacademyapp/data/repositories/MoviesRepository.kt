@@ -38,30 +38,37 @@ object MoviesRepository {
     private var actorsSearchResult = MutableLiveData<List<Actor>>()
 
 
-    suspend fun searchQuery(query: String) {
+//    suspend fun search(query: String): List<Movie> {
+//        try {
+//            val searchResult = movieApi.multiSearch(query)
+//            moviesSearchResult.postValue(searchResult.results.filter { it.mediaType == "movie" }
+//                .distinct().map {
+//                    DtoMapper.convertMovieFromDto(movieApi.getMovieById(it.id))
+//                })
+//
+////            actorsSearchResult.postValue(searchResult.results.filter { it.mediaType == "person" }
+////                .distinct().map {
+////                DtoMapper.convertActorFromDto(movieApi.getActor(it.id))
+////            })
+//        } catch (e: Exception) {
+//            handleExceptions(e)
+//        }
+//        return moviesSearchResult.value ?: emptyList()
+//    }
+
+    suspend fun search(query: String): List<Movie> {
+        var searchResult: List<Movie> = listOf()
         try {
-            val searchResult = movieApi.multiSearch(query)
-            moviesSearchResult.postValue(searchResult.results.filter { it.mediaType == "movie" }
-                .distinct().map {
-                DtoMapper.convertMovieFromDto(movieApi.getMovieById(it.id))
-            })
-            actorsSearchResult.postValue(searchResult.results.filter { it.mediaType == "person" }
-                .distinct().map {
-                DtoMapper.convertActorFromDto(movieApi.getActor(it.id))
-            })
-//            if(!searchResult.movies.isNullOrEmpty()){
-//                moviesSearchResult.postValue(searchResult.movies.distinct().map {
-//                    DtoMapper.convertMovieFromDto(it)
-//                })
-//            }
-//            if(!searchResult.actors.isNullOrEmpty()){
-//                actorsSearchResult.postValue(searchResult.actors.distinct().map {
-//                    DtoMapper.convertActorFromDto(it)
-//                })
-//            }
+            searchResult =
+                movieApi.multiSearch(query).results.filter { it.mediaType == "movie" }
+                    .distinct().map {
+                        DtoMapper.convertMovieFromDto(movieApi.getMovieById(it.id))
+                    }
         } catch (e: Exception) {
             handleExceptions(e)
         }
+
+        return searchResult
     }
 
     suspend fun loadSimilarMoviesById(movieId: Int) {

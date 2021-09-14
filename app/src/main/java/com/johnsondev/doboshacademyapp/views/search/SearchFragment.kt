@@ -5,10 +5,11 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
@@ -17,18 +18,21 @@ import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.utilities.Constants
+import com.johnsondev.doboshacademyapp.utilities.*
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
-import com.johnsondev.doboshacademyapp.utilities.hideKeyboard
-import com.johnsondev.doboshacademyapp.utilities.observeOnce
-import com.johnsondev.doboshacademyapp.utilities.showKeyboard
+import com.johnsondev.doboshacademyapp.utilities.states.*
 import com.johnsondev.doboshacademyapp.viewmodel.SearchViewModel
-import com.johnsondev.doboshacademyapp.views.movielist.MoviesListFragmentDirections
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.launch
 
 
 class SearchFragment : BaseFragment() {
 
+    private lateinit var nothingFoundPlaceholder: View
+    private lateinit var findSomethingPlaceholder: View
+    private lateinit var searchLoadingIndicator: ProgressBar
     private lateinit var etSearch: EditText
     private lateinit var moviesResultSpecBtn: View
     private lateinit var tvMoviesCount: TextView
@@ -39,9 +43,13 @@ class SearchFragment : BaseFragment() {
     private lateinit var rvActorResult: RecyclerView
     private lateinit var actorsAdapter: ActorsAdapter
 
+
     private val searchViewModel by viewModels<SearchViewModel>()
 
     override fun initViews(view: View) {
+        nothingFoundPlaceholder = view.findViewById(R.id.nothing_found_placeholder)
+        findSomethingPlaceholder = view.findViewById(R.id.find_something_placeholder)
+        searchLoadingIndicator = view.findViewById(R.id.search_progress)
         etSearch = view.findViewById(R.id.search_edit_text)
         moviesResultSpecBtn = view.findViewById(R.id.movies_result_spec_btn)
         tvMoviesCount = view.findViewById(R.id.tv_movies_count)
@@ -55,6 +63,10 @@ class SearchFragment : BaseFragment() {
 
         actorsAdapter = ActorsAdapter(requireContext(), onActorClickListener, ITEM_TYPE_MINI)
         rvActorResult.adapter = actorsAdapter
+
+
+        rvActorResult.visibility = View.GONE
+        actorResultSpecBtn.visibility = View.GONE
     }
 
     override fun layoutId(): Int = R.layout.fragment_search
@@ -68,13 +80,17 @@ class SearchFragment : BaseFragment() {
 //        etSearch.showKeyboard()
     }
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     override fun initListenersAndObservers(view: View) {
 
         etSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
 
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    searchViewModel.searchQuery(etSearch.text.toString())
+                    lifecycleScope.launch {
+                        searchViewModel.queryChannel.send(etSearch.text.toString())
+                    }
                     etSearch.hideKeyboard()
                     return true
                 }
@@ -83,20 +99,64 @@ class SearchFragment : BaseFragment() {
 
         })
 
-        searchViewModel.getMoviesResultList().observeOnce(this, {
-            moviesAdapter.setMovies(it)
-        })
+        etSearch.afterTextChanged {
+            lifecycleScope.launch {
+                searchViewModel.queryChannel.send(etSearch.text.toString())
+            }
+        }
 
-        searchViewModel.getActorsResultList().observeOnce(this, {
-            actorsAdapter.setActors(it)
-        })
+        searchViewModel.moviesResultList.observeOnce(viewLifecycleOwner, { handleMovieResult(it) })
+        searchViewModel.searchState.observeOnce(viewLifecycleOwner, { handleSearchState(it) })
+
 
     }
 
-    override fun onPause() {
-        super.onPause()
-//        etSearch.hideKeyboard()
+
+    private fun handleMovieResult(result: MoviesResult) {
+        when (result) {
+            is ValidResult -> {
+                nothingFoundPlaceholder.visibility = View.GONE
+                findSomethingPlaceholder.visibility = View.GONE
+                rvMoviesResult.visibility = View.VISIBLE
+                moviesResultSpecBtn.visibility = View.VISIBLE
+                moviesAdapter.setMovies(result.resultList)
+                tvMoviesCount.text = result.resultList.size.toString()
+            }
+            is ErrorResult -> {
+                nothingFoundPlaceholder.visibility = View.VISIBLE
+                findSomethingPlaceholder.visibility = View.GONE
+                moviesAdapter.setMovies(emptyList())
+                moviesResultSpecBtn.visibility = View.GONE
+            }
+            is EmptyResult -> {
+                nothingFoundPlaceholder.visibility = View.VISIBLE
+                findSomethingPlaceholder.visibility = View.GONE
+                moviesAdapter.setMovies(emptyList())
+                moviesResultSpecBtn.visibility = View.GONE
+            }
+            is EmptyQuery -> {
+                nothingFoundPlaceholder.visibility = View.GONE
+                findSomethingPlaceholder.visibility = View.VISIBLE
+                moviesAdapter.setMovies(emptyList())
+                moviesResultSpecBtn.visibility = View.GONE
+            }
+            is TerminalError -> {
+                showMessage(getString(R.string.error_on_loading))
+            }
+        }
     }
+
+    private fun handleSearchState(state: SearchState) {
+        when (state) {
+            is Loading -> {
+                searchLoadingIndicator.visibility = View.VISIBLE
+            }
+            is Ready -> {
+                searchLoadingIndicator.visibility = View.GONE
+            }
+        }
+    }
+
 
     private val onMovieClickListener = object : OnMovieItemClickListener {
         override fun onClick(movie: Movie) {
