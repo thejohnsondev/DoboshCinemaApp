@@ -24,9 +24,9 @@
             android:layout_marginEnd="@dimen/dp_8"
             android:indeterminate="true"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/search_box"
             app:layout_constraintEnd_toEndOf="@id/search_box"
-            app:layout_constraintTop_toTopOf="@id/search_box"
-            app:layout_constraintBottom_toBottomOf="@id/search_box"/>
+            app:layout_constraintTop_toTopOf="@id/search_box" />
 
         <ImageView
             android:id="@+id/search_icon"
@@ -72,13 +72,14 @@
             android:id="@+id/movies_result_spec_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
             android:orientation="horizontal"
             android:paddingTop="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_8"
-            android:layout_marginTop="@dimen/dp_16"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -125,7 +126,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <include
             android:id="@+id/find_something_placeholder"
@@ -133,7 +134,7 @@
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -169,6 +170,7 @@
             android:paddingTop="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_8"
             android:splitMotionEvents="false"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">

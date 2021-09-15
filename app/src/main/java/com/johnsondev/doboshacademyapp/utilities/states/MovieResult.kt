@@ -1,10 +1,12 @@
 package com.johnsondev.doboshacademyapp.utilities.states
 
-import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.models.SearchResultLists
 
-sealed class MoviesResult
-class ValidResult(val resultList: List<Movie>) : MoviesResult()
-object EmptyResult : MoviesResult()
-object EmptyQuery : MoviesResult()
-class ErrorResult(val e: Throwable) : MoviesResult()
-object TerminalError : MoviesResult()
+sealed class SearchResult
+class ValidResult(val resultLists: SearchResultLists) : SearchResult()
+object EmptyMoviesResult : SearchResult()
+object EmptyActorsResult : SearchResult()
+object EmptyResult: SearchResult()
+object EmptyQuery : SearchResult()
+class ErrorResult(val e: Throwable) : SearchResult()
+object TerminalError : SearchResult()

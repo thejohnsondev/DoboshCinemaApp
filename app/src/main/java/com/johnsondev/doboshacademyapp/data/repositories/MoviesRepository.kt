@@ -1,10 +1,7 @@
 package com.johnsondev.doboshacademyapp.data.repositories
 
 import androidx.lifecycle.MutableLiveData
-import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.Genre
-import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.data.models.MovieDetails
+import com.johnsondev.doboshacademyapp.data.models.*
 import com.johnsondev.doboshacademyapp.data.network.NetworkService
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieImageDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
@@ -56,19 +53,26 @@ object MoviesRepository {
 //        return moviesSearchResult.value ?: emptyList()
 //    }
 
-    suspend fun search(query: String): List<Movie> {
-        var searchResult: List<Movie> = listOf()
+    suspend fun search(query: String): SearchResultLists {
+        var moviesSearchResult: List<Movie> = listOf()
+        var actorsSearchResult: List<Actor> = listOf()
+
         try {
-            searchResult =
+            moviesSearchResult =
                 movieApi.multiSearch(query).results.filter { it.mediaType == "movie" }
                     .distinct().map {
                         DtoMapper.convertMovieFromDto(movieApi.getMovieById(it.id))
+                    }
+            actorsSearchResult =
+                movieApi.multiSearch(query).results.filter { it.mediaType == "person" }
+                    .distinct().map {
+                        DtoMapper.convertActorFromDto(movieApi.getActor(it.id))
                     }
         } catch (e: Exception) {
             handleExceptions(e)
         }
 
-        return searchResult
+        return SearchResultLists(moviesSearchResult, actorsSearchResult)
     }
 
     suspend fun loadSimilarMoviesById(movieId: Int) {

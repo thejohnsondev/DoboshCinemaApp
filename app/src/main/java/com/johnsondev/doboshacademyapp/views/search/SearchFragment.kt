@@ -65,8 +65,6 @@ class SearchFragment : BaseFragment() {
         rvActorResult.adapter = actorsAdapter
 
 
-        rvActorResult.visibility = View.GONE
-        actorResultSpecBtn.visibility = View.GONE
     }
 
     override fun layoutId(): Int = R.layout.fragment_search
@@ -105,40 +103,77 @@ class SearchFragment : BaseFragment() {
             }
         }
 
-        searchViewModel.moviesResultList.observeOnce(viewLifecycleOwner, { handleMovieResult(it) })
+        searchViewModel.searchResultMap.observeOnce(viewLifecycleOwner, { handleSearchResult(it) })
         searchViewModel.searchState.observeOnce(viewLifecycleOwner, { handleSearchState(it) })
 
 
     }
 
 
-    private fun handleMovieResult(result: MoviesResult) {
+    private fun handleSearchResult(result: SearchResult) {
         when (result) {
             is ValidResult -> {
-                nothingFoundPlaceholder.visibility = View.GONE
-                findSomethingPlaceholder.visibility = View.GONE
-                rvMoviesResult.visibility = View.VISIBLE
-                moviesResultSpecBtn.visibility = View.VISIBLE
-                moviesAdapter.setMovies(result.resultList)
-                tvMoviesCount.text = result.resultList.size.toString()
+                if (result.resultLists.movies.isEmpty()) {
+                    findSomethingPlaceholder.visibility = View.GONE
+                    nothingFoundPlaceholder.visibility = View.GONE
+                    moviesAdapter.setMovies(emptyList())
+                    moviesResultSpecBtn.visibility = View.GONE
+                }
+                if (result.resultLists.actors.isEmpty()) {
+                    findSomethingPlaceholder.visibility = View.GONE
+                    nothingFoundPlaceholder.visibility = View.GONE
+                    actorsAdapter.setActors(emptyList())
+                    actorResultSpecBtn.visibility = View.GONE
+                }
+                if (result.resultLists.movies.isNotEmpty()) {
+                    nothingFoundPlaceholder.visibility = View.GONE
+                    findSomethingPlaceholder.visibility = View.GONE
+                    moviesResultSpecBtn.visibility = View.VISIBLE
+                    moviesAdapter.setMovies(result.resultLists.movies)
+                    tvMoviesCount.text = result.resultLists.movies.size.toString()
+                    rvMoviesResult.scrollToPosition(0)
+                }
+                if (result.resultLists.actors.isNotEmpty()) {
+                    nothingFoundPlaceholder.visibility = View.GONE
+                    findSomethingPlaceholder.visibility = View.GONE
+                    actorResultSpecBtn.visibility = View.VISIBLE
+                    actorsAdapter.setActors(result.resultLists.actors)
+                    tvActorCount.text = result.resultLists.actors.size.toString()
+                    rvActorResult.scrollToPosition(0)
+                }
             }
             is ErrorResult -> {
                 nothingFoundPlaceholder.visibility = View.VISIBLE
                 findSomethingPlaceholder.visibility = View.GONE
                 moviesAdapter.setMovies(emptyList())
+                actorsAdapter.setActors(emptyList())
                 moviesResultSpecBtn.visibility = View.GONE
             }
             is EmptyResult -> {
                 nothingFoundPlaceholder.visibility = View.VISIBLE
                 findSomethingPlaceholder.visibility = View.GONE
-                moviesAdapter.setMovies(emptyList())
                 moviesResultSpecBtn.visibility = View.GONE
+                actorResultSpecBtn.visibility = View.GONE
             }
+//            is EmptyMoviesResult -> {
+//                findSomethingPlaceholder.visibility = View.GONE
+//                nothingFoundPlaceholder.visibility = View.GONE
+//                moviesAdapter.setMovies(emptyList())
+//                moviesResultSpecBtn.visibility = View.GONE
+//            }
+//            is EmptyActorsResult -> {
+//                findSomethingPlaceholder.visibility = View.GONE
+//                nothingFoundPlaceholder.visibility = View.GONE
+//                actorsAdapter.setActors(emptyList())
+//                actorResultSpecBtn.visibility = View.GONE
+//            }
             is EmptyQuery -> {
                 nothingFoundPlaceholder.visibility = View.GONE
                 findSomethingPlaceholder.visibility = View.VISIBLE
                 moviesAdapter.setMovies(emptyList())
+                actorsAdapter.setActors(emptyList())
                 moviesResultSpecBtn.visibility = View.GONE
+                actorResultSpecBtn.visibility = View.GONE
             }
             is TerminalError -> {
                 showMessage(getString(R.string.error_on_loading))

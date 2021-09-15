@@ -37,10 +37,13 @@ class SearchViewModel(application: Application) : BaseViewModel(application) {
             } else {
                 try {
                     val result = MoviesRepository.search(it)
-                    if (result.isEmpty()) {
-                        EmptyResult
-                    } else {
-                        ValidResult(result)
+                    when {
+                        result.actors.isEmpty() && result.movies.isEmpty() -> {
+                            EmptyResult
+                        }
+                        else -> {
+                            ValidResult(result)
+                        }
                     }
                 } catch (e: Throwable) {
                     if (e is CancellationException) {
@@ -59,7 +62,7 @@ class SearchViewModel(application: Application) : BaseViewModel(application) {
 
     @ExperimentalCoroutinesApi
     @FlowPreview
-    val moviesResultList: LiveData<MoviesResult>
+    val searchResultMap: LiveData<SearchResult>
         get() = _searchResult
 
     val searchState: LiveData<SearchState> get() = _searchState
