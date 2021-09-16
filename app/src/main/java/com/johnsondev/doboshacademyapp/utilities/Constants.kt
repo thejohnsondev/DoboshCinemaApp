@@ -1,6 +1,7 @@
 package com.johnsondev.doboshacademyapp.utilities
 
 import com.johnsondev.doboshacademyapp.BuildConfig
+import java.util.*
 
 object Constants {
 
@@ -17,7 +18,10 @@ object Constants {
     const val CALENDAR_VAL_DESCRIPTION = "description"
 
     const val HORIZONTAL_SPAN_COUNT = 4
-    const val VERTICAL_SPAN_COUNT = 2
+    const val VERTICAL_SPAN_COUNT = 5
+
+    const val GENRE_ITEM_TYPE = 6
+    const val NAMES_ITEM_TYPE = 7
 
     const val CONNECTION_ERROR_EXTRA = "connection_error_extra"
     const val CONNECTION_ERROR_ARG = "connection_error_arg"
@@ -60,6 +64,10 @@ object Constants {
     const val LANG_ENG = "en-US"
     const val LANG_RU = "ru-RU"
 
-    val TAB_TITLES = arrayListOf("Information", "Actors", "Recommendations", "Similar", "Trailers")
+    val MOVIE_TAB_TITLES =
+        arrayListOf("Information", "Actors", "Recommendations", "Similar", "Trailers")
+    val ACTOR_TAB_TITLES = arrayListOf("About", "Movies")
+
+    val CURRENT_YEAR = Calendar.getInstance()[Calendar.YEAR]
 
 }

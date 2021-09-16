@@ -19,6 +19,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_HORIZONTAL
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
+import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragmentDirections
 
 class MovieDetailsActorsFragment : BaseFragment() {
 
@@ -62,8 +63,7 @@ class MovieDetailsActorsFragment : BaseFragment() {
             val bundleWithActor = Bundle()
             bundleWithActor.putParcelable(Constants.ACTOR_KEY, actor)
             findNavController().navigate(
-                R.id.action_moviesDetailsFragment_to_actorDetailsFragment,
-                bundleWithActor
+               MoviesDetailsFragmentDirections.actionMoviesDetailsFragmentToActorDetailsActivity(actor.id)
             )
         }
 

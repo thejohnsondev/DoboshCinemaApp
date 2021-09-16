@@ -77,11 +77,8 @@ class SpecificActorsListFragment : BaseFragment() {
 
     private val actorClickListener = object : OnActorItemClickListener {
         override fun onClick(actor: Actor) {
-            val bundleWithActor = Bundle()
-            bundleWithActor.putParcelable(Constants.ACTOR_KEY, actor)
             findNavController().navigate(
-                R.id.action_specificActorsListFragment_to_actorDetailsFragment,
-                bundleWithActor
+               SpecificActorsListFragmentDirections.actionSpecificActorsListFragmentToActorDetailsActivity2(actor.id)
             )
         }
     }

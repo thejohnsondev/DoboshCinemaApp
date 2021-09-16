@@ -70,13 +70,10 @@ class SearchFragment : BaseFragment() {
     override fun layoutId(): Int = R.layout.fragment_search
 
 
-    override fun loadData() {
+    override fun loadData() {}
 
-    }
+    override fun bindViews(view: View) {}
 
-    override fun bindViews(view: View) {
-//        etSearch.showKeyboard()
-    }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
@@ -131,7 +128,6 @@ class SearchFragment : BaseFragment() {
                     moviesResultSpecBtn.visibility = View.VISIBLE
                     moviesAdapter.setMovies(result.resultLists.movies)
                     tvMoviesCount.text = result.resultLists.movies.size.toString()
-                    rvMoviesResult.scrollToPosition(0)
                 }
                 if (result.resultLists.actors.isNotEmpty()) {
                     nothingFoundPlaceholder.visibility = View.GONE
@@ -139,7 +135,6 @@ class SearchFragment : BaseFragment() {
                     actorResultSpecBtn.visibility = View.VISIBLE
                     actorsAdapter.setActors(result.resultLists.actors)
                     tvActorCount.text = result.resultLists.actors.size.toString()
-                    rvActorResult.scrollToPosition(0)
                 }
             }
             is ErrorResult -> {
@@ -155,18 +150,6 @@ class SearchFragment : BaseFragment() {
                 moviesResultSpecBtn.visibility = View.GONE
                 actorResultSpecBtn.visibility = View.GONE
             }
-//            is EmptyMoviesResult -> {
-//                findSomethingPlaceholder.visibility = View.GONE
-//                nothingFoundPlaceholder.visibility = View.GONE
-//                moviesAdapter.setMovies(emptyList())
-//                moviesResultSpecBtn.visibility = View.GONE
-//            }
-//            is EmptyActorsResult -> {
-//                findSomethingPlaceholder.visibility = View.GONE
-//                nothingFoundPlaceholder.visibility = View.GONE
-//                actorsAdapter.setActors(emptyList())
-//                actorResultSpecBtn.visibility = View.GONE
-//            }
             is EmptyQuery -> {
                 nothingFoundPlaceholder.visibility = View.GONE
                 findSomethingPlaceholder.visibility = View.VISIBLE
@@ -203,11 +186,8 @@ class SearchFragment : BaseFragment() {
 
     private val onActorClickListener = object : OnActorItemClickListener {
         override fun onClick(actor: Actor) {
-            val bundleWithActor = Bundle()
-            bundleWithActor.putParcelable(Constants.ACTOR_KEY, actor)
             findNavController().navigate(
-                R.id.action_searchFragment_to_actorDetailsFragment,
-                bundleWithActor
+                SearchFragmentDirections.actionSearchFragmentToActorDetailsActivity2(actor.id)
             )
         }
     }

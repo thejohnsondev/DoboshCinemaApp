@@ -17,13 +17,6 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out" />
         <action
-            android:id="@+id/action_moviesListFragment_to_actorDetailsFragment"
-            app:destination="@id/actorDetailsFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_out" />
-        <action
             android:id="@+id/action_moviesListFragment_to_specificActorsListFragment"
             app:destination="@id/specificActorsListFragment"
             app:enterAnim="@anim/slide_in"
@@ -40,6 +33,9 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_down" />
+        <action
+            android:id="@+id/action_moviesListFragment_to_actorDetailsActivity2"
+            app:destination="@id/actorDetailsActivity2" />
     </fragment>
     <fragment
         android:id="@+id/specificListFragment"
@@ -51,25 +47,10 @@
             app:destination="@id/detailsActivity" />
     </fragment>
     <fragment
-        android:id="@+id/actorDetailsFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.actordetails.ActorDetailsFragment"
-        android:label="ActorDetailsFragment" >
-        <action
-            android:id="@+id/action_actorDetailsFragment_to_detailsActivity"
-            app:destination="@id/detailsActivity" />
-    </fragment>
-    <fragment
         android:id="@+id/searchFragment"
         android:name="com.johnsondev.doboshacademyapp.views.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
-        <action
-            android:id="@+id/action_searchFragment_to_actorDetailsFragment"
-            app:destination="@id/actorDetailsFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_searchFragment_to_detailsActivity"
             app:destination="@id/detailsActivity"
@@ -77,6 +58,9 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_searchFragment_to_actorDetailsActivity2"
+            app:destination="@id/actorDetailsActivity2" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
@@ -93,12 +77,8 @@
         android:name="com.johnsondev.doboshacademyapp.views.movielist.SpecificActorsListFragment"
         android:label="SpecificActorsListFragment" >
         <action
-            android:id="@+id/action_specificActorsListFragment_to_actorDetailsFragment"
-            app:destination="@id/actorDetailsFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_out" />
+            android:id="@+id/action_specificActorsListFragment_to_actorDetailsActivity2"
+            app:destination="@id/actorDetailsActivity2" />
     </fragment>
     <activity
         android:id="@+id/detailsActivity"
@@ -107,6 +87,15 @@
         tools:layout="@layout/activity_details" >
         <argument
             android:name="movieId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </activity>
+    <activity
+        android:id="@+id/actorDetailsActivity2"
+        android:name="com.johnsondev.doboshacademyapp.views.actordetails.ActorDetailsActivity"
+        android:label="activity_actor_details"
+        tools:layout="@layout/activity_actor_details" >
+        <argument android:name="actorId"
             app:argType="integer"
             android:defaultValue="0" />
     </activity>

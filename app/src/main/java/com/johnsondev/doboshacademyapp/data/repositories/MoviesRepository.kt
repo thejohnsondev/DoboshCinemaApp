@@ -31,27 +31,6 @@ object MoviesRepository {
     private var movieVideos = MutableLiveData<List<MovieVideoDto>>()
     private var movieImages = MutableLiveData<Map<String, List<MovieImageDto>>>()
 
-    private var moviesSearchResult = MutableLiveData<List<Movie>>()
-    private var actorsSearchResult = MutableLiveData<List<Actor>>()
-
-
-//    suspend fun search(query: String): List<Movie> {
-//        try {
-//            val searchResult = movieApi.multiSearch(query)
-//            moviesSearchResult.postValue(searchResult.results.filter { it.mediaType == "movie" }
-//                .distinct().map {
-//                    DtoMapper.convertMovieFromDto(movieApi.getMovieById(it.id))
-//                })
-//
-////            actorsSearchResult.postValue(searchResult.results.filter { it.mediaType == "person" }
-////                .distinct().map {
-////                DtoMapper.convertActorFromDto(movieApi.getActor(it.id))
-////            })
-//        } catch (e: Exception) {
-//            handleExceptions(e)
-//        }
-//        return moviesSearchResult.value ?: emptyList()
-//    }
 
     suspend fun search(query: String): SearchResultLists {
         var moviesSearchResult: List<Movie> = listOf()
@@ -174,10 +153,6 @@ object MoviesRepository {
     fun getRecommendations(): MutableLiveData<List<Movie>> = movieRecommendations
 
     fun getSimilarMovies(): MutableLiveData<List<Movie>> = similarMovies
-
-    fun getMoviesSearchResult(): MutableLiveData<List<Movie>> = moviesSearchResult
-
-    fun getActorsSearchResult(): MutableLiveData<List<Actor>> = actorsSearchResult
 
     fun setAverageColor(body: Int, text: Int) {
         actorImgAverageColorBody.postValue(body)

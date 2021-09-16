@@ -46,13 +46,6 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
     private var _actorList = MutableLiveData<List<Actor>>()
     private var _crewList = MutableLiveData<List<CrewMember>>()
 
-    private var _actorDetails = MutableLiveData<ActorDetailsDto>()
-    private var _actorMovieCredits = MutableLiveData<List<Movie>>()
-    private var _actorImages = MutableLiveData<List<ActorImageProfileDto>>()
-
-    private var _averageColorBody = MutableLiveData<Int>()
-    private var _averageColorText = MutableLiveData<Int>()
-
     private var _currentMovie = MutableLiveData<MovieDetails>()
     private var _movieVideos = MutableLiveData<List<MovieVideoDto>>()
     private var _movieImages = MutableLiveData<Map<String, List<MovieImageDto>>>()
@@ -74,12 +67,6 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
         }
     }
 
-    fun loadActorDetailsById(id: Int) {
-        viewModelScope.launch(exceptionHandler()) {
-            ActorsRepository.loadActorDetailsById(id)
-            mutableError.value = null
-        }
-    }
 
     fun loadMovieVideosById(id: Int) {
         viewModelScope.launch(exceptionHandler()) {
@@ -195,65 +182,6 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
         }
         context.startActivity(intent)
         return intent
-    }
-
-
-    fun getActorDetails(): LiveData<ActorDetailsDto> {
-        _actorDetails = ActorsRepository.getActorDetails()
-        return _actorDetails
-    }
-
-    fun getActorMovieCredits(): LiveData<List<Movie>> {
-        _actorMovieCredits = ActorsRepository.getActorMovieCredits()
-        return _actorMovieCredits
-    }
-
-    fun getActorImages(): LiveData<List<ActorImageProfileDto>> {
-        _actorImages = ActorsRepository.getActorImages()
-        return _actorImages
-    }
-
-    fun clearActorDetails() {
-        _actorImages.value = emptyList()
-        _actorMovieCredits.value = emptyList()
-        _actorDetails.value = ActorDetailsDto()
-    }
-
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun calculateAverageColor(imageUrl: String, context: Context) {
-        viewModelScope.launch {
-            Glide.with(context).asBitmap().load(imageUrl).into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    val palette = Palette.from(resource).generate()
-                    MoviesRepository.setAverageColor(
-                        palette.getDarkMutedColor(Color.BLACK),
-                        palette.getLightMutedColor(Color.GRAY)
-                    )
-                }
-
-                override fun onLoadCleared(placeholder: Drawable?) {
-
-                }
-            })
-        }
-
-
-    }
-
-    fun getAverageColorBody(): LiveData<Int> {
-        _averageColorBody = MoviesRepository.getAverageColorBody()
-        return _averageColorBody
-    }
-
-    fun getAverageColorText(): LiveData<Int> {
-        _averageColorText = MoviesRepository.getAverageColorText()
-        return _averageColorText
-    }
-
-    fun checkInternetConnection(context: Context): Boolean {
-        val internetConnectionManager = InternetConnectionManager(context)
-        return internetConnectionManager.isNetworkAvailable()
     }
 
 

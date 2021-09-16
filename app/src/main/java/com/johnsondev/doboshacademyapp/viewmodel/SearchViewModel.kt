@@ -67,12 +67,4 @@ class SearchViewModel(application: Application) : BaseViewModel(application) {
 
     val searchState: LiveData<SearchState> get() = _searchState
 
-
-    private var _actorsResultList = MutableLiveData<List<Actor>>()
-
-    fun getActorsResultList(): LiveData<List<Actor>> {
-        _actorsResultList = MoviesRepository.getActorsSearchResult()
-        return _actorsResultList
-    }
-
 }

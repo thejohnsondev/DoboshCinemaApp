@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,16 +16,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/back_btn"
-                android:layout_width="@dimen/dp_24"
-                android:layout_height="@dimen/dp_24"
-                android:layout_marginStart="@dimen/dp_16"
-                android:layout_marginTop="@dimen/dp_16"
-                android:src="@drawable/ic_baseline_arrow_back_24"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
 
             <include
@@ -61,6 +50,16 @@
                 app:layout_constraintStart_toStartOf="@+id/iv_backdrop_rv_item"
                 app:layout_constraintTop_toTopOf="@+id/iv_backdrop_rv_item"
                 app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/back_btn"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:layout_marginStart="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_16"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/iv_poster_rv_item"
@@ -239,32 +238,27 @@
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab_movie_information"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/information" />
+                    android:layout_height="wrap_content" />
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab_movie_actors"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/actors" />
+                    android:layout_height="wrap_content" />
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab_movie_recommendations"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/recommendations" />
+                    android:layout_height="wrap_content" />
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab_movie_similar"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/similar" />
+                    android:layout_height="wrap_content" />
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab_movie_trailers"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/trailers" />
+                    android:layout_height="wrap_content" />
 
             </com.google.android.material.tabs.TabLayout>
 

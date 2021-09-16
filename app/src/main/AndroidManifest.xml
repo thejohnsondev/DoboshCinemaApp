@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DoboshAcademyApp">
         <activity
+            android:name=".views.actordetails.ActorDetailsActivity"
+            android:exported="true" />
+        <activity
             android:name=".views.moviedetails.DetailsActivity"
             android:exported="true" />
         <activity

@@ -36,9 +36,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="actor_details">Actor details</string>
     <string name="actor_name">Actor Name</string>
-    <string name="birth_day">Birth day:</string>
+    <string name="birth_day">Birth day</string>
     <string name="_1983_11_15">1983–11–15</string>
-    <string name="death_day">Death day:</string>
+    <string name="death_day">Death day</string>
     <string name="symb_min">-</string>
     <string name="place_of_birth">Place of birth:</string>
     <string name="biography">Biography</string>
@@ -89,5 +89,7 @@
     <string name="nothing_found">Nothing found</string>
     <string name="find_movies_or_actors">Find movies or actors</string>
     <string name="error_on_loading">Error on loading</string>
+    <string name="age">Age</string>
+    <string name="also_known_as">Also known as</string>
 
 </resources>

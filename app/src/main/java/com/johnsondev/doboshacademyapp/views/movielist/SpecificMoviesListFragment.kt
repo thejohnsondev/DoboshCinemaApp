@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
@@ -18,7 +18,6 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
-import com.johnsondev.doboshacademyapp.utilities.calculateSpanCount
 import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
 
 
@@ -37,9 +36,8 @@ class SpecificMoviesListFragment : BaseFragment() {
 
         rvSpecMoviesList = view.findViewById(R.id.rv_spec_movies_list)
         backViewGroup = view.findViewById(R.id.back_to_main_view_group)
-        adapter = MoviesAdapter(requireContext(), clickListener, false)
-        rvSpecMoviesList.layoutManager =
-            GridLayoutManager(requireContext(), calculateSpanCount(requireContext()))
+        adapter = MoviesAdapter(requireContext(), clickListener, true)
+        rvSpecMoviesList.layoutManager = LinearLayoutManager(requireContext())
         rvSpecMoviesList.adapter = adapter
         tvSpecListType = view.findViewById(R.id.spec_list_type_tv)
 

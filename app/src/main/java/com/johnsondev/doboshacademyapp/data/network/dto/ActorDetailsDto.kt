@@ -25,5 +25,9 @@ data class ActorDetailsDto(
     @SerialName("place_of_birth")
     val placeOfBirth: String = "",
     @SerialName("profile_path")
-    val profilePath: String = ""
+    val profilePath: String = "",
+    @SerialName("also_known_as")
+    val alsoKnownAs: List<String> = emptyList(),
+    @SerialName("known_for_department")
+    val department: String = ""
 ): Parcelable

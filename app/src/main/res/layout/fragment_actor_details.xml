@@ -99,7 +99,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_8"
-
                 app:layout_constraintStart_toEndOf="@+id/birth_day"
                 app:layout_constraintTop_toTopOf="@+id/birth_day" />
 

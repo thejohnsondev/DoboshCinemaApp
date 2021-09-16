@@ -7,7 +7,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.SIMILAR_LIST_TYPE
 import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsActorsFragment
 import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsInfoFragment
 import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsRecommendFragment
-import com.johnsondev.doboshacademyapp.views.moviedetails.MovieDetailsTrailersFragment
+import com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsTrailersFragment
 
 class MovieDetailsPagerAdapter(
     fragment: Fragment

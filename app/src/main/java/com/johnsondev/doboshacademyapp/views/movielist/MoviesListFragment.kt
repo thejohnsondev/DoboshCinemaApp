@@ -276,11 +276,8 @@ class MoviesListFragment : BaseFragment() {
 
     private val actorClickListener = object : OnActorItemClickListener {
         override fun onClick(actor: Actor) {
-            val bundleWithActor = Bundle()
-            bundleWithActor.putParcelable(ACTOR_KEY, actor)
             findNavController().navigate(
-                R.id.action_moviesListFragment_to_actorDetailsFragment,
-                bundleWithActor
+               MoviesListFragmentDirections.actionMoviesListFragmentToActorDetailsActivity2(actor.id)
             )
         }
 

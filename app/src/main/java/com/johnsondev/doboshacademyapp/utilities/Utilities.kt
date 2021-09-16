@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.johnsondev.doboshacademyapp.data.network.exception.ConnectionErrorException
 import retrofit2.HttpException
 import java.io.IOException
+import java.util.*
 import java.util.concurrent.TimeoutException
 
 
@@ -116,6 +117,14 @@ fun handleExceptions(e: Exception) {
         else -> e
     }
 }
+
+fun calculateAge(dateOfBirth: String): String {
+    val birthYear = dateOfBirth.substring(0, 4).toInt()
+    val currentYear = Calendar.getInstance()[Calendar.YEAR]
+
+    return (currentYear - birthYear).toString()
+}
+
 
 
 

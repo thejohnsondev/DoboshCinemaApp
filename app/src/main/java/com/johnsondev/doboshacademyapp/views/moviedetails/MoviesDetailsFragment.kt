@@ -25,12 +25,11 @@ import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
-import com.johnsondev.doboshacademyapp.utilities.Constants.TAB_TITLES
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_TAB_TITLES
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.timeToHFromMin
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
-import kotlinx.android.synthetic.main.fragment_movies_list.view.*
 import kotlinx.coroutines.*
 
 class MoviesDetailsFragment : BaseFragment() {
@@ -120,7 +119,7 @@ class MoviesDetailsFragment : BaseFragment() {
 
 
         TabLayoutMediator(tabLayout, viewPager2) { tab, pos ->
-            tab.text = TAB_TITLES[pos]
+            tab.text = MOVIE_TAB_TITLES[pos]
             viewPager2.setCurrentItem(tab.position, true)
 
         }.attach()
@@ -298,11 +297,8 @@ class MoviesDetailsFragment : BaseFragment() {
         val bundle = Bundle()
         bundle.putParcelable(ACTOR_KEY, actor)
         findNavController().navigate(
-            R.id.action_moviesDetailsFragment_to_actorDetailsFragment,
-            bundle
+           MoviesDetailsFragmentDirections.actionMoviesDetailsFragmentToActorDetailsActivity(actor.id)
         )
-
-
     }
 
     override fun onDestroy() {

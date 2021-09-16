@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.views.moviedetails
+package com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments
 
 import android.view.View
 import androidx.fragment.app.viewModels
