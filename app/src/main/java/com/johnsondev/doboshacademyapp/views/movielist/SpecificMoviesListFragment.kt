@@ -1,7 +1,9 @@
 package com.johnsondev.doboshacademyapp.views.movielist
 
+import android.util.Log
 import android.view.View
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,13 +15,20 @@ import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_SPEC_TYPE
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIES_SEARCH_RESULT_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
 import com.johnsondev.doboshacademyapp.utilities.Constants.POPULAR_SPEC_TYPE
+import com.johnsondev.doboshacademyapp.utilities.Constants.SEARCH_RESULT_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
+import com.johnsondev.doboshacademyapp.utilities.observeOnce
+import com.johnsondev.doboshacademyapp.utilities.states.ValidResult
 import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
+import com.johnsondev.doboshacademyapp.viewmodel.SearchViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
 
 class SpecificMoviesListFragment : BaseFragment() {
@@ -30,10 +39,13 @@ class SpecificMoviesListFragment : BaseFragment() {
     private lateinit var adapter: MoviesAdapter
     private lateinit var specType: String
     private var genre: Genre? = null
-    private lateinit var moviesListViewModel: MoviesListViewModel
+
+    private val moviesListViewModel by viewModels<MoviesListViewModel>()
+
 
     override fun initViews(view: View) {
-        moviesListViewModel = ViewModelProvider(this)[MoviesListViewModel::class.java]
+
+
 
         rvSpecMoviesList = view.findViewById(R.id.rv_spec_movies_list)
         backViewGroup = view.findViewById(R.id.back_to_main_view_group)
@@ -66,6 +78,8 @@ class SpecificMoviesListFragment : BaseFragment() {
         }
     }
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     override fun initListenersAndObservers(view: View) {
         backViewGroup.setOnClickListener {
             findNavController().popBackStack()
@@ -92,6 +106,10 @@ class SpecificMoviesListFragment : BaseFragment() {
                     adapter.setMovies(it)
                 }
             }
+            SEARCH_RESULT_SPEC_TYPE -> {
+                val list = arguments?.getParcelableArrayList<Movie>(MOVIES_SEARCH_RESULT_SPEC_TYPE)
+                adapter.setMovies(list ?: emptyList())
+            }
         }
     }
 
@@ -108,5 +126,8 @@ class SpecificMoviesListFragment : BaseFragment() {
             SpecificMoviesListFragmentDirections.actionSpecificListFragmentToDetailsActivity(movie.id)
         )
     }
+
+
+
 
 }

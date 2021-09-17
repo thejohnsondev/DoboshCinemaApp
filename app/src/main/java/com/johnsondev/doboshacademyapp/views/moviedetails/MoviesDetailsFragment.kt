@@ -291,7 +291,7 @@ class MoviesDetailsFragment : BaseFragment() {
 
 
     }
-    
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun doOnClick(actor: Actor) {

@@ -10,8 +10,11 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
+import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_HORIZONTAL
 import com.johnsondev.doboshacademyapp.utilities.Constants.POP_ACTORS_SPEC_TYPE
+import com.johnsondev.doboshacademyapp.utilities.Constants.SEARCH_RESULT_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
@@ -69,6 +72,10 @@ class SpecificActorsListFragment : BaseFragment() {
                 moviesListViewModel.getPopularActors().observe(viewLifecycleOwner) {
                     adapter.setActors(it)
                 }
+            }
+            SEARCH_RESULT_SPEC_TYPE -> {
+                val list = arguments?.getParcelableArrayList<Actor>(Constants.ACTORS_SEARCH_RESULT_SPEC_TYPE)
+                adapter.setActors(list ?: emptyList())
             }
         }
     }

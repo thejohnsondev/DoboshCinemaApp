@@ -1,5 +1,7 @@
 package com.johnsondev.doboshacademyapp.views.search
 
+import android.os.Bundle
+import android.os.Parcelable
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -17,8 +19,12 @@ import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.utilities.Constants.ACTORS_SEARCH_RESULT_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIES_SEARCH_RESULT_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_MINI
+import com.johnsondev.doboshacademyapp.utilities.Constants.SEARCH_RESULT_SPEC_TYPE
+import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.afterTextChanged
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.hideKeyboard
@@ -29,6 +35,7 @@ import com.johnsondev.doboshacademyapp.viewmodel.SearchViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
+import java.util.*
 
 
 class SearchFragment : BaseFragment() {
@@ -106,7 +113,36 @@ class SearchFragment : BaseFragment() {
         searchViewModel.searchResultMap.observeOnce(viewLifecycleOwner, { handleSearchResult(it) })
         searchViewModel.searchState.observeOnce(viewLifecycleOwner, { handleSearchState(it) })
 
+        moviesResultSpecBtn.setOnClickListener {
+            if (searchViewModel.searchResultMap.value is ValidResult) {
+                val bundle = Bundle()
+                bundle.putParcelableArrayList(
+                    MOVIES_SEARCH_RESULT_SPEC_TYPE,
+                    (searchViewModel.searchResultMap.value as ValidResult).resultLists.movies as ArrayList<out Parcelable>
+                )
+                bundle.putString(SPECIFIC_LIST_TYPE, SEARCH_RESULT_SPEC_TYPE)
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_specificListFragment,
+                    bundle
+                )
+            }
+        }
 
+        actorResultSpecBtn.setOnClickListener {
+            if (searchViewModel.searchResultMap.value is ValidResult) {
+                val bundle = Bundle()
+                bundle.putParcelableArrayList(
+                    ACTORS_SEARCH_RESULT_SPEC_TYPE,
+                    (searchViewModel.searchResultMap.value as ValidResult).resultLists.actors as ArrayList<out Parcelable>
+                )
+                bundle.putString(SPECIFIC_LIST_TYPE, SEARCH_RESULT_SPEC_TYPE)
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_specificActorsListFragment,
+                    bundle
+                )
+            }
+
+        }
     }
 
 
@@ -194,6 +230,7 @@ class SearchFragment : BaseFragment() {
             )
         }
     }
+
 
 }
 

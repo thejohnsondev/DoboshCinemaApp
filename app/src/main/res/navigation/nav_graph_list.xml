@@ -61,17 +61,21 @@
         <action
             android:id="@+id/action_searchFragment_to_actorDetailsActivity2"
             app:destination="@id/actorDetailsActivity2" />
+        <action
+            android:id="@+id/action_searchFragment_to_specificListFragment"
+            app:destination="@id/specificListFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_searchFragment_to_specificActorsListFragment"
+            app:destination="@id/specificActorsListFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
-    <fragment
-        android:id="@+id/favoriteFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.favorite.FavoriteFragment"
-        android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.settings.SettingsFragment"
-        android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/specificActorsListFragment"
         android:name="com.johnsondev.doboshacademyapp.views.movielist.SpecificActorsListFragment"

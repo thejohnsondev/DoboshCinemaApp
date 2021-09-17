@@ -60,6 +60,7 @@ class SearchViewModel(application: Application) : BaseViewModel(application) {
         .catch { emit(TerminalError) }
         .asLiveData(viewModelScope.coroutineContext)
 
+
     @ExperimentalCoroutinesApi
     @FlowPreview
     val searchResultMap: LiveData<SearchResult>

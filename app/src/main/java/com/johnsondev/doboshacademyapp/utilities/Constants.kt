@@ -34,6 +34,9 @@ object Constants {
     const val TOP_RATED_SPEC_TYPE = "top_rated_spec_type"
     const val UPCOMING_SPEC_TYPE = "upcoming_spec_type"
     const val GENRE_SPEC_TYPE = "genre_spec_type"
+    const val SEARCH_RESULT_SPEC_TYPE = "input_data_spec_type"
+    const val MOVIES_SEARCH_RESULT_SPEC_TYPE = "movies_search_result_spec_type"
+    const val ACTORS_SEARCH_RESULT_SPEC_TYPE = "actors_search_result_spec_type"
     const val POP_ACTORS_SPEC_TYPE = "pop_actors_spec_type"
 
     const val ITEM_TYPE_MINI = 0
