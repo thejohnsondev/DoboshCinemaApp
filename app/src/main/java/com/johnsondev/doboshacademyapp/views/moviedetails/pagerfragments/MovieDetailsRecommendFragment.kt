@@ -9,13 +9,13 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
 import com.johnsondev.doboshacademyapp.utilities.Constants.RECOMMENDATIONS_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SIMILAR_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragmentDirections
-import kotlinx.android.synthetic.main.fragment_actor_details.*
 
 
 class MovieDetailsRecommendFragment(private val listType: String) : BaseFragment() {
@@ -29,7 +29,7 @@ class MovieDetailsRecommendFragment(private val listType: String) : BaseFragment
         detailsViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
 
         rvMoviesList = view.findViewById(R.id.rv_details_movies_list)
-        moviesListAdapter = MoviesAdapter(requireContext(), onMovieClickListener, true)
+        moviesListAdapter = MoviesAdapter(requireContext(), onMovieClickListener, MOVIE_ITEM_LARGE)
         rvMoviesList.adapter = moviesListAdapter
         rvMoviesList.layoutManager =
             LinearLayoutManager(requireContext())

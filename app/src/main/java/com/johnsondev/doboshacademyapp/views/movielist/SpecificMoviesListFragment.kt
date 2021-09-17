@@ -13,6 +13,7 @@ import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_SPEC_TYPE
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
 import com.johnsondev.doboshacademyapp.utilities.Constants.POPULAR_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
@@ -36,7 +37,7 @@ class SpecificMoviesListFragment : BaseFragment() {
 
         rvSpecMoviesList = view.findViewById(R.id.rv_spec_movies_list)
         backViewGroup = view.findViewById(R.id.back_to_main_view_group)
-        adapter = MoviesAdapter(requireContext(), clickListener, true)
+        adapter = MoviesAdapter(requireContext(), clickListener, MOVIE_ITEM_LARGE)
         rvSpecMoviesList.layoutManager = LinearLayoutManager(requireContext())
         rvSpecMoviesList.adapter = adapter
         tvSpecListType = view.findViewById(R.id.spec_list_type_tv)

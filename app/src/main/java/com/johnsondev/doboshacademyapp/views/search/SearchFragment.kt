@@ -1,6 +1,5 @@
 package com.johnsondev.doboshacademyapp.views.search
 
-import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -18,9 +17,13 @@ import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.utilities.*
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_MINI
+import com.johnsondev.doboshacademyapp.utilities.afterTextChanged
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
+import com.johnsondev.doboshacademyapp.utilities.hideKeyboard
+import com.johnsondev.doboshacademyapp.utilities.observeOnce
+import com.johnsondev.doboshacademyapp.utilities.showMessage
 import com.johnsondev.doboshacademyapp.utilities.states.*
 import com.johnsondev.doboshacademyapp.viewmodel.SearchViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -58,7 +61,7 @@ class SearchFragment : BaseFragment() {
         tvActorCount = view.findViewById(R.id.tv_actors_count)
         rvActorResult = view.findViewById(R.id.search_actors_rv)
 
-        moviesAdapter = MoviesAdapter(requireContext(), onMovieClickListener, false)
+        moviesAdapter = MoviesAdapter(requireContext(), onMovieClickListener, MOVIE_ITEM_MINI)
         rvMoviesResult.adapter = moviesAdapter
 
         actorsAdapter = ActorsAdapter(requireContext(), onActorClickListener, ITEM_TYPE_MINI)

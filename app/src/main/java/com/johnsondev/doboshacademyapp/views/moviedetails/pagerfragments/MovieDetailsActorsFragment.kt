@@ -1,11 +1,7 @@
 package com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -63,7 +59,9 @@ class MovieDetailsActorsFragment : BaseFragment() {
             val bundleWithActor = Bundle()
             bundleWithActor.putParcelable(Constants.ACTOR_KEY, actor)
             findNavController().navigate(
-               MoviesDetailsFragmentDirections.actionMoviesDetailsFragmentToActorDetailsActivity(actor.id)
+                MoviesDetailsFragmentDirections.actionMoviesDetailsFragmentToActorDetailsActivity(
+                    actor.id
+                )
             )
         }
 

@@ -9,13 +9,17 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_DEFAULT
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_MINI
 
 class MoviesAdapter(
     private val context: Context,
     private val clickListener: OnMovieItemClickListener,
-    private val isHorizontalList: Boolean
+    private val itemType: Int
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var moviesList: List<Movie> = listOf()
@@ -25,26 +29,47 @@ class MoviesAdapter(
 
     private fun getItem(position: Int): Movie = moviesList[position]
 
+    override fun getItemViewType(position: Int): Int {
+        return when (itemType) {
+            MOVIE_ITEM_MINI -> MOVIE_ITEM_MINI
+            MOVIE_ITEM_DEFAULT -> MOVIE_ITEM_DEFAULT
+            else -> MOVIE_ITEM_LARGE
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView: View
-        return if (isHorizontalList) {
-            itemView = inflater.inflate(R.layout.movie_rv_item_horizontal, parent, false)
-            MovieViewHolderHorizontal(itemView, context)
-        } else {
-            itemView = inflater.inflate(R.layout.movie_rv_item, parent, false)
-            MovieViewHolder(itemView, context)
+        return when (viewType) {
+            MOVIE_ITEM_MINI -> {
+                itemView = inflater.inflate(R.layout.movie_rv_item_mini, parent, false)
+                MovieViewHolderMini(itemView)
+            }
+            MOVIE_ITEM_DEFAULT -> {
+                itemView = inflater.inflate(R.layout.movie_rv_item, parent, false)
+                MovieViewHolderDefault(itemView, context)
+            }
+            else -> {
+                itemView = inflater.inflate(R.layout.movie_rv_item_horizontal, parent, false)
+                MovieViewHolderLarge(itemView, context)
+            }
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is MovieViewHolder -> {
+            is MovieViewHolderDefault -> {
                 holder.bind(getItem(position))
                 holder.itemView.setOnClickListener {
                     clickListener.onClick(moviesList[position])
                 }
             }
-            is MovieViewHolderHorizontal -> {
+            is MovieViewHolderLarge -> {
+                holder.bind(getItem(position))
+                holder.itemView.setOnClickListener {
+                    clickListener.onClick(moviesList[position])
+                }
+            }
+            is MovieViewHolderMini -> {
                 holder.bind(getItem(position))
                 holder.itemView.setOnClickListener {
                     clickListener.onClick(moviesList[position])
@@ -60,7 +85,7 @@ class MoviesAdapter(
     }
 }
 
-class MovieViewHolder(private val view: View, private val context: Context) :
+class MovieViewHolderDefault(private val view: View, private val context: Context) :
     RecyclerView.ViewHolder(view) {
 
     private val name: TextView = view.findViewById(R.id.movie_title)
@@ -91,7 +116,7 @@ class MovieViewHolder(private val view: View, private val context: Context) :
 
 }
 
-class MovieViewHolderHorizontal(private val view: View, private val context: Context) :
+class MovieViewHolderLarge(private val view: View, private val context: Context) :
     RecyclerView.ViewHolder(view) {
 
     private val name: TextView = view.findViewById(R.id.movie_title)
@@ -110,6 +135,25 @@ class MovieViewHolderHorizontal(private val view: View, private val context: Con
         rating.progress = (movie.ratings * 2).toInt()
 
         movieImg.load(movie.poster) {
+            crossfade(true)
+            placeholder(R.drawable.movie_placeholder)
+            fallback(R.drawable.movie_placeholder)
+            error(R.drawable.movie_placeholder)
+        }
+        movieImg.clipToOutline = true
+    }
+}
+
+class MovieViewHolderMini(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    private val name: TextView = itemView.findViewById(R.id.movie_title)
+    private val movieImg: ImageView = itemView.findViewById(R.id.movie_img)
+
+    fun bind(movie: Movie) {
+        name.text = movie.title
+
+        movieImg.load(movie.poster) {
+            RoundedCornersTransformation(10f)
             crossfade(true)
             placeholder(R.drawable.movie_placeholder)
             fallback(R.drawable.movie_placeholder)

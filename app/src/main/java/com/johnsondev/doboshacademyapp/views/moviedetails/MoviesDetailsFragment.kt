@@ -3,7 +3,9 @@ package com.johnsondev.doboshacademyapp.views.moviedetails
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.ImageView
+import android.widget.RatingBar
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,9 +18,9 @@ import coil.transform.BlurTransformation
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.johnsondev.doboshacademyapp.R
-import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.adapters.GenresAdapter
 import com.johnsondev.doboshacademyapp.adapters.MovieDetailsPagerAdapter
+import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.adapters.OnGenreClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Genre
@@ -30,7 +32,9 @@ import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.timeToHFromMin
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 
 class MoviesDetailsFragment : BaseFragment() {
 
@@ -70,9 +74,6 @@ class MoviesDetailsFragment : BaseFragment() {
     private lateinit var viewPager2: ViewPager2
 
     private lateinit var detailsViewModel: MovieDetailsViewModel
-    private val scope = CoroutineScope(Dispatchers.IO + Job())
-
-    private val fragmentsWithData = mutableMapOf<String, Fragment>()
 
 
     override fun initViews(view: View) {
@@ -290,6 +291,7 @@ class MoviesDetailsFragment : BaseFragment() {
 
 
     }
+    
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun doOnClick(actor: Actor) {
@@ -297,14 +299,11 @@ class MoviesDetailsFragment : BaseFragment() {
         val bundle = Bundle()
         bundle.putParcelable(ACTOR_KEY, actor)
         findNavController().navigate(
-           MoviesDetailsFragmentDirections.actionMoviesDetailsFragmentToActorDetailsActivity(actor.id)
+            MoviesDetailsFragmentDirections.actionMoviesDetailsFragmentToActorDetailsActivity(actor.id)
         )
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
 
-    }
 }
 
 

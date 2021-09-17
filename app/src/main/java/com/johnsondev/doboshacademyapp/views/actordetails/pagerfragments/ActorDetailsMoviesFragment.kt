@@ -15,6 +15,7 @@ import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.viewmodel.ActorDetailsViewModel
@@ -33,7 +34,7 @@ class ActorDetailsMoviesFragment : BaseFragment() {
     override fun initViews(view: View) {
 
         rvMoviesList = view.findViewById(R.id.rv_details_movies_list)
-        moviesListAdapter = MoviesAdapter(requireContext(), onMovieClickListener, true)
+        moviesListAdapter = MoviesAdapter(requireContext(), onMovieClickListener, MOVIE_ITEM_LARGE)
         rvMoviesList.adapter = moviesListAdapter
         rvMoviesList.layoutManager =
             LinearLayoutManager(requireContext())

@@ -14,7 +14,6 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.CrewAdapter
 import com.johnsondev.doboshacademyapp.adapters.ProductCompaniesAdapter
 import com.johnsondev.doboshacademyapp.adapters.ProductCountriesAdapter
-import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.BACKDROP_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.IMAGES_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_BACKDROP
@@ -39,8 +38,8 @@ class MovieDetailsInfoFragment : BaseFragment() {
     private lateinit var tvBudget: TextView
     private lateinit var tvRevenue: TextView
     private lateinit var rvProductCompanies: RecyclerView
-    private lateinit var ivMediaPoster: ImageView
-    private lateinit var ivMediaBackdrop: ImageView
+    private var ivMediaPoster: ImageView? = null
+    private var ivMediaBackdrop: ImageView? = null
     private lateinit var tvPostersCount: TextView
     private lateinit var tvBackdrops: TextView
 
@@ -97,12 +96,12 @@ class MovieDetailsInfoFragment : BaseFragment() {
             tvReleaseDate.text = movie.releaseDate
             tvOrigTitle.text = movie.origTitle
             tvOrigLang.text = movie.origLanguage
-            movie.productionCountries?.map { DtoMapper.convertCountryFromDto(it) }
-                .let { productCountriesAdapter.setCountries(it!!) }
+            movie.productionCountries.map { DtoMapper.convertCountryFromDto(it) }
+                .let { productCountriesAdapter.setCountries(it) }
             tvRuntime.text = getString(R.string.running_time, movie.runtime)
             tvBudget.text = movie.budget.toString()
             tvRevenue.text = movie.revenue.toString()
-            movie.productionCompanies?.let { productCompaniesAdapter.setCompanies(it) }
+            movie.productionCompanies.let { productCompaniesAdapter.setCompanies(it) }
 
         })
 
@@ -113,7 +112,7 @@ class MovieDetailsInfoFragment : BaseFragment() {
         detailsViewModel.getMovieImagesForCurrentMovie().observeOnce(this, {
 
             if (it[POSTER_KEY]?.size != 0) {
-                ivMediaPoster.load("$POSTER_PATH${it[POSTER_KEY]?.get(0)?.filePath}") {
+                ivMediaPoster?.load("$POSTER_PATH${it[POSTER_KEY]?.get(0)?.filePath}") {
                     crossfade(true)
                     error(R.drawable.ic_baseline_image_24)
                     placeholder(R.drawable.ic_baseline_image_24)
@@ -125,7 +124,7 @@ class MovieDetailsInfoFragment : BaseFragment() {
 
             if (it[BACKDROP_KEY]?.size != 0) {
 
-                ivMediaBackdrop.load("$POSTER_PATH${it[BACKDROP_KEY]?.get(0)?.filePath}") {
+                ivMediaBackdrop?.load("$POSTER_PATH${it[BACKDROP_KEY]?.get(0)?.filePath}") {
                     crossfade(true)
                     error(R.drawable.ic_baseline_image_24)
                     placeholder(R.drawable.ic_baseline_image_24)
@@ -143,7 +142,7 @@ class MovieDetailsInfoFragment : BaseFragment() {
 
         })
 
-        ivMediaPoster.setOnClickListener {
+        ivMediaPoster?.setOnClickListener {
             val bundle = Bundle()
             bundle.putInt(IMAGES_LIST_TYPE, ITEM_TYPE_POSTER)
             findNavController().navigate(
@@ -152,7 +151,7 @@ class MovieDetailsInfoFragment : BaseFragment() {
             )
         }
 
-        ivMediaBackdrop.setOnClickListener {
+        ivMediaBackdrop?.setOnClickListener {
             val bundle = Bundle()
             bundle.putInt(IMAGES_LIST_TYPE, ITEM_TYPE_BACKDROP)
             findNavController().navigate(
@@ -161,6 +160,14 @@ class MovieDetailsInfoFragment : BaseFragment() {
             )
         }
 
+    }
+
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        ivMediaPoster?.clear()
+        ivMediaBackdrop?.clear()
     }
 
 

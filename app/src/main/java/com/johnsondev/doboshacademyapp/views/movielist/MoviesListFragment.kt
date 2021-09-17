@@ -15,10 +15,10 @@ import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.services.MovieDbUpdateWorker
 import com.johnsondev.doboshacademyapp.utilities.Constants
-import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_DEFAULT
 import com.johnsondev.doboshacademyapp.utilities.Constants.PERIODIC_UPDATE_WORK
 import com.johnsondev.doboshacademyapp.utilities.Constants.POPULAR_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.POP_ACTORS_SPEC_TYPE
@@ -87,9 +87,9 @@ class MoviesListFragment : BaseFragment() {
         rvUpcomingMovies = view.findViewById(R.id.upcoming_movies_rv)
         rvPopGenres = view.findViewById(R.id.pop_genres_rv)
         rvPopActors = view.findViewById(R.id.pop_actors_rv)
-        popularMoviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
-        topRatedMoviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
-        upcomingMoviesAdapter = MoviesAdapter(view.context, movieClickListener, false)
+        popularMoviesAdapter = MoviesAdapter(view.context, movieClickListener, MOVIE_ITEM_DEFAULT)
+        topRatedMoviesAdapter = MoviesAdapter(view.context, movieClickListener, MOVIE_ITEM_DEFAULT)
+        upcomingMoviesAdapter = MoviesAdapter(view.context, movieClickListener, MOVIE_ITEM_DEFAULT)
         popGenresAdapter = GenresAdapter(view.context, genreClickListener)
         popActorsAdapter = ActorsAdapter(view.context, actorClickListener, ITEM_TYPE_MINI)
         rvPopularMovies.adapter = popularMoviesAdapter
@@ -277,7 +277,7 @@ class MoviesListFragment : BaseFragment() {
     private val actorClickListener = object : OnActorItemClickListener {
         override fun onClick(actor: Actor) {
             findNavController().navigate(
-               MoviesListFragmentDirections.actionMoviesListFragmentToActorDetailsActivity2(actor.id)
+                MoviesListFragmentDirections.actionMoviesListFragmentToActorDetailsActivity2(actor.id)
             )
         }
 

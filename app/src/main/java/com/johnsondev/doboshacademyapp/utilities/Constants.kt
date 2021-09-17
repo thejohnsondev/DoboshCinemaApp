@@ -39,6 +39,10 @@ object Constants {
     const val ITEM_TYPE_MINI = 0
     const val ITEM_TYPE_HORIZONTAL = 1
 
+    const val MOVIE_ITEM_MINI = 8
+    const val MOVIE_ITEM_DEFAULT = 9
+    const val MOVIE_ITEM_LARGE = 10
+
     const val IMAGES_LIST_TYPE = "images_list_type"
     const val ITEM_TYPE_POSTER = 2
     const val ITEM_TYPE_BACKDROP = 3
@@ -50,10 +54,6 @@ object Constants {
 
     const val BACKDROP_KEY = "backdrop_key"
     const val POSTER_KEY = "poster_key"
-
-    const val POPULAR_MOVIES_TYPE: String = "popular"
-    const val TOP_RATED_MOVIES_TYPE: String = "topRated"
-    const val UPCOMING_MOVIES_TYPE: String = "upcoming"
 
     const val RECOMMENDATIONS_LIST_TYPE: String = "recommendation_list_type"
     const val SIMILAR_LIST_TYPE: String = "similar_list_type"

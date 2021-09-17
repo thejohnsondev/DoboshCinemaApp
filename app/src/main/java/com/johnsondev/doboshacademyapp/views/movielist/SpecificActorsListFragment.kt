@@ -1,6 +1,5 @@
 package com.johnsondev.doboshacademyapp.views.movielist
 
-import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
@@ -11,7 +10,6 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_HORIZONTAL
 import com.johnsondev.doboshacademyapp.utilities.Constants.POP_ACTORS_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
@@ -68,7 +66,7 @@ class SpecificActorsListFragment : BaseFragment() {
 
         when (specType) {
             POP_ACTORS_SPEC_TYPE -> {
-                moviesListViewModel.getPopularActors().observe(viewLifecycleOwner){
+                moviesListViewModel.getPopularActors().observe(viewLifecycleOwner) {
                     adapter.setActors(it)
                 }
             }
@@ -78,7 +76,9 @@ class SpecificActorsListFragment : BaseFragment() {
     private val actorClickListener = object : OnActorItemClickListener {
         override fun onClick(actor: Actor) {
             findNavController().navigate(
-               SpecificActorsListFragmentDirections.actionSpecificActorsListFragmentToActorDetailsActivity2(actor.id)
+                SpecificActorsListFragmentDirections.actionSpecificActorsListFragmentToActorDetailsActivity2(
+                    actor.id
+                )
             )
         }
     }
