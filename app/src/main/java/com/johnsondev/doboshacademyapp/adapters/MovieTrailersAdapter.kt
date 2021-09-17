@@ -1,6 +1,8 @@
 package com.johnsondev.doboshacademyapp.adapters
 
 import android.content.Context
+import android.util.Log
+import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,19 +50,12 @@ class MovieTrailerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(trailer: MovieVideoDto) {
         trailerTitle.text = trailer.name
-        ytPlayer.addFullScreenListener(object : YouTubePlayerFullScreenListener{
-            override fun onYouTubePlayerEnterFullScreen() {
-                ytPlayer.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-            }
+        ytPlayer.clipToOutline = true
 
-            override fun onYouTubePlayerExitFullScreen() {
-                ytPlayer.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-            }
 
-        })
         ytPlayer.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
-                youTubePlayer.loadVideo(trailer.key, 0f)
+                youTubePlayer.cueVideo(trailer.key, 0f)
                 youTubePlayer.pause()
             }
 

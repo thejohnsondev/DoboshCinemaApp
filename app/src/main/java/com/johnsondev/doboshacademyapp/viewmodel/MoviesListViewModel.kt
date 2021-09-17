@@ -1,20 +1,18 @@
 package com.johnsondev.doboshacademyapp.viewmodel
 
 import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.johnsondev.doboshacademyapp.data.models.Actor
+import com.johnsondev.doboshacademyapp.data.models.Genre
 import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
-import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
-import com.johnsondev.doboshacademyapp.utilities.getUpdateTime
+import com.johnsondev.doboshacademyapp.utilities.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class MoviesListViewModel(application: Application) : AndroidViewModel(application) {
+class MoviesListViewModel(application: Application) : BaseViewModel(application) {
 
     private var popularMovies = MutableLiveData<List<Movie>>()
     val popularMoviesList: LiveData<List<Movie>> get() = popularMovies
@@ -25,22 +23,54 @@ class MoviesListViewModel(application: Application) : AndroidViewModel(applicati
     private var upcomingMovies = MutableLiveData<List<Movie>>()
     val upcomingMoviesList: LiveData<List<Movie>> get() = upcomingMovies
 
-    private var lastUpdateTime = MutableLiveData<String>()
+    private var _popularGenres = MutableLiveData<List<Genre>>()
+    private var _moviesByGenre = MutableLiveData<List<Movie>>()
+    private var _popularActors = MutableLiveData<List<Actor>>()
+
     private var checkInternetConnection: InternetConnectionManager? = null
 
-    fun getLastUpdateTime(context: Context): LiveData<String> {
-        if (lastUpdateTime.value.isNullOrEmpty()) {
-            viewModelScope.launch {
-                lastUpdateTime.postValue(getUpdateTime(context))
-            }
+    fun loadGenresList() {
+        viewModelScope.launch(exceptionHandler()) {
+            MoviesRepository.loadGenresList()
+            mutableError.value = null
         }
-        return lastUpdateTime
     }
+
+    fun getGenresList(): LiveData<List<Genre>> {
+        _popularGenres = MoviesRepository.getGenresList()
+        return _popularGenres
+    }
+
+    fun loadMoviesByGenreId(id: Int) {
+        viewModelScope.launch(exceptionHandler()) {
+            MoviesRepository.loadMoviesByGenreId(id)
+            mutableError.value = null
+        }
+    }
+
+    fun getMoviesByGenre(): LiveData<List<Movie>> {
+        _moviesByGenre = MoviesRepository.getMoviesByGenre()
+        return _moviesByGenre
+    }
+
+    fun loadPopularActors() {
+        viewModelScope.launch(exceptionHandler()) {
+            MoviesRepository.loadPopularActorsList()
+            mutableError.value = null
+        }
+    }
+
+    fun getPopularActors(): LiveData<List<Actor>> {
+        _popularActors = MoviesRepository.getPopularActors()
+        return _popularActors
+    }
+
 
     fun getPopularMovies(): LiveData<List<Movie>> {
         if (popularMovies.value.isNullOrEmpty()) {
-            viewModelScope.launch {
+            viewModelScope.launch(exceptionHandler()) {
                 popularMovies.postValue(MoviesRepository.getPopularMovies())
+                mutableError.value = null
             }
         }
         return popularMovies
@@ -48,21 +78,24 @@ class MoviesListViewModel(application: Application) : AndroidViewModel(applicati
 
     fun getTopRatedMovies(): LiveData<List<Movie>> {
         if (topRatedMovies.value.isNullOrEmpty()) {
-            viewModelScope.launch {
+            viewModelScope.launch(exceptionHandler()) {
                 topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
+                mutableError.value = null
             }
         }
-        return  topRatedMovies
+        return topRatedMovies
     }
 
     fun getUpcomingMovies(): LiveData<List<Movie>> {
         if (upcomingMovies.value.isNullOrEmpty()) {
-            viewModelScope.launch {
+            viewModelScope.launch(exceptionHandler()) {
                 upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
+                mutableError.value = null
             }
         }
         return upcomingMovies
     }
+
 
     fun isInternetConnectionAvailable(): Boolean {
         checkInternetConnection = InternetConnectionManager(getApplication())
@@ -73,11 +106,14 @@ class MoviesListViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     suspend fun loadMoviesFromNet() {
-        viewModelScope.launch {
-            MoviesRepository.loadMoviesFromNet()
+        viewModelScope.launch(exceptionHandler()) {
+            MoviesRepository.loadPopularMoviesFromNet()
+            MoviesRepository.loadTopRatedMoviesFromNet()
+            MoviesRepository.loadUpcomingMoviesFromNet()
             popularMovies.postValue(MoviesRepository.getPopularMovies())
             topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
             upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
+            mutableError.value = null
         }.join()
     }
 

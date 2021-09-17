@@ -9,9 +9,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MovieVideoDto(
     @SerialName("name")
-    val name: String,
+    val name: String = "",
     @SerialName("key")
-    val key: String,
+    val key: String = "",
     @SerialName("type")
-    val type: String
+    val type: String = ""
 ): Parcelable

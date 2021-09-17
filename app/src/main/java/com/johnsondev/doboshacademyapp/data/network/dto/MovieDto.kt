@@ -9,23 +9,23 @@ import kotlinx.serialization.SerialName
 @Parcelize
 data class MovieDto(
     @SerialName("id")
-    val id: Int,
+    val id: Int = 0,
     @SerialName("title")
-    val title: String?,
+    val title: String = "",
     @SerialName("poster_path")
-    val poster: String?,
+    val poster: String = "",
     @SerialName("backdrop_path")
-    val backdropImg: String?,
+    val backdropImg: String = "",
     @SerialName("runtime")
-    var runtime: Int? = null,
+    var runtime: Int = 0,
     @SerialName("genres")
-    var genres: @RawValue List<GenreDto>? = null,
+    var genres: @RawValue List<GenreDto> = emptyList(),
     @SerialName("vote_average")
-    val rating: Float?,
+    val rating: Float = 0f ,
     @SerialName("vote_count")
-    val voteCount: Int?,
+    val voteCount: Int = 0,
     @SerialName("overview")
-    val overview: String?,
+    val overview: String = "",
     @SerialName("adult")
-    val adult: Boolean?
+    val adult: Boolean = false
 ) : Parcelable

@@ -9,13 +9,17 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_DEFAULT
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_MINI
 
 class MoviesAdapter(
     private val context: Context,
-    private val clickListener: OnRecyclerItemClicked,
-    private val isActorList: Boolean
+    private val clickListener: OnMovieItemClickListener,
+    private val itemType: Int
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var moviesList: List<Movie> = listOf()
@@ -25,20 +29,41 @@ class MoviesAdapter(
 
     private fun getItem(position: Int): Movie = moviesList[position]
 
+    override fun getItemViewType(position: Int): Int {
+        return when (itemType) {
+            MOVIE_ITEM_MINI -> MOVIE_ITEM_MINI
+            MOVIE_ITEM_DEFAULT -> MOVIE_ITEM_DEFAULT
+            else -> MOVIE_ITEM_LARGE
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView: View
-        return if (isActorList) {
-            itemView = inflater.inflate(R.layout.movie_rv_item_mini, parent, false)
-            MovieViewHolderMini(itemView, context)
-        } else {
-            itemView = inflater.inflate(R.layout.movie_rv_item, parent, false)
-            MovieViewHolder(itemView, context)
+        return when (viewType) {
+            MOVIE_ITEM_MINI -> {
+                itemView = inflater.inflate(R.layout.movie_rv_item_mini, parent, false)
+                MovieViewHolderMini(itemView)
+            }
+            MOVIE_ITEM_DEFAULT -> {
+                itemView = inflater.inflate(R.layout.movie_rv_item, parent, false)
+                MovieViewHolderDefault(itemView, context)
+            }
+            else -> {
+                itemView = inflater.inflate(R.layout.movie_rv_item_horizontal, parent, false)
+                MovieViewHolderLarge(itemView, context)
+            }
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is MovieViewHolder -> {
+            is MovieViewHolderDefault -> {
+                holder.bind(getItem(position))
+                holder.itemView.setOnClickListener {
+                    clickListener.onClick(moviesList[position])
+                }
+            }
+            is MovieViewHolderLarge -> {
                 holder.bind(getItem(position))
                 holder.itemView.setOnClickListener {
                     clickListener.onClick(moviesList[position])
@@ -60,32 +85,24 @@ class MoviesAdapter(
     }
 }
 
-class MovieViewHolder(private val view: View, private val context: Context) :
+class MovieViewHolderDefault(private val view: View, private val context: Context) :
     RecyclerView.ViewHolder(view) {
 
-    private val name: TextView = view.findViewById(R.id.movie_name)
-    private val genre: TextView = view.findViewById(R.id.movie_genres)
+    private val name: TextView = view.findViewById(R.id.movie_title)
     private val reviews: TextView = view.findViewById(R.id.movie_reviews)
     private val rating: RatingBar = view.findViewById(R.id.movie_rating)
-    private val time: TextView = view.findViewById(R.id.movie_time)
-    private val age: TextView = view.findViewById(R.id.tv_age)
     private val movieImg: ImageView = view.findViewById(R.id.movie_img)
+    private val movieMask: ImageView = view.findViewById(R.id.movie_mask)
 
     fun bind(movie: Movie) {
         itemView.transitionName =
             context.getString(R.string.shared_element_container_with_id, movie.id.toString())
 
         val movieReviews: String = view.context.getString(R.string.reviews, movie.numberOfRatings)
-        val movieAge: String = view.context.getString(R.string.plus, movie.minimumAge)
-        val movieRunningTime: String =
-            view.context.getString(R.string.running_time, movie.runtime)
 
         name.text = movie.title
-        genre.text = movie.genres?.joinToString { it.name }
         reviews.text = movieReviews
         rating.progress = (movie.ratings * 2).toInt()
-        time.text = movieRunningTime
-        age.text = movieAge
 
         movieImg.load(movie.poster) {
             crossfade(true)
@@ -94,17 +111,17 @@ class MovieViewHolder(private val view: View, private val context: Context) :
             error(R.drawable.movie_placeholder)
         }
         movieImg.clipToOutline = true
+        movieMask.clipToOutline = true
     }
 
 }
 
-class MovieViewHolderMini(private val view: View, private val context: Context) :
+class MovieViewHolderLarge(private val view: View, private val context: Context) :
     RecyclerView.ViewHolder(view) {
-    private val name: TextView = view.findViewById(R.id.movie_name)
-    private val genre: TextView = view.findViewById(R.id.movie_genres)
+
+    private val name: TextView = view.findViewById(R.id.movie_title)
     private val reviews: TextView = view.findViewById(R.id.movie_reviews)
     private val rating: RatingBar = view.findViewById(R.id.movie_rating)
-    private val age: TextView = view.findViewById(R.id.tv_age)
     private val movieImg: ImageView = view.findViewById(R.id.movie_img)
 
     fun bind(movie: Movie) {
@@ -112,13 +129,10 @@ class MovieViewHolderMini(private val view: View, private val context: Context) 
             context.getString(R.string.shared_element_container_with_id, movie.id.toString())
 
         val movieReviews: String = view.context.getString(R.string.reviews, movie.numberOfRatings)
-        val movieAge: String = view.context.getString(R.string.plus, movie.minimumAge)
 
         name.text = movie.title
-        genre.text = movie.genres?.joinToString { it.name }
         reviews.text = movieReviews
         rating.progress = (movie.ratings * 2).toInt()
-        age.text = movieAge
 
         movieImg.load(movie.poster) {
             crossfade(true)
@@ -130,7 +144,26 @@ class MovieViewHolderMini(private val view: View, private val context: Context) 
     }
 }
 
-interface OnRecyclerItemClicked {
+class MovieViewHolderMini(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    private val name: TextView = itemView.findViewById(R.id.movie_title)
+    private val movieImg: ImageView = itemView.findViewById(R.id.movie_img)
+
+    fun bind(movie: Movie) {
+        name.text = movie.title
+
+        movieImg.load(movie.poster) {
+            RoundedCornersTransformation(10f)
+            crossfade(true)
+            placeholder(R.drawable.movie_placeholder)
+            fallback(R.drawable.movie_placeholder)
+            error(R.drawable.movie_placeholder)
+        }
+        movieImg.clipToOutline = true
+    }
+}
+
+interface OnMovieItemClickListener {
     fun onClick(movie: Movie)
 }
 
