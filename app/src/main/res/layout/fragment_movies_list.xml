@@ -5,7 +5,7 @@
     android:id="@+id/swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg">
+    android:background="@color/main_color">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,56 +16,98 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/target_img"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_16"
-                android:layout_marginStart="@dimen/dp_16"
-                android:layout_marginTop="@dimen/dp_16"
-                android:src="@drawable/target_img"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="TODO" />
-
-            <TextView
-                android:id="@+id/type_of_list_tv"
-                style="@style/LightText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_8"
-                android:text="@string/movies_list"
-                app:layout_constraintBottom_toBottomOf="@+id/target_img"
-                app:layout_constraintStart_toEndOf="@id/target_img"
-                app:layout_constraintTop_toTopOf="@+id/target_img" />
-
-            <TextView
-                android:id="@+id/last_update_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/last_update"
-                android:textAppearance="@style/LightText"
-                android:textColor="@color/gray"
-                android:layout_marginEnd="@dimen/dp_18"
+                android:id="@+id/logo_img"
+                android:layout_width="151dp"
+                android:layout_height="55dp"
+                android:contentDescription="TODO"
+                android:src="@drawable/cinema_logo_dark"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/type_of_list_tv" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/search_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logo_img">
+
+                <TextView
+                    android:id="@+id/search_tv"
+                    style="@style/TitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:text="@string/search"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/search_box_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/search_field_height"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginEnd="@dimen/dp_16"
+                    android:layout_marginBottom="@dimen/dp_8"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/search_bg"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/search_tv">
+
+                    <ImageView
+                        android:id="@+id/search_icon"
+                        android:layout_width="@dimen/dp_20"
+                        android:layout_height="@dimen/dp_20"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:src="@drawable/ic_search_icon"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/search_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:background="@android:color/transparent"
+                        android:text="@string/movies_actors"
+                        android:textSize="@dimen/sp_20"
+                        android:textColor="@color/gray_light"
+                        android:textColorHint="@color/gray_light"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/search_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/popular_spec_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/dp_18"
+                android:splitMotionEvents="false"
+                android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:paddingBottom="@dimen/dp_8"
+                android:orientation="horizontal"
                 android:paddingTop="@dimen/dp_8"
-                android:background="?android:attr/selectableItemBackground"
+                android:paddingBottom="@dimen/dp_8"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/type_of_list_tv">
+                app:layout_constraintTop_toBottomOf="@+id/search_group">
 
                 <TextView
                     android:id="@+id/popular_tv"
-                    style="@style/LightText"
+                    style="@style/TitleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_16"
@@ -78,44 +120,67 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dp_16"
+                    android:contentDescription="TODO"
                     android:src="@drawable/ic_baseline_arrow_forward_24"
                     app:layout_constraintBottom_toBottomOf="@+id/popular_tv"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/popular_tv"
-                    android:contentDescription="TODO" />
+                    app:layout_constraintTop_toTopOf="@+id/popular_tv" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/popular_movies_rv"
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:id="@+id/popular_frame"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/dp_8"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/popular_spec_list"
-                tools:listitem="@layout/movie_rv_item" />
+                app:layout_constraintTop_toBottomOf="@+id/popular_spec_list">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/popular_movies_rv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp_4"
+                    android:splitMotionEvents="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/popular_spec_list"
+                    tools:listitem="@layout/movie_rv_item" />
+
+                <include
+                    android:id="@+id/unavailable_list_placeholder"
+                    layout="@layout/internet_unavailable_placeholder"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/search_group" />
+
+            </FrameLayout>
+
+
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/top_rated_spec_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:splitMotionEvents="false"
+                android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:paddingBottom="@dimen/dp_8"
+                android:orientation="horizontal"
                 android:paddingTop="8dp"
-                android:background="?android:attr/selectableItemBackground"
+                android:paddingBottom="@dimen/dp_8"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/popular_movies_rv">
+                app:layout_constraintTop_toBottomOf="@+id/popular_frame">
+
 
                 <TextView
                     android:id="@+id/top_rated_tv"
-                    style="@style/LightText"
+                    style="@style/TitleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_16"
@@ -128,45 +193,45 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dp_16"
+                    android:contentDescription="TODO"
                     android:src="@drawable/ic_baseline_arrow_forward_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="TODO" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/top_rated_movies_rv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/dp_8"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:orientation="horizontal"
+                android:padding="@dimen/dp_4"
+                android:splitMotionEvents="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/top_rated_spec_list"
                 tools:listitem="@layout/movie_rv_item" />
 
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/upcoming_spec_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:paddingBottom="@dimen/dp_8"
+                android:orientation="horizontal"
                 android:paddingTop="8dp"
-                android:background="?android:attr/selectableItemBackground"
+                android:paddingBottom="@dimen/dp_8"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/top_rated_movies_rv">
 
                 <TextView
                     android:id="@+id/upcoming_tv"
-                    style="@style/LightText"
+                    style="@style/TitleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_16"
@@ -179,25 +244,118 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dp_16"
+                    android:contentDescription="TODO"
                     android:src="@drawable/ic_baseline_arrow_forward_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="TODO" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/upcoming_movies_rv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/dp_8"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:orientation="horizontal"
+                android:padding="@dimen/dp_4"
+                android:splitMotionEvents="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/upcoming_spec_list"
                 tools:listitem="@layout/movie_rv_item" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/pop_genres_spec_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="8dp"
+                android:paddingBottom="@dimen/dp_8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/upcoming_movies_rv">
+
+                <TextView
+                    android:id="@+id/pop_genres_tv"
+                    style="@style/TitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:text="@string/popular_genres"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/pop_genres_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp_4"
+                android:layout_marginStart="@dimen/dp_16"
+                android:splitMotionEvents="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/pop_actors_spec_list"
+                app:layout_constraintTop_toBottomOf="@+id/pop_genres_spec_list"
+                tools:listitem="@layout/genre_rv_item" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/pop_actors_spec_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingTop="8dp"
+                android:paddingBottom="@dimen/dp_8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pop_genres_rv">
+
+                <TextView
+                    android:id="@+id/pop_actors_tv"
+                    style="@style/TitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:text="@string/popular_actors"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp_16"
+                    android:contentDescription="TODO"
+                    android:src="@drawable/ic_baseline_arrow_forward_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/pop_actors_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp_4"
+                android:splitMotionEvents="false"
+                android:layout_marginBottom="@dimen/bottom_bar_height"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pop_actors_spec_list"
+                tools:listitem="@layout/actor_rv_item" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -3,7 +3,6 @@ package com.johnsondev.doboshacademyapp.data.services
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationChannelCompat
@@ -16,8 +15,7 @@ import com.bumptech.glide.Glide
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
-import com.johnsondev.doboshacademyapp.utilities.saveUpdateTime
-import com.johnsondev.doboshacademyapp.views.activities.SplashScreenActivity
+import com.johnsondev.doboshacademyapp.views.splash.SplashScreenActivity
 import kotlinx.coroutines.*
 
 class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
@@ -37,19 +35,15 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
     override suspend fun doWork(): Result {
         return try {
             var newMovieList: List<Movie>
-            var oldMovieList: List<Movie>
             scope.launch {
 
                 withContext(scope.coroutineContext) {
-                    oldMovieList = MoviesRepository.loadAllMovieFromDb()
-                }
-                withContext(scope.coroutineContext) {
-                    MoviesRepository.loadMoviesFromNet().apply {
-                        newMovieList = MoviesRepository.getAllMoviesFromNet()
+                    MoviesRepository.loadUpcomingMoviesFromNet().apply {
+                        newMovieList = MoviesRepository.getUpcomingMovies()
                     }
                 }
 
-                val newMovie = findNewMovie(oldMovieList, newMovieList)
+                val newMovie = newMovieList.random()
 
                 buildNotificationChannel()
 
@@ -61,7 +55,6 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
                     )
                 }
                 isNewMovie = false
-                saveUpdateTime(context)
             }
             Result.success()
         } catch (throwable: Throwable) {
@@ -70,17 +63,6 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
 
     }
 
-    private fun findNewMovie(oldMovieList: List<Movie>, newMovieList: List<Movie>): Movie {
-        var newMovie: Movie? = null
-        newMovieList.forEach { new ->
-            val isNewMovieExisting = !oldMovieList.any { it.id == new.id }
-            if (isNewMovieExisting) {
-                newMovie = new
-                return@forEach
-            }
-        }
-        return newMovie ?: Movie(id = 0)
-    }
 
     private fun buildNotification(movie: Movie): NotificationCompat.Builder {
         val uri = "${context.getString(R.string.base_deep_link)}${movie.id}".toUri()
@@ -98,8 +80,8 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
         return NotificationCompat.Builder(context, CHANNEL_ID).apply {
             setContentTitle(contentTitle)
             setContentText(movie.title)
-            setSmallIcon(R.drawable.cinema)
-            priority = NotificationCompat.PRIORITY_DEFAULT
+            setSmallIcon(R.drawable.cinema_app_icon_round)
+            priority = NotificationCompat.PRIORITY_LOW
             setOnlyAlertOnce(true)
             setContentIntent(
                 PendingIntent.getActivity(

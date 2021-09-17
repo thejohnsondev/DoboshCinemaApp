@@ -10,43 +10,97 @@
         android:name="com.johnsondev.doboshacademyapp.views.movielist.MoviesListFragment"
         android:label="MoviesListFragment" >
         <action
-            android:id="@+id/action_moviesListFragment_to_moviesDetailsFragment"
-            app:destination="@id/moviesDetailsFragment" />
-        <action
             android:id="@+id/action_moviesListFragment_to_specificListFragment"
-            app:destination="@id/specificListFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/moviesDetailsFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragment"
-        android:label="MoviesDetailsFragment" >
+            app:destination="@id/specificListFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
         <action
-            android:id="@+id/action_moviesDetailsFragment_to_actorDetailsFragment"
-            app:destination="@id/actorDetailsFragment" />
+            android:id="@+id/action_moviesListFragment_to_specificActorsListFragment"
+            app:destination="@id/specificActorsListFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
         <action
-            android:id="@+id/action_moviesDetailsFragment_to_movieTrailersFragment"
-            app:destination="@id/movieTrailersFragment" />
+            android:id="@+id/action_moviesListFragment_to_detailsActivity"
+            app:destination="@id/detailsActivity" />
+        <action
+            android:id="@+id/action_moviesListFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down" />
+        <action
+            android:id="@+id/action_moviesListFragment_to_actorDetailsActivity2"
+            app:destination="@id/actorDetailsActivity2" />
     </fragment>
     <fragment
         android:id="@+id/specificListFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.specificlist.SpecificListFragment"
+        android:name="com.johnsondev.doboshacademyapp.views.movielist.SpecificMoviesListFragment"
         android:label="fragment_specific_list"
-        tools:layout="@layout/fragment_specific_list" >
+        tools:layout="@layout/fragment_specific_movies_list" >
         <action
-            android:id="@+id/action_specificListFragment_to_moviesDetailsFragment"
-            app:destination="@id/moviesDetailsFragment" />
+            android:id="@+id/action_specificListFragment_to_detailsActivity"
+            app:destination="@id/detailsActivity" />
     </fragment>
     <fragment
-        android:id="@+id/movieTrailersFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.movietrailers.MovieTrailersFragment"
-        android:label="fragment_movie_trailers"
-        tools:layout="@layout/fragment_movie_trailers" />
-    <fragment
-        android:id="@+id/actorDetailsFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.actordetails.ActorDetailsFragment"
-        android:label="ActorDetailsFragment" >
+        android:id="@+id/searchFragment"
+        android:name="com.johnsondev.doboshacademyapp.views.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
         <action
-            android:id="@+id/action_actorDetailsFragment_to_moviesDetailsFragment"
-            app:destination="@id/moviesDetailsFragment" />
+            android:id="@+id/action_searchFragment_to_detailsActivity"
+            app:destination="@id/detailsActivity"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_searchFragment_to_actorDetailsActivity2"
+            app:destination="@id/actorDetailsActivity2" />
+        <action
+            android:id="@+id/action_searchFragment_to_specificListFragment"
+            app:destination="@id/specificListFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_searchFragment_to_specificActorsListFragment"
+            app:destination="@id/specificActorsListFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
+    <fragment
+        android:id="@+id/specificActorsListFragment"
+        android:name="com.johnsondev.doboshacademyapp.views.movielist.SpecificActorsListFragment"
+        android:label="SpecificActorsListFragment" >
+        <action
+            android:id="@+id/action_specificActorsListFragment_to_actorDetailsActivity2"
+            app:destination="@id/actorDetailsActivity2" />
+    </fragment>
+    <activity
+        android:id="@+id/detailsActivity"
+        android:name="com.johnsondev.doboshacademyapp.views.moviedetails.DetailsActivity"
+        android:label="activity_details"
+        tools:layout="@layout/activity_details" >
+        <argument
+            android:name="movieId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </activity>
+    <activity
+        android:id="@+id/actorDetailsActivity2"
+        android:name="com.johnsondev.doboshacademyapp.views.actordetails.ActorDetailsActivity"
+        android:label="activity_actor_details"
+        tools:layout="@layout/activity_actor_details" >
+        <argument android:name="actorId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </activity>
 </navigation>

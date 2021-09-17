@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_actor_details"
+    app:startDestination="@id/actorDetailsFragment2">
+
+    <fragment
+        android:id="@+id/actorDetailsFragment2"
+        android:name="com.johnsondev.doboshacademyapp.views.actordetails.ActorDetailsFragment"
+        android:label="ActorDetailsFragment" >
+        <action
+            android:id="@+id/action_actorDetailsFragment_to_detailsActivity"
+            app:destination="@id/detailsActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/detailsActivity"
+        android:name="com.johnsondev.doboshacademyapp.views.moviedetails.DetailsActivity"
+        android:label="activity_details"
+        tools:layout="@layout/activity_details" >
+        <argument
+            android:name="movieId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </activity>
+</navigation>

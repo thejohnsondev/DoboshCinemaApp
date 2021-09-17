@@ -1,47 +1,37 @@
 package com.johnsondev.doboshacademyapp.utilities
 
-import android.app.Activity
+
 import android.content.Context
-import android.graphics.Color
-import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.AttrRes
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.use
 import androidx.fragment.app.Fragment
-import com.johnsondev.doboshacademyapp.R
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 
-fun Context.themeColor(
-    @AttrRes themeAttrId: Int
-): Int {
-    return obtainStyledAttributes(
-        intArrayOf(themeAttrId)
-    ).use {
-        it.getColor(0, Color.MAGENTA)
-    }
-}
-
-fun Fragment.replaceFragment(fragment: Fragment) {
-
-    this.parentFragmentManager.beginTransaction().setCustomAnimations(
-        R.anim.slide_in,
-        R.anim.fade_out,
-        R.anim.fade_in,
-        R.anim.slide_out
-    )
-        .addToBackStack(null)
-        .replace(R.id.main_container, fragment)
-        .commit()
-}
-
-fun AppCompatActivity.addFragment(fragment: Fragment, bundle: Bundle) {
-    fragment.arguments = bundle
-    supportFragmentManager.beginTransaction().apply {
-        add(R.id.main_container, fragment)
-        commit()
-    }
-}
 
 fun Fragment.showMessage(message: String) {
     Toast.makeText(this.requireContext(), message, Toast.LENGTH_SHORT).show()
+}
+
+fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+    observe(lifecycleOwner, { t ->
+        observer.onChanged(t)
+        removeObserver(observer)
+    })
+}
+
+fun EditText.hideKeyboard() {
+    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(windowToken, 0)
+}
+
+fun EditText.showKeyboard() {
+    this.requestFocus()
+    this.postDelayed({
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+    }, 1000)
 }

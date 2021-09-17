@@ -50,6 +50,8 @@ class MovieTrailerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(trailer: MovieVideoDto) {
         trailerTitle.text = trailer.name
+        ytPlayer.clipToOutline = true
+
 
         ytPlayer.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {

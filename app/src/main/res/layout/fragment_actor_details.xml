@@ -47,7 +47,7 @@
 
                 <TextView
                     android:id="@+id/trailers_nav"
-                    style="@style/LightText"
+                    style="@style/TitleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_16"
@@ -64,14 +64,14 @@
                 android:layout_width="@dimen/dp_133"
                 android:layout_height="@dimen/dp_200"
                 android:layout_margin="@dimen/dp_16"
-                android:background="@drawable/round_outline"
+                android:background="@drawable/round_outline_8"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/back_to_detail_view_group"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/tv_actor_name_detail"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_16"
@@ -84,7 +84,7 @@
 
             <TextView
                 android:id="@+id/birth_day"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/birth_day"
@@ -95,17 +95,16 @@
 
             <TextView
                 android:id="@+id/tv_birth_day"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_8"
-                android:text="@string/_1983_11_15"
                 app:layout_constraintStart_toEndOf="@+id/birth_day"
                 app:layout_constraintTop_toTopOf="@+id/birth_day" />
 
             <TextView
                 android:id="@+id/death_day"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/death_day"
@@ -116,7 +115,7 @@
 
             <TextView
                 android:id="@+id/tv_death_day"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_8"
@@ -126,7 +125,7 @@
 
             <TextView
                 android:id="@+id/place_of_birth"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/place_of_birth"
@@ -137,21 +136,21 @@
 
             <TextView
                 android:id="@+id/tv_place_of_birth"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_8"
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:layout_marginEnd="@dimen/dp_16"
-                android:text="@string/esher_surrey_england_uk"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/place_of_birth"
                 app:layout_constraintTop_toTopOf="@+id/place_of_birth" />
 
             <TextView
                 android:id="@+id/images"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_16"
@@ -161,11 +160,10 @@
 
             <TextView
                 android:id="@+id/tv_images_count"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"
-                android:text="5"
                 app:layout_constraintTop_toTopOf="@id/images"
                 app:layout_constraintStart_toEndOf="@id/images"
                 android:layout_marginStart="@dimen/dp_8" />
@@ -179,12 +177,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/images"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:orientation="horizontal"
+                android:splitMotionEvents="false"
                 tools:listitem="@layout/actor_image_rv_item"/>
 
 
             <TextView
                 android:id="@+id/biography"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_16"
@@ -195,6 +194,8 @@
             <TextView
                 android:id="@+id/tv_biography"
                 style="@style/DescriptionText"
+                android:textSize="@dimen/text_size_14"
+                android:textStyle="normal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
@@ -203,14 +204,13 @@
                 android:maxLines="15"
                 android:paddingTop="@dimen/dp_8"
                 android:paddingBottom="@dimen/dp_8"
-                android:text="@string/bio_example"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/biography"
                 app:layout_constraintTop_toBottomOf="@+id/biography" />
 
             <TextView
                 android:id="@+id/movies"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_16"
@@ -220,11 +220,10 @@
 
             <TextView
                 android:id="@+id/tv_movies_count"
-                style="@style/LightText"
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"
-                android:text="5"
                 app:layout_constraintTop_toTopOf="@id/movies"
                 app:layout_constraintStart_toEndOf="@id/movies"
                 android:layout_marginStart="@dimen/dp_8" />
@@ -236,6 +235,7 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/dp_16"
+                android:splitMotionEvents="false"
                 tools:listitem="@layout/movie_rv_item_mini"
                 app:layout_constraintTop_toBottomOf="@id/movies"
                 app:layout_constraintStart_toStartOf="parent"

@@ -3,9 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@drawable/splash_bg" />
     <item
-        android:width="@dimen/dp_250"
-        android:height="@dimen/dp_250"
-        android:drawable="@drawable/cinema"
+        android:width="@dimen/splash_logo_width_274"
+        android:height="@dimen/splash_logo_height_100"
+        android:drawable="@drawable/cinema_logo_dark"
         android:gravity="center"
         tools:targetApi="m">
     </item>
