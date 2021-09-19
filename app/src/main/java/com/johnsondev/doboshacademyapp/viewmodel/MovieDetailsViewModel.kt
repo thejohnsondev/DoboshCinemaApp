@@ -52,6 +52,13 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
     private var _movieRecommendations = MutableLiveData<List<Movie>>()
     private var _similarMovies = MutableLiveData<List<Movie>>()
 
+    fun insertMovieToFavorites(movieId: Int){
+        viewModelScope.launch(exceptionHandler()) {
+            MoviesRepository.insertMovieToFavorites(movieId)
+            mutableError.value = null
+        }
+
+    }
 
     fun loadMovieFromNetById(id: Int) {
         viewModelScope.launch(exceptionHandler()) {

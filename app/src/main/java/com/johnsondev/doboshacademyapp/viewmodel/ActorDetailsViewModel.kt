@@ -9,6 +9,7 @@ import com.johnsondev.doboshacademyapp.data.models.Movie
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
+import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.base.BaseViewModel
@@ -19,6 +20,15 @@ class ActorDetailsViewModel(application: Application): BaseViewModel(application
     private var _actorDetails = MutableLiveData<ActorDetailsDto>()
     private var _actorMovieCredits = MutableLiveData<List<Movie>>()
     private var _actorImages = MutableLiveData<List<ActorImageProfileDto>>()
+
+    fun insertActorToFavorites(actorId: Int){
+        viewModelScope.launch(exceptionHandler()) {
+            MoviesRepository.insertActorToFavorites(actorId)
+            mutableError.value = null
+        }
+    }
+
+
 
     fun loadActorDetailsById(id: Int) {
         viewModelScope.launch(exceptionHandler()) {

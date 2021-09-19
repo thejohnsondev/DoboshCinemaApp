@@ -3,6 +3,7 @@ package com.johnsondev.doboshacademyapp.views.moviedetails
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
@@ -66,14 +67,13 @@ class MoviesDetailsFragment : BaseFragment() {
     private lateinit var rbMovieRating: RatingBar
     private lateinit var tvReviews: TextView
     private lateinit var tvAge: TextView
+    private lateinit var moreBtn: ImageView
     private lateinit var rvMovieGenres: RecyclerView
     private lateinit var movieGenresAdapter: GenresAdapter
-
-
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager2: ViewPager2
-
     private lateinit var detailsViewModel: MovieDetailsViewModel
+    private var currentMovieId: Int = 0
 
 
     override fun initViews(view: View) {
@@ -108,6 +108,7 @@ class MoviesDetailsFragment : BaseFragment() {
         rbMovieRating = view.findViewById(R.id.rb_rating)
         tvReviews = view.findViewById(R.id.tv_reviews)
         tvAge = view.findViewById(R.id.tv_age)
+        moreBtn = view.findViewById(R.id.more_btn)
         rvMovieGenres = view.findViewById(R.id.rv_movie_genres)
         movieGenresAdapter = GenresAdapter(view.context, onGenreClickListener)
         rvMovieGenres.adapter = movieGenresAdapter
@@ -194,6 +195,8 @@ class MoviesDetailsFragment : BaseFragment() {
 //                error(R.drawable.movie_placeholder)
 //            }
 
+            currentMovieId = movie.id
+
             val movieReviews: String =
                 view.context.getString(R.string.reviews, movie.numberOfRatings)
 
@@ -263,6 +266,10 @@ class MoviesDetailsFragment : BaseFragment() {
 //                unavailableMoviePlaceholder.visibility = View.VISIBLE
             }
         })
+
+        moreBtn.setOnClickListener {
+            detailsViewModel.insertMovieToFavorites(currentMovieId)
+        }
 
         ivBackBtn.setOnClickListener {
             findNavController().popBackStack()

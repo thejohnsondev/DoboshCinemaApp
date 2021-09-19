@@ -103,4 +103,27 @@
             app:argType="integer"
             android:defaultValue="0" />
     </activity>
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.johnsondev.doboshacademyapp.views.favorite.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_specificActorsListFragment"
+            app:destination="@id/specificActorsListFragment" />
+        <action
+            android:id="@+id/action_favoriteFragment_to_specificListFragment"
+            app:destination="@id/specificListFragment" />
+        <action
+            android:id="@+id/action_favoriteFragment_to_detailsActivity"
+            app:destination="@id/detailsActivity" />
+        <action
+            android:id="@+id/action_favoriteFragment_to_actorDetailsActivity"
+            app:destination="@id/actorDetailsActivity2" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.johnsondev.doboshacademyapp.views.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

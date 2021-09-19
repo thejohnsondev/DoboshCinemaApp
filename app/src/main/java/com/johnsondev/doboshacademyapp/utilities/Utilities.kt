@@ -2,6 +2,7 @@ package com.johnsondev.doboshacademyapp.utilities
 
 import android.animation.Animator
 import android.animation.ValueAnimator
+import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import android.text.Editable
@@ -123,6 +124,14 @@ fun calculateAge(dateOfBirth: String): String {
     val currentYear = Calendar.getInstance()[Calendar.YEAR]
 
     return (currentYear - birthYear).toString()
+}
+
+fun isInternetConnectionAvailable(app: Application): Boolean {
+    val checkInternetConnection = InternetConnectionManager(app)
+    if (checkInternetConnection.isNetworkAvailable()) {
+        return true
+    }
+    return false
 }
 
 

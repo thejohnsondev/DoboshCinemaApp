@@ -107,13 +107,15 @@ class MoviesListViewModel(application: Application) : BaseViewModel(application)
 
     suspend fun loadMoviesFromNet() {
         viewModelScope.launch(exceptionHandler()) {
-            MoviesRepository.loadPopularMoviesFromNet()
-            MoviesRepository.loadTopRatedMoviesFromNet()
-            MoviesRepository.loadUpcomingMoviesFromNet()
-            popularMovies.postValue(MoviesRepository.getPopularMovies())
-            topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
-            upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
-            mutableError.value = null
+            if(popularMovies.value.isNullOrEmpty()){
+                MoviesRepository.loadPopularMoviesFromNet()
+                MoviesRepository.loadTopRatedMoviesFromNet()
+                MoviesRepository.loadUpcomingMoviesFromNet()
+                popularMovies.postValue(MoviesRepository.getPopularMovies())
+                topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
+                upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
+                mutableError.value = null
+            }
         }.join()
     }
 

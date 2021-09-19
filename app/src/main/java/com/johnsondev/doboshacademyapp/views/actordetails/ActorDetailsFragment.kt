@@ -4,9 +4,7 @@ import android.os.Build
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
@@ -16,10 +14,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorDetailsPagerAdapter
-import com.johnsondev.doboshacademyapp.adapters.OnImageClickListener
-import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
-import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
@@ -33,7 +27,7 @@ import kotlinx.coroutines.launch
 
 
 class ActorDetailsFragment : BaseFragment() {
-    
+
     private lateinit var detailsViewModel: ActorDetailsViewModel
     private val scope = CoroutineScope(Dispatchers.IO + Job())
     private var currentActorId: Int? = null
@@ -44,6 +38,7 @@ class ActorDetailsFragment : BaseFragment() {
     private var tvActorDepartment: TextView? = null
     private var viewPager: ViewPager2? = null
     private var tabLayout: TabLayout? = null
+    private var favoriteActorBtn: ImageView? = null
 
 
     override fun initViews(view: View) {
@@ -56,6 +51,7 @@ class ActorDetailsFragment : BaseFragment() {
         tvActorDepartment = view.findViewById(R.id.tv_actor_department)
         viewPager = view.findViewById(R.id.actor_view_pager)
         tabLayout = view.findViewById(R.id.actor_details_tab_layout)
+        favoriteActorBtn = view.findViewById(R.id.favorite_actor_btn)
 
 
         viewPager?.adapter = ActorDetailsPagerAdapter(this)
@@ -91,6 +87,7 @@ class ActorDetailsFragment : BaseFragment() {
 
         detailsViewModel.getActorDetails().observe(viewLifecycleOwner) {
 
+
             val imagePath = "$POSTER_PATH${it.profilePath}"
 
             ivActorPoster?.clipToOutline = true
@@ -116,6 +113,10 @@ class ActorDetailsFragment : BaseFragment() {
             if (it != null) {
                 onError(it)
             }
+        }
+
+        favoriteActorBtn?.setOnClickListener {
+            detailsViewModel.insertActorToFavorites(currentActorId ?: 0)
         }
     }
 

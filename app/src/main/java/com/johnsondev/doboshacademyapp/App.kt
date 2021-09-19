@@ -2,16 +2,22 @@ package com.johnsondev.doboshacademyapp
 
 import android.app.Application
 import androidx.room.Room
-import com.johnsondev.doboshacademyapp.data.db.MoviesDatabase
-import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIES_DB_NAME
+import com.johnsondev.doboshacademyapp.data.db.FavoritesDb
+import com.johnsondev.doboshacademyapp.utilities.Constants.FAVORITES_DB_NAME
 
 class App : Application() {
 
-//    private lateinit var movieDatabase: MoviesDatabase
+    //    private lateinit var movieDatabase: MoviesDatabase
+    private lateinit var favoritesDatabase: FavoritesDb
 
     override fun onCreate() {
         super.onCreate()
         appInstance = this
+        favoritesDatabase = Room.databaseBuilder(
+            this,
+            FavoritesDb::class.java,
+            FAVORITES_DB_NAME
+        ).build()
 //        movieDatabase = Room.databaseBuilder(
 //            this,
 //            MoviesDatabase::class.java,
@@ -19,7 +25,8 @@ class App : Application() {
 //        ).build()
     }
 
-//    fun getMovieDatabase(): MoviesDatabase = movieDatabase
+    //    fun getMovieDatabase(): MoviesDatabase = movieDatabase
+    fun getFavoritesDatabase(): FavoritesDb = favoritesDatabase
 
     companion object {
         private lateinit var appInstance: App
