@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.base.BaseViewModel
 import com.johnsondev.doboshacademyapp.utilities.states.*
@@ -21,7 +20,7 @@ class SearchViewModel(application: Application) : BaseViewModel(application) {
     @ExperimentalCoroutinesApi
     val queryChannel = BroadcastChannel<String>(Channel.CONFLATED)
 
-    private val _searchState = MutableLiveData<SearchState>()
+    private val _searchState = MutableLiveData<LoadingState>()
 
     @FlowPreview
     @ExperimentalCoroutinesApi
@@ -66,6 +65,6 @@ class SearchViewModel(application: Application) : BaseViewModel(application) {
     val searchResultMap: LiveData<SearchResult>
         get() = _searchResult
 
-    val searchState: LiveData<SearchState> get() = _searchState
+    val searchState: LiveData<LoadingState> get() = _searchState
 
 }

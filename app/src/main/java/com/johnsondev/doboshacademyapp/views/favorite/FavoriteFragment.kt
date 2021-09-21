@@ -1,8 +1,7 @@
 package com.johnsondev.doboshacademyapp.views.favorite
 
-import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
+import android.widget.ProgressBar
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -13,16 +12,14 @@ import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.Actor
 import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.utilities.Constants
-import com.johnsondev.doboshacademyapp.utilities.Constants.FAVORITES_MOVIES_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_MINI
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.isInternetConnectionAvailable
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
-import com.johnsondev.doboshacademyapp.utilities.states.ValidResult
+import com.johnsondev.doboshacademyapp.utilities.states.Loading
+import com.johnsondev.doboshacademyapp.utilities.states.Ready
 import com.johnsondev.doboshacademyapp.viewmodel.FavoritesViewModel
-import java.util.ArrayList
 
 
 class FavoriteFragment : BaseFragment() {
@@ -32,6 +29,10 @@ class FavoriteFragment : BaseFragment() {
     private var moviesAdapter: MoviesAdapter? = null
     private var rvFavoriteActors: RecyclerView? = null
     private var actorsAdapter: ActorsAdapter? = null
+    private var favMoviesLoadingIndicator: ProgressBar? = null
+    private var favActorsLoadingIndicator: ProgressBar? = null
+    private var favMoviesSpecBtn: View? = null
+    private var favActorsSpecBtn: View? = null
 
 
     override fun initViews(view: View) {
@@ -39,8 +40,10 @@ class FavoriteFragment : BaseFragment() {
         moviesAdapter = MoviesAdapter(requireContext(), onMovieClickListener, MOVIE_ITEM_MINI)
         rvFavoriteMovies?.adapter = moviesAdapter
         rvFavoriteActors = view.findViewById(R.id.favorite_actors_rv)
-        actorsAdapter = ActorsAdapter(requireContext(),onActorClickListener, ITEM_TYPE_MINI)
-        rvFavoriteActors?.adapter =actorsAdapter
+        actorsAdapter = ActorsAdapter(requireContext(), onActorClickListener, ITEM_TYPE_MINI)
+        rvFavoriteActors?.adapter = actorsAdapter
+        favMoviesLoadingIndicator = view.findViewById(R.id.favorite_movies_loading_indicator)
+        favActorsLoadingIndicator = view.findViewById(R.id.favorite_actors_loading_indicator)
     }
 
     override fun layoutId(): Int = R.layout.fragment_favorite
@@ -59,13 +62,54 @@ class FavoriteFragment : BaseFragment() {
     override fun initListenersAndObservers(view: View) {
 
         favoritesViewModel.getFavoriteMovies().observeOnce(this, {
+            favMoviesLoadingIndicator?.visibility = View.GONE
+            rvFavoriteMovies?.visibility = View.VISIBLE
             moviesAdapter?.setMovies(it)
+
         })
 
-        favoritesViewModel.getFavoriteActors().observeOnce(this,{
+        favoritesViewModel.getFavoriteActors().observeOnce(this, {
+            favActorsLoadingIndicator?.visibility = View.GONE
+            rvFavoriteActors?.visibility = View.VISIBLE
             actorsAdapter?.setActors(it)
+
         })
+
+        favoritesViewModel.moviesLoadingState.observeOnce(this, {
+            when (it) {
+                is Loading -> {
+                    favMoviesLoadingIndicator?.visibility = View.VISIBLE
+                    rvFavoriteMovies?.visibility = View.GONE
+                }
+//                is Ready -> {
+//                    favMoviesLoadingIndicator?.visibility = View.GONE
+//                }
+            }
+        })
+
+        favoritesViewModel.actorsLoadingState.observeOnce(this, {
+            when (it) {
+                is Loading -> {
+                    favActorsLoadingIndicator?.visibility = View.VISIBLE
+                    rvFavoriteActors?.visibility = View.GONE
+
+                }
+//                is Ready -> {
+//                    favActorsLoadingIndicator?.visibility = View.GONE
+//
+//                }
+            }
+        })
+
+        favMoviesSpecBtn?.setOnClickListener {
+
+        }
+
+        favActorsSpecBtn?.setOnClickListener {
+
+        }
     }
+
 
     private val onMovieClickListener = object : OnMovieItemClickListener {
         override fun onClick(movie: Movie) {
@@ -75,7 +119,7 @@ class FavoriteFragment : BaseFragment() {
         }
     }
 
-    private val onActorClickListener = object : OnActorItemClickListener{
+    private val onActorClickListener = object : OnActorItemClickListener {
         override fun onClick(actor: Actor) {
             findNavController().navigate(
                 FavoriteFragmentDirections.actionFavoriteFragmentToActorDetailsActivity(actor.id)

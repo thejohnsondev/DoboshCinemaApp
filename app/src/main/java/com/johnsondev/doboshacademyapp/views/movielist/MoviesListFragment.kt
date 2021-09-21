@@ -2,6 +2,7 @@ package com.johnsondev.doboshacademyapp.views.movielist
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -35,6 +36,10 @@ import java.util.concurrent.TimeUnit
 
 class MoviesListFragment : BaseFragment() {
 
+
+    private var popularLoadingIndicator: ProgressBar? = null
+    private var topLoadingIndicator: ProgressBar? = null
+    private var upcomingLoadingIndicator: ProgressBar? = null
     private lateinit var searchBtn: View
     private lateinit var rvPopularMovies: RecyclerView
     private lateinit var popularMoviesAdapter: MoviesAdapter
@@ -67,6 +72,10 @@ class MoviesListFragment : BaseFragment() {
             this,
             MovieViewModelFactory(activity?.application!!)
         )[MoviesListViewModel::class.java]
+
+        popularLoadingIndicator = view.findViewById(R.id.popular_list_loading_indicator)
+        topLoadingIndicator = view.findViewById(R.id.top_list_loading_indicator)
+        upcomingLoadingIndicator = view.findViewById(R.id.upcoming_list_loading_indicator)
 
         searchBtn = view.findViewById(R.id.search_box_btn)
         swipeToRefresh = view.findViewById(R.id.swipe_layout)

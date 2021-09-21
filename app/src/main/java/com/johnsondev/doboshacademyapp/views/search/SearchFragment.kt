@@ -203,7 +203,7 @@ class SearchFragment : BaseFragment() {
         }
     }
 
-    private fun handleSearchState(state: SearchState) {
+    private fun handleSearchState(state: LoadingState) {
         when (state) {
             is Loading -> {
                 searchLoadingIndicator.visibility = View.VISIBLE
