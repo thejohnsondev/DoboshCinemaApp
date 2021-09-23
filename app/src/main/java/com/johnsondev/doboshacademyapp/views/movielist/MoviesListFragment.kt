@@ -11,9 +11,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.*
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.*
-import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.Genre
-import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.models.base.Actor
+import com.johnsondev.doboshacademyapp.data.models.base.Genre
+import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.data.services.MovieDbUpdateWorker
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_KEY
@@ -205,14 +205,17 @@ class MoviesListFragment : BaseFragment() {
 
         listViewModel.popularMoviesList.observe(viewLifecycleOwner) {
             popularMoviesAdapter.setMovies(it)
+            popularLoadingIndicator?.visibility = View.GONE
         }
 
         listViewModel.topRatedMoviesList.observe(viewLifecycleOwner) {
             topRatedMoviesAdapter.setMovies(it)
+            topLoadingIndicator?.visibility = View.GONE
         }
 
         listViewModel.upcomingMoviesList.observe(viewLifecycleOwner) {
             upcomingMoviesAdapter.setMovies(it)
+            upcomingLoadingIndicator?.visibility = View.GONE
         }
 
         listViewModel.getGenresList().observe(viewLifecycleOwner) {
@@ -226,17 +229,7 @@ class MoviesListFragment : BaseFragment() {
         listViewModel.error.observe(viewLifecycleOwner) {
             if (it != null) {
                 onError(it)
-                unavailableListPlaceholder.visibility = View.VISIBLE
-                popularSpecificListBtn.visibility = View.GONE
-                topRatedSpecificListBtn.visibility = View.GONE
-                upcomingSpecificListBtn.visibility = View.GONE
-                popGenresSpecificListView.visibility = View.GONE
-                popActorsSpecificListBtn.visibility = View.GONE
-                rvPopularMovies.visibility = View.GONE
-                rvTopRatedMovies.visibility = View.GONE
-                rvUpcomingMovies.visibility = View.GONE
-                rvPopGenres.visibility = View.GONE
-                rvPopActors.visibility = View.GONE
+                hideViews()
             }
         }
 
@@ -260,6 +253,20 @@ class MoviesListFragment : BaseFragment() {
             updateWorkRequest
         )
 
+    }
+
+    private fun hideViews() {
+        unavailableListPlaceholder.visibility = View.VISIBLE
+        popularSpecificListBtn.visibility = View.GONE
+        topRatedSpecificListBtn.visibility = View.GONE
+        upcomingSpecificListBtn.visibility = View.GONE
+        popGenresSpecificListView.visibility = View.GONE
+        popActorsSpecificListBtn.visibility = View.GONE
+        rvPopularMovies.visibility = View.GONE
+        rvTopRatedMovies.visibility = View.GONE
+        rvUpcomingMovies.visibility = View.GONE
+        rvPopGenres.visibility = View.GONE
+        rvPopActors.visibility = View.GONE
     }
 
     private val movieClickListener = object : OnMovieItemClickListener {

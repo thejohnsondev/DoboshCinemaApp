@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
@@ -18,7 +19,6 @@ import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
-import com.johnsondev.doboshacademyapp.utilities.showMessage
 import com.johnsondev.doboshacademyapp.viewmodel.ActorDetailsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -76,8 +76,6 @@ class ActorDetailsFragment : BaseFragment() {
                     detailsViewModel.loadActorDetailsById(currentActorId!!)
                 }
             }
-        } else {
-            showMessage(getString(R.string.internet_connection_error))
         }
     }
 
@@ -112,12 +110,19 @@ class ActorDetailsFragment : BaseFragment() {
         detailsViewModel.error.observe(viewLifecycleOwner) {
             if (it != null) {
                 onError(it)
+                hideViews()
             }
         }
 
         favoriteActorBtn?.setOnClickListener {
             detailsViewModel.insertActorToFavorites(currentActorId ?: 0)
         }
+    }
+
+    private fun hideViews() {
+        favoriteActorBtn?.isVisible = false
+        tabLayout?.isVisible = false
+        viewPager?.isVisible = false
     }
 
 

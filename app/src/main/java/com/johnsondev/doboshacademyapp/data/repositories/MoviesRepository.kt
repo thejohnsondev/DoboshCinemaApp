@@ -3,17 +3,25 @@ package com.johnsondev.doboshacademyapp.data.repositories
 import androidx.lifecycle.MutableLiveData
 import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.data.db.entities.FavoriteEntity
-import com.johnsondev.doboshacademyapp.data.models.*
+import com.johnsondev.doboshacademyapp.data.models.SearchResultLists
+import com.johnsondev.doboshacademyapp.data.models.base.Actor
+import com.johnsondev.doboshacademyapp.data.models.base.Genre
+import com.johnsondev.doboshacademyapp.data.models.base.Movie
+import com.johnsondev.doboshacademyapp.data.models.base.MovieDetails
 import com.johnsondev.doboshacademyapp.data.network.NetworkService
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieImageDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
+import com.johnsondev.doboshacademyapp.data.network.exception.ConnectionErrorException
+import com.johnsondev.doboshacademyapp.data.network.exception.UnexpectedErrorException
 import com.johnsondev.doboshacademyapp.utilities.Constants.BACKDROP_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.FAVORITE_ACTOR_ENTITY_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.FAVORITE_MOVIE_ENTITY_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.LANG_RU
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_KEY
 import com.johnsondev.doboshacademyapp.utilities.DtoMapper
-import com.johnsondev.doboshacademyapp.utilities.handleExceptions
+import retrofit2.HttpException
+import java.io.IOException
+import java.util.concurrent.TimeoutException
 
 object MoviesRepository {
 
@@ -206,13 +214,6 @@ object MoviesRepository {
 
     fun getSimilarMovies(): MutableLiveData<List<Movie>> = similarMovies
 
-    fun setAverageColor(body: Int, text: Int) {
-        actorImgAverageColorBody.postValue(body)
-        actorImgAverageColorText.postValue(text)
-    }
-
-    fun getAverageColorBody(): MutableLiveData<Int> = actorImgAverageColorBody
-    fun getAverageColorText(): MutableLiveData<Int> = actorImgAverageColorText
 
     suspend fun loadPopularMoviesFromNet() {
         try {
@@ -264,6 +265,13 @@ object MoviesRepository {
 
     fun getUpcomingMovies(): List<Movie> {
         return upcomingMoviesList
+    }
+
+    private fun handleExceptions(e: Exception) {
+        throw when (e) {
+            is IOException, is HttpException, is TimeoutException -> ConnectionErrorException()
+            else -> UnexpectedErrorException()
+        }
     }
 
 

@@ -37,5 +37,6 @@ class MovieDetailsTrailersFragment : BaseFragment() {
         detailsViewModel.getMovieVideos().observeOnce(this, {
             adapter.setTrailers(it)
         })
+
     }
 }

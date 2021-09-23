@@ -1,15 +1,12 @@
 package com.johnsondev.doboshacademyapp.views.moviedetails
 
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -21,21 +18,15 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.GenresAdapter
 import com.johnsondev.doboshacademyapp.adapters.MovieDetailsPagerAdapter
-import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.adapters.OnGenreClickListener
-import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.Genre
+import com.johnsondev.doboshacademyapp.data.models.base.Genre
 import com.johnsondev.doboshacademyapp.utilities.Constants
-import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_TAB_TITLES
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.timeToHFromMin
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 
 class MoviesDetailsFragment : BaseFragment() {
 
@@ -72,8 +63,13 @@ class MoviesDetailsFragment : BaseFragment() {
     private lateinit var movieGenresAdapter: GenresAdapter
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager2: ViewPager2
+    private lateinit var unavailableMoviePlaceholder: View
     private lateinit var detailsViewModel: MovieDetailsViewModel
     private var currentMovieId: Int = 0
+
+    private lateinit var timeIcon: ImageView
+    private lateinit var ageBox: View
+    private lateinit var genresText: TextView
 
 
     override fun initViews(view: View) {
@@ -92,13 +88,14 @@ class MoviesDetailsFragment : BaseFragment() {
 //        addToCalendarBtn = view.findViewById(R.id.add_to_calendar_btn)
 //        backBtn = view.findViewById(R.id.back_btn)
 //        watchTheTrailerBtn = view.findViewById(R.id.watch_the_trailer_btn)
-//        unavailableMoviePlaceholder = view.findViewById(R.id.unavailable_movie_details_placeholder)
+
 //
 //        adapter = ActorsAdapter(requireContext(), clickListener, ITEM_TYPE_MINI)
 //        rvActors = view.findViewById(R.id.rv_actors)
 //        rvActors?.adapter = adapter
 //        rvActors?.setHasFixedSize(true)
 
+        unavailableMoviePlaceholder = view.findViewById(R.id.unavailable_movie_details_placeholder)
         ivBackBtn = view.findViewById(R.id.back_btn)
         ivBackdrop = view.findViewById(R.id.iv_backdrop_rv_item)
         ivPoster = view.findViewById(R.id.iv_poster_rv_item)
@@ -112,6 +109,10 @@ class MoviesDetailsFragment : BaseFragment() {
         rvMovieGenres = view.findViewById(R.id.rv_movie_genres)
         movieGenresAdapter = GenresAdapter(view.context, onGenreClickListener)
         rvMovieGenres.adapter = movieGenresAdapter
+
+        ageBox = view.findViewById(R.id.age_shape)
+        timeIcon = view.findViewById(R.id.time_icon)
+        genresText = view.findViewById(R.id.genres_text)
 
         tabLayout = view.findViewById(R.id.movie_details_tab_layout)
         viewPager2 = view.findViewById(R.id.movie_view_pager)
@@ -242,30 +243,12 @@ class MoviesDetailsFragment : BaseFragment() {
 
         })
 
-
-
-        detailsViewModel.getMovieVideos().observeOnce(this, {
-
-        })
-
-
-        detailsViewModel.error.observeOnce(this, {
+        detailsViewModel.error.observe(viewLifecycleOwner) {
             if (it != null) {
                 onError(it)
-//                tvTitle?.isVisible = false
-//                headImage?.isVisible = false
-//                tvGenres?.isVisible = false
-//                tvReviews?.isVisible = false
-//                movieRating?.isVisible = false
-//                tvDescription?.isVisible = false
-//                tvStoryLine?.isVisible = false
-//                tvCast?.isVisible = false
-//                addToCalendarBtn?.isVisible = false
-//                rvActors?.adapter = null
-//                watchTheTrailerBtn?.isVisible = false
-//                unavailableMoviePlaceholder.visibility = View.VISIBLE
+                hideViews()
             }
-        })
+        }
 
         moreBtn.setOnClickListener {
             detailsViewModel.insertMovieToFavorites(currentMovieId)
@@ -276,16 +259,24 @@ class MoviesDetailsFragment : BaseFragment() {
         }
     }
 
-
-    private val clickListener = object : OnActorItemClickListener {
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun onClick(actor: Actor) {
-            doOnClick(actor)
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        detailsViewModel.clearMovieDetails()
     }
 
-    private val onGenreClickListener = object : OnGenreClickListener {
+    private fun hideViews() {
+        rbMovieRating.isVisible = false
+        moreBtn.isVisible = false
+        ageBox.isVisible = false
+        timeIcon.isVisible = false
+        genresText.isVisible = false
+        viewPager2.isVisible = false
+        tabLayout.isVisible = false
+        unavailableMoviePlaceholder.visibility = View.VISIBLE
+    }
 
+
+    private val onGenreClickListener = object : OnGenreClickListener {
         override fun onClick(genre: Genre) {
             val bundleWithGenre = Bundle()
             bundleWithGenre.putParcelable(Constants.GENRE_KEY, genre)
@@ -295,21 +286,7 @@ class MoviesDetailsFragment : BaseFragment() {
                 bundleWithGenre
             )
         }
-
-
     }
-
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun doOnClick(actor: Actor) {
-
-        val bundle = Bundle()
-        bundle.putParcelable(ACTOR_KEY, actor)
-        findNavController().navigate(
-            MoviesDetailsFragmentDirections.actionMoviesDetailsFragmentToActorDetailsActivity(actor.id)
-        )
-    }
-
 
 }
 

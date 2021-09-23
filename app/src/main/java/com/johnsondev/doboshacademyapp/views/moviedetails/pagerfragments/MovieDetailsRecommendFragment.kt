@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
-import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
 import com.johnsondev.doboshacademyapp.utilities.Constants.RECOMMENDATIONS_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SIMILAR_LIST_TYPE
@@ -55,6 +55,7 @@ class MovieDetailsRecommendFragment(private val listType: String) : BaseFragment
                 })
             }
         }
+
 
     }
 

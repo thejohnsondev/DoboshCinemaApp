@@ -120,8 +120,6 @@ class MovieDetailsInfoFragment : BaseFragment() {
                 }
             }
 
-
-
             if (it[BACKDROP_KEY]?.size != 0) {
 
                 ivMediaBackdrop?.load("$POSTER_PATH${it[BACKDROP_KEY]?.get(0)?.filePath}") {
@@ -132,10 +130,6 @@ class MovieDetailsInfoFragment : BaseFragment() {
                 }
 
             }
-
-
-
-
 
             tvPostersCount.text = getString(R.string.posters_count, it[POSTER_KEY]?.size)
             tvBackdrops.text = getString(R.string.backdrops_count, it[BACKDROP_KEY]?.size)
@@ -151,6 +145,7 @@ class MovieDetailsInfoFragment : BaseFragment() {
             )
         }
 
+
         ivMediaBackdrop?.setOnClickListener {
             val bundle = Bundle()
             bundle.putInt(IMAGES_LIST_TYPE, ITEM_TYPE_BACKDROP)
@@ -161,7 +156,6 @@ class MovieDetailsInfoFragment : BaseFragment() {
         }
 
     }
-
 
 
     override fun onDestroy() {

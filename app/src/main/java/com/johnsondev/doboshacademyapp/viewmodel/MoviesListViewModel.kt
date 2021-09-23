@@ -4,13 +4,12 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.Genre
-import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.models.base.Actor
+import com.johnsondev.doboshacademyapp.data.models.base.Genre
+import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.base.BaseViewModel
-import com.johnsondev.doboshacademyapp.utilities.states.LoadingState
 import kotlinx.coroutines.launch
 
 class MoviesListViewModel(application: Application) : BaseViewModel(application) {
@@ -21,14 +20,6 @@ class MoviesListViewModel(application: Application) : BaseViewModel(application)
     val topRatedMoviesList: LiveData<List<Movie>> get() = topRatedMovies
     private var upcomingMovies = MutableLiveData<List<Movie>>()
     val upcomingMoviesList: LiveData<List<Movie>> get() = upcomingMovies
-
-    private var _popularMoviesLoadingState = MutableLiveData<LoadingState>()
-    val popularMoviesLoadingState: LiveData<LoadingState> get() = _popularMoviesLoadingState
-    private var _topMoviesLoadingState = MutableLiveData<LoadingState>()
-    val topMoviesLoadingState: LiveData<LoadingState> get() = _topMoviesLoadingState
-    private var _upcomingMoviesLoadingState = MutableLiveData<LoadingState>()
-    val upcomingMoviesLoadingState: LiveData<LoadingState> get() = _upcomingMoviesLoadingState
-
 
     private var _popularGenres = MutableLiveData<List<Genre>>()
     private var _moviesByGenre = MutableLiveData<List<Movie>>()

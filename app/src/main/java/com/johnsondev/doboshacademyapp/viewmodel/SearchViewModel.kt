@@ -38,17 +38,17 @@ class SearchViewModel(application: Application) : BaseViewModel(application) {
                     val result = MoviesRepository.search(it)
                     when {
                         result.actors.isEmpty() && result.movies.isEmpty() -> {
-                            EmptyResult
+                            EmptySearchResult
                         }
                         else -> {
-                            ValidResult(result)
+                            ValidSearchResult(result)
                         }
                     }
                 } catch (e: Throwable) {
                     if (e is CancellationException) {
                         throw e
                     } else {
-                        ErrorResult(e)
+                        ErrorSearchResult(e)
                     }
                 }
             }
@@ -56,7 +56,7 @@ class SearchViewModel(application: Application) : BaseViewModel(application) {
         .onEach {
             _searchState.value = Ready
         }
-        .catch { emit(TerminalError) }
+        .catch { emit(TerminalSearchError) }
         .asLiveData(viewModelScope.coroutineContext)
 
 

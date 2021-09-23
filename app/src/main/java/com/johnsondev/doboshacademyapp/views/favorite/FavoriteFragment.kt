@@ -2,6 +2,7 @@ package com.johnsondev.doboshacademyapp.views.favorite
 
 import android.view.View
 import android.widget.ProgressBar
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -10,15 +11,14 @@ import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
-import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.models.base.Actor
+import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_MINI
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.isInternetConnectionAvailable
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.states.Loading
-import com.johnsondev.doboshacademyapp.utilities.states.Ready
 import com.johnsondev.doboshacademyapp.viewmodel.FavoritesViewModel
 
 
@@ -81,9 +81,6 @@ class FavoriteFragment : BaseFragment() {
                     favMoviesLoadingIndicator?.visibility = View.VISIBLE
                     rvFavoriteMovies?.visibility = View.GONE
                 }
-//                is Ready -> {
-//                    favMoviesLoadingIndicator?.visibility = View.GONE
-//                }
             }
         })
 
@@ -94,12 +91,18 @@ class FavoriteFragment : BaseFragment() {
                     rvFavoriteActors?.visibility = View.GONE
 
                 }
-//                is Ready -> {
-//                    favActorsLoadingIndicator?.visibility = View.GONE
-//
-//                }
             }
         })
+
+        favoritesViewModel.error.observe(viewLifecycleOwner){
+            if(it != null){
+                onError(it)
+                favActorsLoadingIndicator?.isVisible = false
+                favMoviesLoadingIndicator?.isVisible = false
+                favMoviesSpecBtn?.isVisible = false
+                favActorsSpecBtn?.isVisible = false
+            }
+        }
 
         favMoviesSpecBtn?.setOnClickListener {
 

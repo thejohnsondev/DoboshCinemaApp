@@ -1,18 +1,16 @@
 package com.johnsondev.doboshacademyapp.views.movielist
 
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
-import com.johnsondev.doboshacademyapp.data.models.Genre
-import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.models.base.Genre
+import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.GENRE_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIES_SEARCH_RESULT_SPEC_TYPE
@@ -23,10 +21,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
-import com.johnsondev.doboshacademyapp.utilities.observeOnce
-import com.johnsondev.doboshacademyapp.utilities.states.ValidResult
 import com.johnsondev.doboshacademyapp.viewmodel.MoviesListViewModel
-import com.johnsondev.doboshacademyapp.viewmodel.SearchViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
@@ -44,7 +39,6 @@ class SpecificMoviesListFragment : BaseFragment() {
 
 
     override fun initViews(view: View) {
-
 
 
         rvSpecMoviesList = view.findViewById(R.id.rv_spec_movies_list)
@@ -126,8 +120,6 @@ class SpecificMoviesListFragment : BaseFragment() {
             SpecificMoviesListFragmentDirections.actionSpecificListFragmentToDetailsActivity(movie.id)
         )
     }
-
-
 
 
 }

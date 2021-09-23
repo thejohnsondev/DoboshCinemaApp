@@ -5,27 +5,15 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.palette.graphics.Palette
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.R
-import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.CrewMember
-import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.data.models.MovieDetails
-import com.johnsondev.doboshacademyapp.data.network.api.MovieApi
-import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
-import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
+import com.johnsondev.doboshacademyapp.data.models.base.Actor
+import com.johnsondev.doboshacademyapp.data.models.base.CrewMember
+import com.johnsondev.doboshacademyapp.data.models.base.Movie
+import com.johnsondev.doboshacademyapp.data.models.base.MovieDetails
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieImageDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
@@ -36,7 +24,6 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_ALL_DAY
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_BEGIN_TIME
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_DESCRIPTION
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_END_TIME
-import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.base.BaseViewModel
 import kotlinx.coroutines.launch
 import java.util.*
@@ -45,7 +32,6 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
 
     private var _actorList = MutableLiveData<List<Actor>>()
     private var _crewList = MutableLiveData<List<CrewMember>>()
-
     private var _currentMovie = MutableLiveData<MovieDetails>()
     private var _movieVideos = MutableLiveData<List<MovieVideoDto>>()
     private var _movieImages = MutableLiveData<Map<String, List<MovieImageDto>>>()
@@ -57,7 +43,6 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
             MoviesRepository.insertMovieToFavorites(movieId)
             mutableError.value = null
         }
-
     }
 
     fun loadMovieFromNetById(id: Int) {
@@ -90,14 +75,14 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
     }
 
     fun loadRecommendationsByMovieId(id: Int){
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler()) {
             MoviesRepository.loadRecommendationsByMovieId(id)
             mutableError.value = null
         }
     }
 
     fun loadSimilarMoviesById(movieId: Int){
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler()) {
             MoviesRepository.loadSimilarMoviesById(movieId)
             mutableError.value = null
         }
@@ -135,6 +120,10 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
         return _crewList
     }
 
+    fun getMovieVideos(): LiveData<List<MovieVideoDto>> {
+        _movieVideos = MoviesRepository.getMovieVideos()
+        return _movieVideos
+    }
 
     fun callDatePicker(context: Context, date: Calendar, currentMovie: Movie) {
 
@@ -191,9 +180,16 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
         return intent
     }
 
-
-    fun getMovieVideos(): LiveData<List<MovieVideoDto>> {
-        _movieVideos = MoviesRepository.getMovieVideos()
-        return _movieVideos
+    fun clearMovieDetails(){
+        _actorList.value = emptyList()
+        _crewList.value = emptyList()
+        _currentMovie.value = MovieDetails()
+        _movieImages.value = emptyMap()
+        _similarMovies.value = emptyList()
+        _movieVideos.value = emptyList()
+        _movieRecommendations.value = emptyList()
     }
+
+
+
 }

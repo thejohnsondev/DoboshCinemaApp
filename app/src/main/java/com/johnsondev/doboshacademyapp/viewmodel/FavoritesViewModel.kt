@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.models.base.Actor
+import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.base.BaseViewModel
 import com.johnsondev.doboshacademyapp.utilities.states.Loading
@@ -26,6 +26,7 @@ class FavoritesViewModel(app: Application) : BaseViewModel(app) {
         viewModelScope.launch(exceptionHandler()) {
             _moviesLoadingState.value = Loading
             MoviesRepository.loadFavoritesMoviesFromDb()
+            mutableError.value = null
         }
     }
 
@@ -39,6 +40,7 @@ class FavoritesViewModel(app: Application) : BaseViewModel(app) {
         viewModelScope.launch(exceptionHandler()) {
             _actorsLoadingState.value = Loading
             MoviesRepository.loadFavoritesActorsFromDb()
+            mutableError.value = null
         }
     }
 
