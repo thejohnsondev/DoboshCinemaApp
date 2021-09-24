@@ -30,26 +30,10 @@ import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.timeToHFromMin
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
 import java.util.*
+import javax.net.ssl.CertPathTrustManagerParameters
 
 class MoviesDetailsFragment : BaseFragment() {
 
-//    private var currentMovie: Movie? = null
-//    private var movieVideos: ArrayList<MovieVideoDto>? = null
-//    private var tvTitle: TextView? = null
-//    private var tvAge: TextView? = null
-//    private var tvGenres: TextView? = null
-//    private var tvReviews: TextView? = null
-//    private var movieRating: RatingBar? = null
-//    private var tvDescription: TextView? = null
-//    private var tvStoryLine: TextView? = null
-//    private var tvCast: TextView? = null
-//    private var headImage: ImageView? = null
-//    private var rvActors: RecyclerView? = null
-//    private var adapter: ActorsAdapter? = null
-//    private var addToCalendarBtn: Button? = null
-//    private var backBtn: TextView? = null
-//    private var watchTheTrailerBtn: Button? = null
-//    private lateinit var unavailableMoviePlaceholder: View
     private var date: Calendar? = null
 
     private lateinit var ivBackBtn: ImageView
@@ -62,6 +46,7 @@ class MoviesDetailsFragment : BaseFragment() {
     private lateinit var tvReviews: TextView
     private lateinit var tvAge: TextView
     private lateinit var moreBtn: ImageView
+    private lateinit var favoriteBtn: ImageView
     private lateinit var rvMovieGenres: RecyclerView
     private lateinit var movieGenresAdapter: GenresAdapter
     private lateinit var tabLayout: TabLayout
@@ -84,24 +69,6 @@ class MoviesDetailsFragment : BaseFragment() {
 
         detailsViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
 
-//        tvTitle = view.findViewById(R.id.tv_title)
-//        tvAge = view.findViewById(R.id.tv_age)
-//        tvGenres = view.findViewById(R.id.movie_genres)
-//        tvReviews = view.findViewById(R.id.tv_reviews)
-//        movieRating = view.findViewById(R.id.movie_rating_bar)
-//        tvDescription = view.findViewById(R.id.tv_biography)
-//        tvStoryLine = view.findViewById(R.id.tv_story_line)
-//        tvCast = view.findViewById(R.id.tv_cast)
-//        headImage = view.findViewById(R.id.head_image)
-//        addToCalendarBtn = view.findViewById(R.id.add_to_calendar_btn)
-//        backBtn = view.findViewById(R.id.back_btn)
-//        watchTheTrailerBtn = view.findViewById(R.id.watch_the_trailer_btn)
-
-//
-//        adapter = ActorsAdapter(requireContext(), clickListener, ITEM_TYPE_MINI)
-//        rvActors = view.findViewById(R.id.rv_actors)
-//        rvActors?.adapter = adapter
-//        rvActors?.setHasFixedSize(true)
 
         unavailableMoviePlaceholder = view.findViewById(R.id.unavailable_movie_details_placeholder)
         ivBackBtn = view.findViewById(R.id.back_btn)
@@ -114,6 +81,7 @@ class MoviesDetailsFragment : BaseFragment() {
         tvReviews = view.findViewById(R.id.tv_reviews)
         tvAge = view.findViewById(R.id.tv_age)
         moreBtn = view.findViewById(R.id.more_btn)
+        favoriteBtn = view.findViewById(R.id.favorite_btn)
         rvMovieGenres = view.findViewById(R.id.rv_movie_genres)
         movieGenresAdapter = GenresAdapter(view.context, onGenreClickListener)
         rvMovieGenres.adapter = movieGenresAdapter
@@ -158,6 +126,7 @@ class MoviesDetailsFragment : BaseFragment() {
                 loadMovieImagesById(movieId)
                 loadRecommendationsByMovieId(movieId)
                 loadSimilarMoviesById(movieId)
+                loadFavoriteMoviesIds()
             }
 
         }
@@ -172,45 +141,14 @@ class MoviesDetailsFragment : BaseFragment() {
 
     override fun initListenersAndObservers(view: View) {
 
-//        addToCalendarBtn?.setOnClickListener {
-
-//        }
-//
-//        watchTheTrailerBtn?.setOnClickListener {
-//            val bundle = Bundle()
-//            bundle.putParcelableArrayList(TRAILERS_KEY, movieVideos)
-//            findNavController().navigate(
-//                R.id.action_moviesDetailsFragment_to_movieTrailersFragment,
-//                bundle
-//            )
-//        }
-//
-//        backBtn?.setOnClickListener {
-//            findNavController().popBackStack()
-//        }
-
-
         detailsViewModel.getCurrentMovieFromNet().observeOnce(this, { movie ->
-
-//                view.context.getString(R.string.reviews, movie.numberOfRatings)
-//            val movieAge: String = view.context.getString(R.string.plus, movie.minimumAge)
-//            tvTitle?.text = movie.title
-//            tvAge?.text = movieAge
-//            tvGenres?.text = movie.genres?.joinToString { it.name }
-//            tvReviews?.text = movieReviews
-//            movieRating?.progress = (movie.ratings * 2).toInt()
-//            tvDescription?.text = movie.overview
-//
-//
-//            headImage?.load(movie.poster) {
-//                crossfade(true)
-//                placeholder(R.drawable.movie_placeholder)
-//                fallback(R.drawable.movie_placeholder)
-//                error(R.drawable.movie_placeholder)
-//            }
 
             currentMovieId = movie.id
             currentMovie = Movie(id = movie.id, title = movie.title)
+
+            if (detailsViewModel.isMovieFavorite(currentMovieId)) {
+                favoriteBtn.load(R.drawable.ic_favorite_filled)
+            }
 
             val movieReviews: String =
                 view.context.getString(R.string.reviews, movie.numberOfRatings)
@@ -237,13 +175,7 @@ class MoviesDetailsFragment : BaseFragment() {
                 movie.title,
                 movie.releaseDate.substring(6, 10)
             )
-//            tvYear.text = getString(
-//                R.string.movie_release_year_placeholder,
-//                movie.releaseDate.substring(0, 4)
-//            )
             tvTagline.text = movie.tagLine
-//            tvTimeInH.text =
-//                "${timeToHFromMin(movie.runtime!!)[0]} H ${timeToHFromMin(movie.runtime!!)[1]} MIN"
             tvTimeInH.text = getString(
                 R.string.movie_time_in_h,
                 timeToHFromMin(movie.runtime)[0],
@@ -253,7 +185,6 @@ class MoviesDetailsFragment : BaseFragment() {
             tvReviews.text = movieReviews
             tvAge.text = getString(R.string.plus, movie.minimumAge)
             movieGenresAdapter.setGenresList(movie.genres ?: emptyList())
-
 
         })
 
@@ -265,8 +196,19 @@ class MoviesDetailsFragment : BaseFragment() {
         }
 
         moreBtn.setOnClickListener {
-//            detailsViewModel.insertMovieToFavorites(currentMovieId)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        favoriteBtn.setOnClickListener {
+            detailsViewModel.loadFavoriteMoviesIds()
+            if (detailsViewModel.isMovieFavorite(currentMovieId)) {
+                detailsViewModel.deleteMovieFromFavorites(currentMovieId)
+                favoriteBtn.load(R.drawable.ic_favorite_icon)
+            } else {
+                detailsViewModel.insertMovieToFavorites(currentMovieId)
+                favoriteBtn.load(R.drawable.ic_favorite_filled)
+            }
+
         }
 
         watchLaterBtn.setOnClickListener {

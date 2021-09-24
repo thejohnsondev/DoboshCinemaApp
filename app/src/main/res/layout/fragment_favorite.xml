@@ -8,23 +8,57 @@
     android:background="@color/main_color">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/star_image"
+            android:layout_width="@dimen/dp_36"
+            android:layout_height="@dimen/dp_36"
+            android:layout_marginTop="@dimen/dp_24"
+            android:src="@drawable/ic_favorite_filled"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/header_text"
+            style="@style/HeaderText1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/your_favorites"
+            android:textAlignment="center"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="@dimen/dp_8"
+            app:layout_constraintEnd_toEndOf="@+id/star_image"
+            app:layout_constraintStart_toStartOf="@+id/star_image"
+            app:layout_constraintTop_toBottomOf="@+id/star_image" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/movies_group"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_group">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/favorite_movies_spec_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:splitMotionEvents="false"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
             android:orientation="horizontal"
             android:paddingTop="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_8"
+            android:splitMotionEvents="false"
+            android:layout_marginTop="@dimen/dp_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -53,16 +87,18 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
         <ProgressBar
             android:id="@+id/favorite_movies_loading_indicator"
             android:layout_width="@dimen/dp_48"
             android:layout_height="@dimen/dp_48"
             android:indeterminate="true"
             android:visibility="visible"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/favorite_movies_rv"
@@ -75,6 +111,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/favorite_movies_spec_btn"
             tools:listitem="@layout/movie_rv_item" />
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

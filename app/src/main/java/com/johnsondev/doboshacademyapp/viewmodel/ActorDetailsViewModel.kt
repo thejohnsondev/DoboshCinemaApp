@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.johnsondev.doboshacademyapp.data.models.base.Actor
 import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
@@ -20,9 +21,31 @@ class ActorDetailsViewModel(application: Application) : BaseViewModel(applicatio
     private var _actorMovieCredits = MutableLiveData<List<Movie>>()
     private var _actorImages = MutableLiveData<List<ActorImageProfileDto>>()
 
+    private var _favoriteActorsIds = MutableLiveData<List<Int>>()
+
+
+
+    fun loadFavoriteActorsIds() {
+        viewModelScope.launch(exceptionHandler()) {
+            _favoriteActorsIds = ActorsRepository.getFavoriteActorsIds()
+            mutableError.value = null
+        }
+    }
+
+    fun isActorFavorite(actorId: Int): Boolean{
+        return _favoriteActorsIds.value?.contains(actorId) == true
+    }
+
     fun insertActorToFavorites(actorId: Int) {
         viewModelScope.launch(exceptionHandler()) {
-            MoviesRepository.insertActorToFavorites(actorId)
+            ActorsRepository.insertActorToFavorites(actorId)
+            mutableError.value = null
+        }
+    }
+
+    fun deleteActorFromFavorites(actorId: Int){
+        viewModelScope.launch(exceptionHandler()) {
+            ActorsRepository.deleteActorFromFavorites(actorId)
             mutableError.value = null
         }
     }

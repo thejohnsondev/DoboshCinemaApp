@@ -34,11 +34,10 @@ object MoviesRepository {
     private var genresList = MutableLiveData<List<Genre>>()
     private var moviesByGenre = MutableLiveData<List<Movie>>()
     private var popularActorsList = MutableLiveData<List<Actor>>()
-    private var actorImgAverageColorBody = MutableLiveData<Int>()
-    private var actorImgAverageColorText = MutableLiveData<Int>()
 
-    private var favoritesMovies = MutableLiveData<List<Movie>>()
-    private var favoriteActors = MutableLiveData<List<Actor>>()
+    private var favoriteMovies = MutableLiveData<List<Movie>>()
+    private var favoriteMoviesIds = MutableLiveData<List<Int>>()
+
 
     private var currentMovieDetails = MutableLiveData<MovieDetails>()
     private var movieRecommendations = MutableLiveData<List<Movie>>()
@@ -46,9 +45,20 @@ object MoviesRepository {
     private var movieVideos = MutableLiveData<List<MovieVideoDto>>()
     private var movieImages = MutableLiveData<Map<String, List<MovieImageDto>>>()
 
+    suspend fun getFavoriteMoviesIds(): MutableLiveData<List<Int>> {
+        try {
+            favoriteMoviesIds.value = favoritesDatabase.favoritesDao()
+                .getFavoritesEntityIdByType(FAVORITE_MOVIE_ENTITY_TYPE)
+        } catch (e: Exception) {
+            handleExceptions(e)
+        }
+        return favoriteMoviesIds
+    }
+
+
     suspend fun loadFavoritesMoviesFromDb() {
         try {
-            favoritesMovies.value = favoritesDatabase.favoritesDao()
+            favoriteMovies.value = favoritesDatabase.favoritesDao()
                 .getFavoritesEntityIdByType(FAVORITE_MOVIE_ENTITY_TYPE).map { id ->
                     DtoMapper.convertMovieFromDto(movieApi.getMovieById(id))
                 }
@@ -58,39 +68,38 @@ object MoviesRepository {
         }
     }
 
+
+
     suspend fun insertMovieToFavorites(movieId: Int) {
-        favoritesDatabase.favoritesDao().insertFavoriteEntity(
-            FavoriteEntity(
-                entityType = FAVORITE_MOVIE_ENTITY_TYPE,
-                entityId = movieId
-            )
-        )
-    }
 
-    fun getFavoritesMovies(): MutableLiveData<List<Movie>> = favoritesMovies
-
-    suspend fun loadFavoritesActorsFromDb() {
         try {
-            favoriteActors.value = favoritesDatabase.favoritesDao()
-                .getFavoritesEntityIdByType(FAVORITE_ACTOR_ENTITY_TYPE).map { id ->
-                    DtoMapper.convertActorFromDto(movieApi.getActor(id))
-                }
-
+            favoritesDatabase.favoritesDao().insertFavoriteEntity(
+                FavoriteEntity(
+                    entityType = FAVORITE_MOVIE_ENTITY_TYPE,
+                    entityId = movieId
+                )
+            )
         } catch (e: Exception) {
             handleExceptions(e)
         }
     }
 
-    suspend fun insertActorToFavorites(acorId: Int) {
-        favoritesDatabase.favoritesDao().insertFavoriteEntity(
-            FavoriteEntity(
-                entityType = FAVORITE_ACTOR_ENTITY_TYPE,
-                entityId = acorId
-            )
-        )
+
+
+    suspend fun deleteMovieFromFavorites(movieId: Int) {
+        try {
+            favoritesDatabase.favoritesDao()
+                .deleteFavoriteEntity(FAVORITE_MOVIE_ENTITY_TYPE, movieId)
+        } catch (e: Exception) {
+            handleExceptions(e)
+        }
+
     }
 
-    fun getFavoritesActors(): MutableLiveData<List<Actor>> = favoriteActors
+
+
+    fun getFavoritesMovies(): MutableLiveData<List<Movie>> = favoriteMovies
+
 
     suspend fun search(query: String): SearchResultLists {
         var moviesSearchResult: List<Movie> = listOf()

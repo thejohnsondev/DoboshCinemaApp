@@ -27,6 +27,8 @@ class MoviesListViewModel(application: Application) : BaseViewModel(application)
 
     private var checkInternetConnection: InternetConnectionManager? = null
 
+
+
     fun loadGenresList() {
         viewModelScope.launch(exceptionHandler()) {
             MoviesRepository.loadGenresList()

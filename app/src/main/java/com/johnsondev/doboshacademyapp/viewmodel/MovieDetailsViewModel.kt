@@ -38,9 +38,31 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
     private var _movieRecommendations = MutableLiveData<List<Movie>>()
     private var _similarMovies = MutableLiveData<List<Movie>>()
 
+    private var _favoriteMoviesIds = MutableLiveData<List<Int>>()
+
+
+    fun loadFavoriteMoviesIds(){
+        viewModelScope.launch(exceptionHandler()) {
+            _favoriteMoviesIds = MoviesRepository.getFavoriteMoviesIds()
+            mutableError.value = null
+        }
+    }
+
+    fun isMovieFavorite(movieId: Int): Boolean{
+        return _favoriteMoviesIds.value?.contains(movieId) == true
+    }
+
+
     fun insertMovieToFavorites(movieId: Int){
         viewModelScope.launch(exceptionHandler()) {
             MoviesRepository.insertMovieToFavorites(movieId)
+            mutableError.value = null
+        }
+    }
+
+    fun deleteMovieFromFavorites(movieId: Int){
+        viewModelScope.launch(exceptionHandler()) {
+            MoviesRepository.deleteMovieFromFavorites(movieId)
             mutableError.value = null
         }
     }
@@ -124,6 +146,7 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
         _movieVideos = MoviesRepository.getMovieVideos()
         return _movieVideos
     }
+
 
     fun callDatePicker(context: Context, date: Calendar, currentMovie: Movie) {
 

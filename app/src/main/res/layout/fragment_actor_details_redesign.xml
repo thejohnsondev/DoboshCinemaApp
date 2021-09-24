@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/main_color">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -75,13 +74,15 @@
 
             <ImageView
                 android:id="@+id/favorite_actor_btn"
-                android:layout_width="@dimen/dp_24"
-                android:layout_height="@dimen/dp_24"
+                android:layout_width="@dimen/dp_36"
+                android:layout_height="@dimen/dp_36"
                 android:layout_marginEnd="@dimen/dp_16"
+                android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/ic_favorite_icon"
-                app:layout_constraintBottom_toBottomOf="@id/tv_actor_department"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_actor_department"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_actor_name"/>
+                app:layout_constraintTop_toTopOf="@+id/tv_actor_name" />
 
             <TextView
                 android:id="@+id/tv_actor_department"

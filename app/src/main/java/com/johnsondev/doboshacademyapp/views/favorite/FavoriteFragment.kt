@@ -44,6 +44,10 @@ class FavoriteFragment : BaseFragment() {
         rvFavoriteActors?.adapter = actorsAdapter
         favMoviesLoadingIndicator = view.findViewById(R.id.favorite_movies_loading_indicator)
         favActorsLoadingIndicator = view.findViewById(R.id.favorite_actors_loading_indicator)
+
+
+        favMoviesSpecBtn = view.findViewById(R.id.favorite_movies_spec_btn)
+        favActorsSpecBtn = view.findViewById(R.id.favorite_actors_spec_btn)
     }
 
     override fun layoutId(): Int = R.layout.fragment_favorite
@@ -62,13 +66,16 @@ class FavoriteFragment : BaseFragment() {
     override fun initListenersAndObservers(view: View) {
 
         favoritesViewModel.getFavoriteMovies().observeOnce(this, {
+            moviesAdapter?.setMovies(emptyList())
             favMoviesLoadingIndicator?.visibility = View.GONE
             rvFavoriteMovies?.visibility = View.VISIBLE
             moviesAdapter?.setMovies(it)
 
+
         })
 
         favoritesViewModel.getFavoriteActors().observeOnce(this, {
+            actorsAdapter?.setActors(emptyList())
             favActorsLoadingIndicator?.visibility = View.GONE
             rvFavoriteActors?.visibility = View.VISIBLE
             actorsAdapter?.setActors(it)
@@ -89,13 +96,12 @@ class FavoriteFragment : BaseFragment() {
                 is Loading -> {
                     favActorsLoadingIndicator?.visibility = View.VISIBLE
                     rvFavoriteActors?.visibility = View.GONE
-
                 }
             }
         })
 
-        favoritesViewModel.error.observe(viewLifecycleOwner){
-            if(it != null){
+        favoritesViewModel.error.observe(viewLifecycleOwner) {
+            if (it != null) {
                 onError(it)
                 favActorsLoadingIndicator?.isVisible = false
                 favMoviesLoadingIndicator?.isVisible = false

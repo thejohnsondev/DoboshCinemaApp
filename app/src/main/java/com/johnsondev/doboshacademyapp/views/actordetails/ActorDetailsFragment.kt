@@ -23,7 +23,6 @@ import com.johnsondev.doboshacademyapp.viewmodel.ActorDetailsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 
 class ActorDetailsFragment : BaseFragment() {
@@ -38,7 +37,7 @@ class ActorDetailsFragment : BaseFragment() {
     private var tvActorDepartment: TextView? = null
     private var viewPager: ViewPager2? = null
     private var tabLayout: TabLayout? = null
-    private var favoriteActorBtn: ImageView? = null
+    private var favoriteBtn: ImageView? = null
 
 
     override fun initViews(view: View) {
@@ -51,7 +50,7 @@ class ActorDetailsFragment : BaseFragment() {
         tvActorDepartment = view.findViewById(R.id.tv_actor_department)
         viewPager = view.findViewById(R.id.actor_view_pager)
         tabLayout = view.findViewById(R.id.actor_details_tab_layout)
-        favoriteActorBtn = view.findViewById(R.id.favorite_actor_btn)
+        favoriteBtn = view.findViewById(R.id.favorite_actor_btn)
 
 
         viewPager?.adapter = ActorDetailsPagerAdapter(this)
@@ -71,9 +70,10 @@ class ActorDetailsFragment : BaseFragment() {
         currentActorId = arguments?.getInt(ACTOR_KEY)
 
         if (detailsViewModel.checkInternetConnection(requireContext())) {
-            scope.launch {
-                if (currentActorId != 0) {
-                    detailsViewModel.loadActorDetailsById(currentActorId!!)
+            if (currentActorId != 0) {
+                detailsViewModel.apply {
+                    loadActorDetailsById(currentActorId!!)
+                    loadFavoriteActorsIds()
                 }
             }
         }
@@ -84,6 +84,10 @@ class ActorDetailsFragment : BaseFragment() {
     override fun initListenersAndObservers(view: View) {
 
         detailsViewModel.getActorDetails().observe(viewLifecycleOwner) {
+
+            if (detailsViewModel.isActorFavorite(currentActorId!!)) {
+                favoriteBtn?.load(R.drawable.ic_favorite_filled)
+            }
 
 
             val imagePath = "$POSTER_PATH${it.profilePath}"
@@ -114,13 +118,23 @@ class ActorDetailsFragment : BaseFragment() {
             }
         }
 
-        favoriteActorBtn?.setOnClickListener {
-            detailsViewModel.insertActorToFavorites(currentActorId ?: 0)
+        favoriteBtn?.setOnClickListener {
+            detailsViewModel.loadFavoriteActorsIds()
+            if (detailsViewModel.isActorFavorite(currentActorId!!)) {
+                detailsViewModel.deleteActorFromFavorites(currentActorId!!)
+                favoriteBtn?.load(R.drawable.ic_favorite_icon)
+            } else {
+                detailsViewModel.insertActorToFavorites(currentActorId!!)
+                favoriteBtn?.load(R.drawable.ic_favorite_filled)
+            }
         }
+
+
+
     }
 
     private fun hideViews() {
-        favoriteActorBtn?.isVisible = false
+        favoriteBtn?.isVisible = false
         tabLayout?.isVisible = false
         viewPager?.isVisible = false
     }
