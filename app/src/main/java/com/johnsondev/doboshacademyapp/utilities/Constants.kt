@@ -74,6 +74,7 @@ object Constants {
     val MOVIE_TAB_TITLES =
         arrayListOf("Information", "Actors", "Recommendations", "Similar", "Trailers")
     val ACTOR_TAB_TITLES = arrayListOf("About", "Movies")
+    val FAVORITES_TAB_TITLES = arrayListOf("Movies","Actors")
 
     val CURRENT_YEAR = Calendar.getInstance()[Calendar.YEAR]
 
