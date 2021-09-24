@@ -180,16 +180,4 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
         return intent
     }
 
-    fun clearMovieDetails(){
-        _actorList.value = emptyList()
-        _crewList.value = emptyList()
-        _currentMovie.value = MovieDetails()
-        _movieImages.value = emptyMap()
-        _similarMovies.value = emptyList()
-        _movieVideos.value = emptyList()
-        _movieRecommendations.value = emptyList()
-    }
-
-
-
 }

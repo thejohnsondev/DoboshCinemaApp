@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import coil.transform.BlurTransformation
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.johnsondev.doboshacademyapp.R
@@ -20,6 +21,7 @@ import com.johnsondev.doboshacademyapp.adapters.GenresAdapter
 import com.johnsondev.doboshacademyapp.adapters.MovieDetailsPagerAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnGenreClickListener
 import com.johnsondev.doboshacademyapp.data.models.base.Genre
+import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_TAB_TITLES
@@ -27,6 +29,7 @@ import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.timeToHFromMin
 import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
+import java.util.*
 
 class MoviesDetailsFragment : BaseFragment() {
 
@@ -47,7 +50,7 @@ class MoviesDetailsFragment : BaseFragment() {
 //    private var backBtn: TextView? = null
 //    private var watchTheTrailerBtn: Button? = null
 //    private lateinit var unavailableMoviePlaceholder: View
-//    private var date: Calendar? = null
+    private var date: Calendar? = null
 
     private lateinit var ivBackBtn: ImageView
     private lateinit var ivBackdrop: ImageView
@@ -66,10 +69,15 @@ class MoviesDetailsFragment : BaseFragment() {
     private lateinit var unavailableMoviePlaceholder: View
     private lateinit var detailsViewModel: MovieDetailsViewModel
     private var currentMovieId: Int = 0
+    private var currentMovie: Movie? = null
 
     private lateinit var timeIcon: ImageView
     private lateinit var ageBox: View
     private lateinit var genresText: TextView
+
+    private lateinit var bottomSheet: View
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    private lateinit var watchLaterBtn: View
 
 
     override fun initViews(view: View) {
@@ -113,6 +121,7 @@ class MoviesDetailsFragment : BaseFragment() {
         ageBox = view.findViewById(R.id.age_shape)
         timeIcon = view.findViewById(R.id.time_icon)
         genresText = view.findViewById(R.id.genres_text)
+        watchLaterBtn = view.findViewById(R.id.add_to_calendar_btn)
 
         tabLayout = view.findViewById(R.id.movie_details_tab_layout)
         viewPager2 = view.findViewById(R.id.movie_view_pager)
@@ -127,13 +136,17 @@ class MoviesDetailsFragment : BaseFragment() {
 
         }.attach()
 
+        bottomSheet = view.findViewById(R.id.details_bottom_sheet)
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
 
     }
 
     override fun layoutId(): Int = R.layout.fragment_movies_details_redesign
 
     override fun loadData() {
-//        date = Calendar.getInstance()
+        date = Calendar.getInstance()
 
         val movieId = arguments?.getInt(MOVIE_KEY)
 
@@ -160,7 +173,7 @@ class MoviesDetailsFragment : BaseFragment() {
     override fun initListenersAndObservers(view: View) {
 
 //        addToCalendarBtn?.setOnClickListener {
-//            detailsViewModel.callDatePicker(requireContext(), date!!, currentMovie!!)
+
 //        }
 //
 //        watchTheTrailerBtn?.setOnClickListener {
@@ -197,6 +210,7 @@ class MoviesDetailsFragment : BaseFragment() {
 //            }
 
             currentMovieId = movie.id
+            currentMovie = Movie(id = movie.id, title = movie.title)
 
             val movieReviews: String =
                 view.context.getString(R.string.reviews, movie.numberOfRatings)
@@ -251,7 +265,13 @@ class MoviesDetailsFragment : BaseFragment() {
         }
 
         moreBtn.setOnClickListener {
-            detailsViewModel.insertMovieToFavorites(currentMovieId)
+//            detailsViewModel.insertMovieToFavorites(currentMovieId)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        watchLaterBtn.setOnClickListener {
+            detailsViewModel.callDatePicker(requireContext(), date!!, currentMovie!!)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         ivBackBtn.setOnClickListener {
@@ -259,10 +279,6 @@ class MoviesDetailsFragment : BaseFragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        detailsViewModel.clearMovieDetails()
-    }
 
     private fun hideViews() {
         rbMovieRating.isVisible = false
