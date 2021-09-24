@@ -1,6 +1,6 @@
 package com.johnsondev.doboshacademyapp.utilities
 
-import com.johnsondev.doboshacademyapp.data.models.*
+import com.johnsondev.doboshacademyapp.data.models.base.*
 import com.johnsondev.doboshacademyapp.data.network.dto.*
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 

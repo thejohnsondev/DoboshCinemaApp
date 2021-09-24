@@ -4,9 +4,8 @@ import android.os.Build
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
@@ -16,26 +15,19 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorDetailsPagerAdapter
-import com.johnsondev.doboshacademyapp.adapters.OnImageClickListener
-import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
-import com.johnsondev.doboshacademyapp.data.models.Movie
-import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
-import com.johnsondev.doboshacademyapp.utilities.showMessage
 import com.johnsondev.doboshacademyapp.viewmodel.ActorDetailsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 
 class ActorDetailsFragment : BaseFragment() {
-    
+
     private lateinit var detailsViewModel: ActorDetailsViewModel
-    private val scope = CoroutineScope(Dispatchers.IO + Job())
     private var currentActorId: Int? = null
 
     private var ivActorPoster: ImageView? = null
@@ -44,6 +36,7 @@ class ActorDetailsFragment : BaseFragment() {
     private var tvActorDepartment: TextView? = null
     private var viewPager: ViewPager2? = null
     private var tabLayout: TabLayout? = null
+    private var favoriteBtn: ImageView? = null
 
 
     override fun initViews(view: View) {
@@ -56,6 +49,7 @@ class ActorDetailsFragment : BaseFragment() {
         tvActorDepartment = view.findViewById(R.id.tv_actor_department)
         viewPager = view.findViewById(R.id.actor_view_pager)
         tabLayout = view.findViewById(R.id.actor_details_tab_layout)
+        favoriteBtn = view.findViewById(R.id.favorite_actor_btn)
 
 
         viewPager?.adapter = ActorDetailsPagerAdapter(this)
@@ -75,13 +69,12 @@ class ActorDetailsFragment : BaseFragment() {
         currentActorId = arguments?.getInt(ACTOR_KEY)
 
         if (detailsViewModel.checkInternetConnection(requireContext())) {
-            scope.launch {
-                if (currentActorId != 0) {
-                    detailsViewModel.loadActorDetailsById(currentActorId!!)
+            if (currentActorId != 0) {
+                detailsViewModel.apply {
+                    loadActorDetailsById(currentActorId!!)
+                    loadFavoriteActorsIds()
                 }
             }
-        } else {
-            showMessage(getString(R.string.internet_connection_error))
         }
     }
 
@@ -91,18 +84,21 @@ class ActorDetailsFragment : BaseFragment() {
 
         detailsViewModel.getActorDetails().observe(viewLifecycleOwner) {
 
+            if (detailsViewModel.isActorFavorite(currentActorId!!)) {
+                favoriteBtn?.load(R.drawable.ic_favorite_filled)
+            }
+
+
             val imagePath = "$POSTER_PATH${it.profilePath}"
 
             ivActorPoster?.clipToOutline = true
             ivActorPoster?.load(imagePath) {
-                memoryCachePolicy(CachePolicy.ENABLED)
                 crossfade(true)
                 placeholder(R.drawable.ic_baseline_person_24)
                 error(R.drawable.ic_baseline_person_24)
             }
 
             ivActorBackdrop?.load(imagePath) {
-                memoryCachePolicy(CachePolicy.ENABLED)
                 crossfade(true)
                 transformations(BlurTransformation(requireContext(), 15f))
             }
@@ -115,8 +111,29 @@ class ActorDetailsFragment : BaseFragment() {
         detailsViewModel.error.observe(viewLifecycleOwner) {
             if (it != null) {
                 onError(it)
+                hideViews()
             }
         }
+
+        favoriteBtn?.setOnClickListener {
+            detailsViewModel.loadFavoriteActorsIds()
+            if (detailsViewModel.isActorFavorite(currentActorId!!)) {
+                detailsViewModel.deleteActorFromFavorites(currentActorId!!)
+                favoriteBtn?.load(R.drawable.ic_favorite_icon)
+            } else {
+                detailsViewModel.insertActorToFavorites(currentActorId!!)
+                favoriteBtn?.load(R.drawable.ic_favorite_filled)
+            }
+        }
+
+
+
+    }
+
+    private fun hideViews() {
+        favoriteBtn?.isVisible = false
+        tabLayout?.isVisible = false
+        viewPager?.isVisible = false
     }
 
 

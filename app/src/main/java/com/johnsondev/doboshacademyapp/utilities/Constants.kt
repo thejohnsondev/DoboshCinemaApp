@@ -37,6 +37,7 @@ object Constants {
     const val SEARCH_RESULT_SPEC_TYPE = "input_data_spec_type"
     const val MOVIES_SEARCH_RESULT_SPEC_TYPE = "movies_search_result_spec_type"
     const val ACTORS_SEARCH_RESULT_SPEC_TYPE = "actors_search_result_spec_type"
+    const val FAVORITES_MOVIES_SPEC_TYPE = "favorites_movie_spec_type"
     const val POP_ACTORS_SPEC_TYPE = "pop_actors_spec_type"
 
     const val ITEM_TYPE_MINI = 0
@@ -61,8 +62,11 @@ object Constants {
     const val RECOMMENDATIONS_LIST_TYPE: String = "recommendation_list_type"
     const val SIMILAR_LIST_TYPE: String = "similar_list_type"
 
-
     const val MOVIES_DB_NAME = "moviesdatabase.db"
+    const val FAVORITES_DB_NAME = "favoritesdatabase.db"
+    const val TABLE_FAVORITES = "favorites"
+    const val FAVORITE_MOVIE_ENTITY_TYPE = "favorite_movie_entity_type"
+    const val FAVORITE_ACTOR_ENTITY_TYPE = "favorite_actor_entity_type"
 
     const val LANG_ENG = "en-US"
     const val LANG_RU = "ru-RU"
@@ -70,6 +74,7 @@ object Constants {
     val MOVIE_TAB_TITLES =
         arrayListOf("Information", "Actors", "Recommendations", "Similar", "Trailers")
     val ACTOR_TAB_TITLES = arrayListOf("About", "Movies")
+    val FAVORITES_TAB_TITLES = arrayListOf("Movies","Actors")
 
     val CURRENT_YEAR = Calendar.getInstance()[Calendar.YEAR]
 

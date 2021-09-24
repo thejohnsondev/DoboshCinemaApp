@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.data.models
+package com.johnsondev.doboshacademyapp.data.models.base
 
 import com.johnsondev.doboshacademyapp.data.network.dto.ProductionCompanyDto
 import com.johnsondev.doboshacademyapp.data.network.dto.ProductionCountryDto

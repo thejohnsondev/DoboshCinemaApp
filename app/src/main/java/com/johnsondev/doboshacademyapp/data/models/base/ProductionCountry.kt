@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.data.models
+package com.johnsondev.doboshacademyapp.data.models.base
 
 data class ProductionCountry(
     val countryCode: String?,

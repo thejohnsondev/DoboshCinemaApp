@@ -1,19 +1,32 @@
 package com.johnsondev.doboshacademyapp.data.repositories
 
 import androidx.lifecycle.MutableLiveData
-import com.johnsondev.doboshacademyapp.data.models.*
+import com.johnsondev.doboshacademyapp.App
+import com.johnsondev.doboshacademyapp.data.db.entities.FavoriteEntity
+import com.johnsondev.doboshacademyapp.data.models.SearchResultLists
+import com.johnsondev.doboshacademyapp.data.models.base.Actor
+import com.johnsondev.doboshacademyapp.data.models.base.Genre
+import com.johnsondev.doboshacademyapp.data.models.base.Movie
+import com.johnsondev.doboshacademyapp.data.models.base.MovieDetails
 import com.johnsondev.doboshacademyapp.data.network.NetworkService
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieImageDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
+import com.johnsondev.doboshacademyapp.data.network.exception.ConnectionErrorException
+import com.johnsondev.doboshacademyapp.data.network.exception.UnexpectedErrorException
 import com.johnsondev.doboshacademyapp.utilities.Constants.BACKDROP_KEY
+import com.johnsondev.doboshacademyapp.utilities.Constants.FAVORITE_ACTOR_ENTITY_TYPE
+import com.johnsondev.doboshacademyapp.utilities.Constants.FAVORITE_MOVIE_ENTITY_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.LANG_RU
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_KEY
 import com.johnsondev.doboshacademyapp.utilities.DtoMapper
-import com.johnsondev.doboshacademyapp.utilities.handleExceptions
+import retrofit2.HttpException
+import java.io.IOException
+import java.util.concurrent.TimeoutException
 
 object MoviesRepository {
 
     private val movieApi = NetworkService.MOVIE_API
+    private val favoritesDatabase = App.getInstance().getFavoritesDatabase()
 
     private var popularMoviesList: List<Movie> = listOf()
     private var topRatedMoviesList: List<Movie> = listOf()
@@ -21,8 +34,9 @@ object MoviesRepository {
     private var genresList = MutableLiveData<List<Genre>>()
     private var moviesByGenre = MutableLiveData<List<Movie>>()
     private var popularActorsList = MutableLiveData<List<Actor>>()
-    private var actorImgAverageColorBody = MutableLiveData<Int>()
-    private var actorImgAverageColorText = MutableLiveData<Int>()
+
+    private var favoriteMovies = MutableLiveData<List<Movie>>()
+    private var favoriteMoviesIds = MutableLiveData<List<Int>>()
 
 
     private var currentMovieDetails = MutableLiveData<MovieDetails>()
@@ -30,6 +44,61 @@ object MoviesRepository {
     private var similarMovies = MutableLiveData<List<Movie>>()
     private var movieVideos = MutableLiveData<List<MovieVideoDto>>()
     private var movieImages = MutableLiveData<Map<String, List<MovieImageDto>>>()
+
+    suspend fun getFavoriteMoviesIds(): MutableLiveData<List<Int>> {
+        try {
+            favoriteMoviesIds.value = favoritesDatabase.favoritesDao()
+                .getFavoritesEntityIdByType(FAVORITE_MOVIE_ENTITY_TYPE)
+        } catch (e: Exception) {
+            handleExceptions(e)
+        }
+        return favoriteMoviesIds
+    }
+
+
+    suspend fun loadFavoritesMoviesFromDb() {
+        try {
+            favoriteMovies.value = favoritesDatabase.favoritesDao()
+                .getFavoritesEntityIdByType(FAVORITE_MOVIE_ENTITY_TYPE).map { id ->
+                    DtoMapper.convertMovieFromDto(movieApi.getMovieById(id))
+                }
+
+        } catch (e: Exception) {
+            handleExceptions(e)
+        }
+    }
+
+
+
+    suspend fun insertMovieToFavorites(movieId: Int) {
+
+        try {
+            favoritesDatabase.favoritesDao().insertFavoriteEntity(
+                FavoriteEntity(
+                    entityType = FAVORITE_MOVIE_ENTITY_TYPE,
+                    entityId = movieId
+                )
+            )
+        } catch (e: Exception) {
+            handleExceptions(e)
+        }
+    }
+
+
+
+    suspend fun deleteMovieFromFavorites(movieId: Int) {
+        try {
+            favoritesDatabase.favoritesDao()
+                .deleteFavoriteEntity(FAVORITE_MOVIE_ENTITY_TYPE, movieId)
+        } catch (e: Exception) {
+            handleExceptions(e)
+        }
+
+    }
+
+
+
+    fun getFavoritesMovies(): MutableLiveData<List<Movie>> = favoriteMovies
 
 
     suspend fun search(query: String): SearchResultLists {
@@ -154,13 +223,6 @@ object MoviesRepository {
 
     fun getSimilarMovies(): MutableLiveData<List<Movie>> = similarMovies
 
-    fun setAverageColor(body: Int, text: Int) {
-        actorImgAverageColorBody.postValue(body)
-        actorImgAverageColorText.postValue(text)
-    }
-
-    fun getAverageColorBody(): MutableLiveData<Int> = actorImgAverageColorBody
-    fun getAverageColorText(): MutableLiveData<Int> = actorImgAverageColorText
 
     suspend fun loadPopularMoviesFromNet() {
         try {
@@ -212,6 +274,13 @@ object MoviesRepository {
 
     fun getUpcomingMovies(): List<Movie> {
         return upcomingMoviesList
+    }
+
+    private fun handleExceptions(e: Exception) {
+        throw when (e) {
+            is IOException, is HttpException, is TimeoutException -> ConnectionErrorException()
+            else -> UnexpectedErrorException()
+        }
     }
 
 

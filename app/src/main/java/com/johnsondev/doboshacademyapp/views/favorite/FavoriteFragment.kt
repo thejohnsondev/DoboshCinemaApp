@@ -1,22 +1,69 @@
 package com.johnsondev.doboshacademyapp.views.favorite
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.johnsondev.doboshacademyapp.R
+import com.johnsondev.doboshacademyapp.adapters.*
+import com.johnsondev.doboshacademyapp.data.models.base.Actor
+import com.johnsondev.doboshacademyapp.data.models.base.Movie
+import com.johnsondev.doboshacademyapp.utilities.Constants
+import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_MINI
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
+import com.johnsondev.doboshacademyapp.utilities.isInternetConnectionAvailable
+import com.johnsondev.doboshacademyapp.utilities.observeOnce
+import com.johnsondev.doboshacademyapp.utilities.states.Loading
+import com.johnsondev.doboshacademyapp.viewmodel.FavoritesViewModel
 
 
-class FavoriteFragment : Fragment() {
+class FavoriteFragment : BaseFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite, container, false)
+    private val favoritesViewModel by viewModels<FavoritesViewModel>()
+    private var viewPager: ViewPager2? = null
+    private var tabLayout: TabLayout? = null
+
+
+    override fun initViews(view: View) {
+        viewPager = view.findViewById(R.id.favorites_view_pager)
+        tabLayout = view.findViewById(R.id.favorites_tab_layout)
+
+        viewPager?.adapter = FavoritesPagerAdapter(this)
+        viewPager?.offscreenPageLimit = 1
+
+        TabLayoutMediator(tabLayout!!, viewPager!!) { tab, pos ->
+            tab.text = Constants.FAVORITES_TAB_TITLES[pos]
+            viewPager?.setCurrentItem(tab.position, true)
+        }.attach()
     }
 
+    override fun layoutId(): Int = R.layout.fragment_favorite
+
+    override fun loadData() {
+        if (isInternetConnectionAvailable(activity?.application!!)) {
+            favoritesViewModel.loadFavoriteMoviesFromDb()
+            favoritesViewModel.loadFavoriteActorsFromDb()
+        }
+    }
+
+    override fun bindViews(view: View) {
+
+    }
+
+    override fun initListenersAndObservers(view: View) {
+
+        favoritesViewModel.error.observeOnce(viewLifecycleOwner, {
+            if(it != null){
+                onError(it)
+            }
+        })
+
+    }
 
 }

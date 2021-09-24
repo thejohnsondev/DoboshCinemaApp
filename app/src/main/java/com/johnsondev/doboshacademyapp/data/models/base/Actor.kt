@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.data.models
+package com.johnsondev.doboshacademyapp.data.models.base
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

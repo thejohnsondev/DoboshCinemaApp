@@ -1,7 +1,8 @@
-package com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments
+package com.johnsondev.doboshacademyapp.views.favorite.pagerfragments
 
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
+import android.widget.ProgressBar
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -10,25 +11,26 @@ import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
-import com.johnsondev.doboshacademyapp.utilities.Constants.RECOMMENDATIONS_LIST_TYPE
-import com.johnsondev.doboshacademyapp.utilities.Constants.SIMILAR_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
-import com.johnsondev.doboshacademyapp.viewmodel.MovieDetailsViewModel
-import com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragmentDirections
+import com.johnsondev.doboshacademyapp.utilities.states.Loading
+import com.johnsondev.doboshacademyapp.viewmodel.FavoritesViewModel
+import com.johnsondev.doboshacademyapp.views.favorite.FavoriteFragmentDirections
 
 
-class MovieDetailsRecommendFragment(private val listType: String) : BaseFragment() {
+class FavoriteMoviesFragment : BaseFragment() {
 
-    private lateinit var detailsViewModel: MovieDetailsViewModel
+    private val favoritesViewModel by viewModels<FavoritesViewModel>()
     private lateinit var rvMoviesList: RecyclerView
     private lateinit var moviesListAdapter: MoviesAdapter
+    private lateinit var loadingIndicator: ProgressBar
 
 
     override fun initViews(view: View) {
-        detailsViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
 
         rvMoviesList = view.findViewById(R.id.rv_details_movies_list)
+        loadingIndicator = view.findViewById(R.id.movies_loading_indicator)
+        loadingIndicator.visibility = View.VISIBLE
         moviesListAdapter = MoviesAdapter(requireContext(), onMovieClickListener, MOVIE_ITEM_LARGE)
         rvMoviesList.adapter = moviesListAdapter
         rvMoviesList.layoutManager =
@@ -43,26 +45,27 @@ class MovieDetailsRecommendFragment(private val listType: String) : BaseFragment
     override fun bindViews(view: View) {}
 
     override fun initListenersAndObservers(view: View) {
-        when (listType) {
-            RECOMMENDATIONS_LIST_TYPE -> {
-                detailsViewModel.getRecommendations().observeOnce(this, {
-                    moviesListAdapter.setMovies(it)
-                })
-            }
-            SIMILAR_LIST_TYPE -> {
-                detailsViewModel.getSimilarMovies().observeOnce(this, {
-                    moviesListAdapter.setMovies(it)
-                })
-            }
-        }
+        favoritesViewModel.getFavoriteMovies().observeOnce(viewLifecycleOwner, {
+            loadingIndicator.visibility = View.GONE
+            rvMoviesList.visibility = View.VISIBLE
+            moviesListAdapter.setMovies(it)
+        })
 
+        favoritesViewModel.moviesLoadingState.observeOnce(viewLifecycleOwner, {
+            when (it) {
+                is Loading -> {
+                    loadingIndicator.visibility = View.VISIBLE
+                    rvMoviesList.visibility = View.GONE
+                }
+            }
+        })
 
     }
 
     private val onMovieClickListener = object : OnMovieItemClickListener {
         override fun onClick(movie: Movie) {
             findNavController().navigate(
-                MoviesDetailsFragmentDirections.actionMoviesDetailsFragmentToDetailsActivity2(movie.id)
+                FavoriteFragmentDirections.actionFavoriteFragmentToDetailsActivity(movie.id)
             )
         }
 

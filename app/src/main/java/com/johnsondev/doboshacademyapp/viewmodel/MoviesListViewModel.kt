@@ -4,9 +4,9 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.Genre
-import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.models.base.Actor
+import com.johnsondev.doboshacademyapp.data.models.base.Genre
+import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.base.BaseViewModel
@@ -16,10 +16,8 @@ class MoviesListViewModel(application: Application) : BaseViewModel(application)
 
     private var popularMovies = MutableLiveData<List<Movie>>()
     val popularMoviesList: LiveData<List<Movie>> get() = popularMovies
-
     private var topRatedMovies = MutableLiveData<List<Movie>>()
     val topRatedMoviesList: LiveData<List<Movie>> get() = topRatedMovies
-
     private var upcomingMovies = MutableLiveData<List<Movie>>()
     val upcomingMoviesList: LiveData<List<Movie>> get() = upcomingMovies
 
@@ -28,6 +26,8 @@ class MoviesListViewModel(application: Application) : BaseViewModel(application)
     private var _popularActors = MutableLiveData<List<Actor>>()
 
     private var checkInternetConnection: InternetConnectionManager? = null
+
+
 
     fun loadGenresList() {
         viewModelScope.launch(exceptionHandler()) {
@@ -107,13 +107,15 @@ class MoviesListViewModel(application: Application) : BaseViewModel(application)
 
     suspend fun loadMoviesFromNet() {
         viewModelScope.launch(exceptionHandler()) {
-            MoviesRepository.loadPopularMoviesFromNet()
-            MoviesRepository.loadTopRatedMoviesFromNet()
-            MoviesRepository.loadUpcomingMoviesFromNet()
-            popularMovies.postValue(MoviesRepository.getPopularMovies())
-            topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
-            upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
-            mutableError.value = null
+            if(popularMovies.value.isNullOrEmpty()){
+                MoviesRepository.loadPopularMoviesFromNet()
+                MoviesRepository.loadTopRatedMoviesFromNet()
+                MoviesRepository.loadUpcomingMoviesFromNet()
+                popularMovies.postValue(MoviesRepository.getPopularMovies())
+                topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
+                upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
+                mutableError.value = null
+            }
         }.join()
     }
 

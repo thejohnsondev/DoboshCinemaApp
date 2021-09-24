@@ -17,8 +17,8 @@ import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
-import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.Movie
+import com.johnsondev.doboshacademyapp.data.models.base.Actor
+import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTORS_SEARCH_RESULT_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIES_SEARCH_RESULT_SPEC_TYPE
@@ -114,11 +114,11 @@ class SearchFragment : BaseFragment() {
         searchViewModel.searchState.observeOnce(viewLifecycleOwner, { handleSearchState(it) })
 
         moviesResultSpecBtn.setOnClickListener {
-            if (searchViewModel.searchResultMap.value is ValidResult) {
+            if (searchViewModel.searchResultMap.value is ValidSearchResult) {
                 val bundle = Bundle()
                 bundle.putParcelableArrayList(
                     MOVIES_SEARCH_RESULT_SPEC_TYPE,
-                    (searchViewModel.searchResultMap.value as ValidResult).resultLists.movies as ArrayList<out Parcelable>
+                    (searchViewModel.searchResultMap.value as ValidSearchResult).resultLists.movies as ArrayList<out Parcelable>
                 )
                 bundle.putString(SPECIFIC_LIST_TYPE, SEARCH_RESULT_SPEC_TYPE)
                 findNavController().navigate(
@@ -129,11 +129,11 @@ class SearchFragment : BaseFragment() {
         }
 
         actorResultSpecBtn.setOnClickListener {
-            if (searchViewModel.searchResultMap.value is ValidResult) {
+            if (searchViewModel.searchResultMap.value is ValidSearchResult) {
                 val bundle = Bundle()
                 bundle.putParcelableArrayList(
                     ACTORS_SEARCH_RESULT_SPEC_TYPE,
-                    (searchViewModel.searchResultMap.value as ValidResult).resultLists.actors as ArrayList<out Parcelable>
+                    (searchViewModel.searchResultMap.value as ValidSearchResult).resultLists.actors as ArrayList<out Parcelable>
                 )
                 bundle.putString(SPECIFIC_LIST_TYPE, SEARCH_RESULT_SPEC_TYPE)
                 findNavController().navigate(
@@ -148,7 +148,7 @@ class SearchFragment : BaseFragment() {
 
     private fun handleSearchResult(result: SearchResult) {
         when (result) {
-            is ValidResult -> {
+            is ValidSearchResult -> {
                 if (result.resultLists.movies.isEmpty()) {
                     findSomethingPlaceholder.visibility = View.GONE
                     nothingFoundPlaceholder.visibility = View.GONE
@@ -176,14 +176,14 @@ class SearchFragment : BaseFragment() {
                     tvActorCount.text = result.resultLists.actors.size.toString()
                 }
             }
-            is ErrorResult -> {
+            is ErrorSearchResult -> {
                 nothingFoundPlaceholder.visibility = View.VISIBLE
                 findSomethingPlaceholder.visibility = View.GONE
                 moviesAdapter.setMovies(emptyList())
                 actorsAdapter.setActors(emptyList())
                 moviesResultSpecBtn.visibility = View.GONE
             }
-            is EmptyResult -> {
+            is EmptySearchResult -> {
                 nothingFoundPlaceholder.visibility = View.VISIBLE
                 findSomethingPlaceholder.visibility = View.GONE
                 moviesResultSpecBtn.visibility = View.GONE
@@ -197,13 +197,13 @@ class SearchFragment : BaseFragment() {
                 moviesResultSpecBtn.visibility = View.GONE
                 actorResultSpecBtn.visibility = View.GONE
             }
-            is TerminalError -> {
+            is TerminalSearchError -> {
                 showMessage(getString(R.string.error_on_loading))
             }
         }
     }
 
-    private fun handleSearchState(state: SearchState) {
+    private fun handleSearchState(state: LoadingState) {
         when (state) {
             is Loading -> {
                 searchLoadingIndicator.visibility = View.VISIBLE

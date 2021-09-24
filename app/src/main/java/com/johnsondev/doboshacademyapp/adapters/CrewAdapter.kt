@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.johnsondev.doboshacademyapp.R
-import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.CrewMember
+import com.johnsondev.doboshacademyapp.data.models.base.CrewMember
 
 class CrewAdapter(context: Context) : RecyclerView.Adapter<CrewMemberViewHolder>() {
 

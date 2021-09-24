@@ -2,6 +2,7 @@ package com.johnsondev.doboshacademyapp.utilities
 
 import android.animation.Animator
 import android.animation.ValueAnimator
+import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import android.text.Editable
@@ -95,34 +96,20 @@ fun calculateSpanCount(context: Context): Int {
         Constants.VERTICAL_SPAN_COUNT else Constants.HORIZONTAL_SPAN_COUNT
 }
 
-fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
-    this.addTextChangedListener(object : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            // do nothing
-        }
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            // do nothing
-        }
-
-        override fun afterTextChanged(editable: Editable?) {
-            afterTextChanged.invoke(editable.toString())
-        }
-    })
-}
-
-fun handleExceptions(e: Exception) {
-    throw when (e) {
-        is IOException, is HttpException, is TimeoutException -> ConnectionErrorException()
-        else -> e
-    }
-}
 
 fun calculateAge(dateOfBirth: String): String {
     val birthYear = dateOfBirth.substring(0, 4).toInt()
     val currentYear = Calendar.getInstance()[Calendar.YEAR]
 
     return (currentYear - birthYear).toString()
+}
+
+fun isInternetConnectionAvailable(app: Application): Boolean {
+    val checkInternetConnection = InternetConnectionManager(app)
+    if (checkInternetConnection.isNetworkAvailable()) {
+        return true
+    }
+    return false
 }
 
 

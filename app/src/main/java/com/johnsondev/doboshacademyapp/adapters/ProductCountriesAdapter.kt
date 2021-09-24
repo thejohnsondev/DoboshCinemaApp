@@ -8,9 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.johnsondev.doboshacademyapp.R
-import com.johnsondev.doboshacademyapp.data.models.Actor
-import com.johnsondev.doboshacademyapp.data.models.ProductionCountry
-import com.johnsondev.doboshacademyapp.data.network.dto.ProductionCountryDto
+import com.johnsondev.doboshacademyapp.data.models.base.ProductionCountry
 
 class ProductCountriesAdapter(context: Context) :
     RecyclerView.Adapter<ProductCountriesViewHolder>() {

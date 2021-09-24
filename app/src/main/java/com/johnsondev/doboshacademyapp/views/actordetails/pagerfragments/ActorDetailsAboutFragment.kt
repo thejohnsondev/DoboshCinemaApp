@@ -9,7 +9,7 @@ import com.johnsondev.doboshacademyapp.adapters.ActorImagesAdapter
 import com.johnsondev.doboshacademyapp.adapters.NamesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnGenreClickListener
 import com.johnsondev.doboshacademyapp.adapters.OnImageClickListener
-import com.johnsondev.doboshacademyapp.data.models.Genre
+import com.johnsondev.doboshacademyapp.data.models.base.Genre
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
 import com.johnsondev.doboshacademyapp.utilities.Constants.CURRENT_YEAR
 import com.johnsondev.doboshacademyapp.utilities.animateView
@@ -102,11 +102,6 @@ class ActorDetailsAboutFragment : BaseFragment() {
         }
     }
 
-    private val emptyClickListener = object : OnGenreClickListener {
-        override fun onClick(genre: Genre) {
-            //do nothing
-        }
-    }
 
     private val imageClickListener = object : OnImageClickListener {
         override fun onClick(actorImage: ActorImageProfileDto) {
