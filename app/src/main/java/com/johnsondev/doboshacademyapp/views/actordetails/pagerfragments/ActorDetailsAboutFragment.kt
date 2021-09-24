@@ -102,11 +102,6 @@ class ActorDetailsAboutFragment : BaseFragment() {
         }
     }
 
-    private val emptyClickListener = object : OnGenreClickListener {
-        override fun onClick(genre: Genre) {
-            //do nothing
-        }
-    }
 
     private val imageClickListener = object : OnImageClickListener {
         override fun onClick(actorImage: ActorImageProfileDto) {

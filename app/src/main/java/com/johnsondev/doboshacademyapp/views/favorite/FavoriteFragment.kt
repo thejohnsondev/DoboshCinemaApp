@@ -64,55 +64,6 @@ class FavoriteFragment : BaseFragment() {
             }
         })
 
-
-//        favoritesViewModel.moviesLoadingState.observeOnce(this, {
-//            when (it) {
-//                is Loading -> {
-//                    favMoviesLoadingIndicator?.visibility = View.VISIBLE
-//                    rvFavoriteMovies?.visibility = View.GONE
-//                }
-//            }
-//        })
-//
-//        favoritesViewModel.actorsLoadingState.observeOnce(this, {
-//            when (it) {
-//                is Loading -> {
-//                    favActorsLoadingIndicator?.visibility = View.VISIBLE
-//                    rvFavoriteActors?.visibility = View.GONE
-//                }
-//            }
-//        })
-//
-//        favoritesViewModel.error.observe(viewLifecycleOwner) {
-//            if (it != null) {
-//                onError(it)
-//                favActorsLoadingIndicator?.isVisible = false
-//                favMoviesLoadingIndicator?.isVisible = false
-//                favMoviesSpecBtn?.isVisible = false
-//                favActorsSpecBtn?.isVisible = false
-//            }
-//        }
-
-
     }
-
-
-    private val onMovieClickListener = object : OnMovieItemClickListener {
-        override fun onClick(movie: Movie) {
-            findNavController().navigate(
-                FavoriteFragmentDirections.actionFavoriteFragmentToDetailsActivity(movie.id)
-            )
-        }
-    }
-
-    private val onActorClickListener = object : OnActorItemClickListener {
-        override fun onClick(actor: Actor) {
-            findNavController().navigate(
-                FavoriteFragmentDirections.actionFavoriteFragmentToActorDetailsActivity(actor.id)
-            )
-        }
-
-    }
-
 
 }

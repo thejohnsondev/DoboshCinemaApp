@@ -28,7 +28,6 @@ import kotlinx.coroutines.Job
 class ActorDetailsFragment : BaseFragment() {
 
     private lateinit var detailsViewModel: ActorDetailsViewModel
-    private val scope = CoroutineScope(Dispatchers.IO + Job())
     private var currentActorId: Int? = null
 
     private var ivActorPoster: ImageView? = null
@@ -94,14 +93,12 @@ class ActorDetailsFragment : BaseFragment() {
 
             ivActorPoster?.clipToOutline = true
             ivActorPoster?.load(imagePath) {
-                memoryCachePolicy(CachePolicy.ENABLED)
                 crossfade(true)
                 placeholder(R.drawable.ic_baseline_person_24)
                 error(R.drawable.ic_baseline_person_24)
             }
 
             ivActorBackdrop?.load(imagePath) {
-                memoryCachePolicy(CachePolicy.ENABLED)
                 crossfade(true)
                 transformations(BlurTransformation(requireContext(), 15f))
             }

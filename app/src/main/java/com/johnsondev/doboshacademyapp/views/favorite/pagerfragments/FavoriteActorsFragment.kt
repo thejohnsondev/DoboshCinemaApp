@@ -42,13 +42,9 @@ class FavoriteActorsFragment : BaseFragment() {
 
     override fun layoutId(): Int = R.layout.fragment_movie_details_actors
 
-    override fun loadData() {
+    override fun loadData() {}
 
-    }
-
-    override fun bindViews(view: View) {
-
-    }
+    override fun bindViews(view: View) {}
 
     override fun initListenersAndObservers(view: View) {
 
