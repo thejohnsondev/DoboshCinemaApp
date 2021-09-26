@@ -17,7 +17,7 @@
     <string name="top_rated">Top rated</string>
     <string name="upcoming">Upcoming</string>
     <string name="popular">Popular</string>
-    <string name="new_movie">New movie in Database</string>
+    <string name="new_movie">Upcoming movie</string>
     <string name="channel_name">New Movies</string>
     <string name="movie_with_highest_rating">Movie with highest rating</string>
     <string name="base_deep_link">https://doboshacademyapp.johnsondev.com/</string>

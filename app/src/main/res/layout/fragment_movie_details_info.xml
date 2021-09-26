@@ -5,8 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/main_color"
-    tools:context=".views.moviedetails.pagerfragments.MovieDetailsInfoFragment">
+    tools:context=".ui.moviedetails.pagerfragments.MovieDetailsInfoFragment">
 
+    <ProgressBar
+        android:id="@+id/movie_info_loading_indicator"
+        android:layout_width="@dimen/dp_48"
+        android:layout_height="@dimen/dp_48"
+        android:indeterminate="true"
+        android:visibility="visible"
+        android:layout_marginTop="@dimen/dp_48"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/story_line_layout"
@@ -14,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_16"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -77,6 +88,8 @@
             app:layout_constraintTop_toBottomOf="@id/film_crew_text"
             app:spanCount="3"
             tools:listitem="@layout/crew_member_rv_item" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

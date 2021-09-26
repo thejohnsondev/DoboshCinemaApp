@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_color"
-    tools:context=".views.moviedetails.pagerfragments.MovieDetailsActorsFragment">
+    tools:context=".ui.moviedetails.pagerfragments.MovieDetailsActorsFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -20,12 +20,12 @@
 
 
     <ProgressBar
-        android:id="@+id/actors_loading_indicator"
+        android:id="@+id/movie_actors_loading_indicator"
         android:layout_width="@dimen/dp_48"
         android:layout_height="@dimen/dp_48"
         android:indeterminate="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible"
+        android:layout_marginTop="@dimen/dp_48"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
