@@ -1,7 +1,6 @@
 package com.johnsondev.doboshacademyapp.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,9 +24,7 @@ class ImagesAdapter(
     private var imagesList: List<MovieImageDto> = listOf()
 
     override fun getItemViewType(position: Int): Int {
-
         return if (listType == ITEM_TYPE_POSTER) ITEM_TYPE_POSTER else ITEM_TYPE_BACKDROP
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -90,6 +87,5 @@ class BackdropViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
     }
-
 
 }

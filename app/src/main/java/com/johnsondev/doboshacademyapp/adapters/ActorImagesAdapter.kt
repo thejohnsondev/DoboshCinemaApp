@@ -24,14 +24,12 @@ class ActorImagesAdapter(
         return ActorImageViewHolder(itemView)
     }
 
-
     override fun onBindViewHolder(holder: ActorImageViewHolder, position: Int) {
         holder.bind(images[position])
         holder.itemView.setOnClickListener {
             clickListener.onClick(images[position])
         }
     }
-
 
     override fun getItemCount(): Int = images.size
 

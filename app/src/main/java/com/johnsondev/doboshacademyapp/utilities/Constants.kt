@@ -20,9 +20,6 @@ object Constants {
     const val HORIZONTAL_SPAN_COUNT = 4
     const val VERTICAL_SPAN_COUNT = 5
 
-    const val GENRE_ITEM_TYPE = 6
-    const val NAMES_ITEM_TYPE = 7
-
     const val CONNECTION_ERROR_EXTRA = "connection_error_extra"
     const val CONNECTION_ERROR_ARG = "connection_error_arg"
 
@@ -37,7 +34,6 @@ object Constants {
     const val SEARCH_RESULT_SPEC_TYPE = "input_data_spec_type"
     const val MOVIES_SEARCH_RESULT_SPEC_TYPE = "movies_search_result_spec_type"
     const val ACTORS_SEARCH_RESULT_SPEC_TYPE = "actors_search_result_spec_type"
-    const val FAVORITES_MOVIES_SPEC_TYPE = "favorites_movie_spec_type"
     const val POP_ACTORS_SPEC_TYPE = "pop_actors_spec_type"
 
     const val ITEM_TYPE_MINI = 0
@@ -52,7 +48,6 @@ object Constants {
     const val ITEM_TYPE_BACKDROP = 3
 
     const val ACTOR_KEY = "actor_key"
-    const val TRAILERS_KEY = "trailers_key"
     const val MOVIE_KEY = "movie_key"
     const val GENRE_KEY = "genre_key"
 
@@ -62,7 +57,6 @@ object Constants {
     const val RECOMMENDATIONS_LIST_TYPE: String = "recommendation_list_type"
     const val SIMILAR_LIST_TYPE: String = "similar_list_type"
 
-    const val MOVIES_DB_NAME = "moviesdatabase.db"
     const val FAVORITES_DB_NAME = "favoritesdatabase.db"
     const val TABLE_FAVORITES = "favorites"
     const val FAVORITE_MOVIE_ENTITY_TYPE = "favorite_movie_entity_type"
@@ -77,5 +71,7 @@ object Constants {
     val FAVORITES_TAB_TITLES = arrayListOf("Movies","Actors")
 
     val CURRENT_YEAR = Calendar.getInstance()[Calendar.YEAR]
+    const val EMPTY_STRING = ""
+    const val ANIM_PROPERTY_MAX_LINES = "maxLines"
 
 }

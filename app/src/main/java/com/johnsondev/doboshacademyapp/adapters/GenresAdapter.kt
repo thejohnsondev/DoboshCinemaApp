@@ -22,7 +22,6 @@ class GenresAdapter(
         return PopGenresViewHolder(itemView)
     }
 
-
     override fun onBindViewHolder(holder: PopGenresViewHolder, position: Int) {
         holder.bind(genresList[position])
         holder.itemView.setOnClickListener {
@@ -32,7 +31,7 @@ class GenresAdapter(
 
     override fun getItemCount(): Int = genresList.size
 
-    fun setGenresList(genres: List<Genre>){
+    fun setGenresList(genres: List<Genre>) {
         genresList = genres
         notifyDataSetChanged()
     }

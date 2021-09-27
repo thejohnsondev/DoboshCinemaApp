@@ -1,49 +1,41 @@
 package com.johnsondev.doboshacademyapp.ui.actordetails.pagerfragments
 
 import android.view.View
-import android.widget.ProgressBar
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MoviesAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.base.Movie
-import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
-import com.johnsondev.doboshacademyapp.utilities.observeOnce
-import com.johnsondev.doboshacademyapp.ui.actordetails.ActorDetailsViewModel
+import com.johnsondev.doboshacademyapp.databinding.FragmentActorDetailsMoviesBinding
 import com.johnsondev.doboshacademyapp.ui.actordetails.ActorDetailsFragmentDirections
+import com.johnsondev.doboshacademyapp.ui.actordetails.ActorDetailsViewModel
+import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.observeOnce
 
-
-class ActorDetailsMoviesFragment : BaseFragment() {
+class ActorDetailsMoviesFragment : BaseFragmentBinding(R.layout.fragment_actor_details_movies) {
 
     private val viewModel by viewModels<ActorDetailsViewModel>()
-    private lateinit var rvMoviesList: RecyclerView
+    private val binding by viewBinding(FragmentActorDetailsMoviesBinding::bind)
     private lateinit var moviesListAdapter: MoviesAdapter
-    private lateinit var loadingIndicator: ProgressBar
 
-
-    override fun initViews(view: View) {
-        loadingIndicator = view.findViewById(R.id.movies_list_loading_indicator)
-        rvMoviesList = view.findViewById(R.id.rv_details_movies_list)
+    override fun initFields() {
         moviesListAdapter = MoviesAdapter(requireContext(), onMovieClickListener, MOVIE_ITEM_LARGE)
-        rvMoviesList.adapter = moviesListAdapter
-        rvMoviesList.layoutManager =
+        binding.rvActorMoviesList.adapter = moviesListAdapter
+        binding.rvActorMoviesList.layoutManager =
             LinearLayoutManager(requireContext())
-
     }
-
-    override fun layoutId(): Int = R.layout.fragment_movie_details_list
 
     override fun loadData() {}
 
-    override fun bindViews(view: View) {}
+    override fun bindViews() {}
 
-    override fun initListenersAndObservers(view: View) {
+    override fun initListenersAndObservers() {
         viewModel.getActorMovieCredits().observeOnce(this, {
-            loadingIndicator.visibility = View.GONE
+            binding.actorMoviesLoadingIndicator.visibility = View.GONE
             moviesListAdapter.setMovies(it)
         })
 
@@ -55,7 +47,5 @@ class ActorDetailsMoviesFragment : BaseFragment() {
                 ActorDetailsFragmentDirections.actionActorDetailsFragmentToDetailsActivity(movie.id)
             )
         }
-
     }
-
 }

@@ -38,7 +38,6 @@ object MoviesRepository {
     private var favoriteMovies = MutableLiveData<List<Movie>>()
     private var favoriteMoviesIds = MutableLiveData<List<Int>>()
 
-
     private var currentMovieDetails = MutableLiveData<MovieDetails>()
     private var movieRecommendations = MutableLiveData<List<Movie>>()
     private var similarMovies = MutableLiveData<List<Movie>>()
@@ -68,8 +67,6 @@ object MoviesRepository {
         }
     }
 
-
-
     suspend fun insertMovieToFavorites(movieId: Int) {
 
         try {
@@ -84,8 +81,6 @@ object MoviesRepository {
         }
     }
 
-
-
     suspend fun deleteMovieFromFavorites(movieId: Int) {
         try {
             favoritesDatabase.favoritesDao()
@@ -96,10 +91,7 @@ object MoviesRepository {
 
     }
 
-
-
     fun getFavoritesMovies(): MutableLiveData<List<Movie>> = favoriteMovies
-
 
     suspend fun search(query: String): SearchResultLists {
         var moviesSearchResult: List<Movie> = listOf()

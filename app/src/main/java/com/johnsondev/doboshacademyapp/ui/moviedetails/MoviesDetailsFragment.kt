@@ -3,7 +3,6 @@ package com.johnsondev.doboshacademyapp.ui.moviedetails
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -28,7 +27,6 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_TAB_TITLES
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
-import com.johnsondev.doboshacademyapp.utilities.states.Loading
 import com.johnsondev.doboshacademyapp.utilities.timeToHFromMin
 import java.util.*
 
@@ -112,7 +110,7 @@ class MoviesDetailsFragment : BaseFragment() {
 
     }
 
-    override fun layoutId(): Int = R.layout.fragment_movies_details_redesign
+    override fun layoutId(): Int = R.layout.fragment_movies_details
 
     override fun loadData() {
         date = Calendar.getInstance()

@@ -13,9 +13,7 @@ class MovieDetailsPagerAdapter(
     fragment: Fragment
 ) : FragmentStateAdapter(fragment) {
 
-
     override fun getItemCount(): Int = 5
-
     override fun createFragment(position: Int): Fragment {
 
         return when (position) {
