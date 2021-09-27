@@ -2,67 +2,63 @@ package com.johnsondev.doboshacademyapp.ui.favorite.pagerfragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ProgressBar
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorsAdapter
 import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.base.Actor
+import com.johnsondev.doboshacademyapp.databinding.FragmentFavoriteActorsBinding
+import com.johnsondev.doboshacademyapp.ui.favorite.FavoriteFragmentDirections
+import com.johnsondev.doboshacademyapp.ui.favorite.FavoritesViewModel
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_HORIZONTAL
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.states.Loading
-import com.johnsondev.doboshacademyapp.ui.favorite.FavoritesViewModel
-import com.johnsondev.doboshacademyapp.ui.favorite.FavoriteFragmentDirections
 
-class FavoriteActorsFragment : BaseFragment() {
-
+class FavoriteActorsFragment : BaseFragmentBinding(R.layout.fragment_favorite_actors) {
 
     private val favoritesViewModel by viewModels<FavoritesViewModel>()
-    private lateinit var rvActors: RecyclerView
+    private val binding by viewBinding(FragmentFavoriteActorsBinding::bind)
     private lateinit var actorsAdapter: ActorsAdapter
-    private lateinit var loadingIndicator: ProgressBar
 
-    override fun initViews(view: View) {
+    override fun initFields() {
+        with(binding) {
+            favoriteActorsLoadingIndicator.visibility = View.VISIBLE
+            actorsAdapter = ActorsAdapter(
+                requireContext(), actorClickListener,
+                ITEM_TYPE_HORIZONTAL
+            )
+            rvFavoriteActorsList.layoutManager = LinearLayoutManager(requireContext())
+            rvFavoriteActorsList.adapter = actorsAdapter
+        }
 
-        rvActors = view.findViewById(R.id.rv_movie_actors)
-        loadingIndicator = view.findViewById(R.id.movie_actors_loading_indicator)
-        loadingIndicator.visibility = View.VISIBLE
-        actorsAdapter = ActorsAdapter(
-            requireContext(), actorClickListener,
-            ITEM_TYPE_HORIZONTAL
-        )
-        rvActors.layoutManager = LinearLayoutManager(requireContext())
-        rvActors.adapter = actorsAdapter
     }
-
-    override fun layoutId(): Int = R.layout.fragment_movie_details_actors
 
     override fun loadData() {}
 
-    override fun bindViews(view: View) {}
+    override fun bindViews() {}
 
-    override fun initListenersAndObservers(view: View) {
+    override fun initListenersAndObservers() {
+        with(binding) {
+            favoritesViewModel.getFavoriteActors().observeOnce(viewLifecycleOwner, {
+                favoriteActorsLoadingIndicator.visibility = View.GONE
+                rvFavoriteActorsList.visibility = View.VISIBLE
+                actorsAdapter.setActors(it)
+            })
 
-        favoritesViewModel.getFavoriteActors().observeOnce(viewLifecycleOwner, {
-            loadingIndicator.visibility = View.GONE
-            rvActors.visibility = View.VISIBLE
-            actorsAdapter.setActors(it)
-        })
-
-        favoritesViewModel.actorsLoadingState.observeOnce(viewLifecycleOwner, {
-            when (it) {
-                is Loading -> {
-                    rvActors.visibility = View.GONE
-                    loadingIndicator.visibility = View.VISIBLE
+            favoritesViewModel.actorsLoadingState.observeOnce(viewLifecycleOwner, {
+                when (it) {
+                    is Loading -> {
+                        rvFavoriteActorsList.visibility = View.GONE
+                        favoriteActorsLoadingIndicator.visibility = View.VISIBLE
+                    }
                 }
-            }
-        })
-
+            })
+        }
     }
 
     private val actorClickListener = object : OnActorItemClickListener {
