@@ -1,46 +1,34 @@
 package com.johnsondev.doboshacademyapp.ui.moviedetails.pagerfragments
 
 import android.view.View
-import android.widget.ProgressBar
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MovieTrailersAdapter
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
-import com.johnsondev.doboshacademyapp.utilities.observeOnce
+import com.johnsondev.doboshacademyapp.databinding.FragmentMovieDetailsTrailersBinding
 import com.johnsondev.doboshacademyapp.ui.moviedetails.MovieDetailsViewModel
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.observeOnce
 
-
-class MovieDetailsTrailersFragment : BaseFragment() {
+class MovieDetailsTrailersFragment : BaseFragmentBinding(R.layout.fragment_movie_details_trailers) {
 
     private val detailsViewModel by viewModels<MovieDetailsViewModel>()
-
-    private lateinit var rvTrailers: RecyclerView
+    private val binding by viewBinding(FragmentMovieDetailsTrailersBinding::bind)
     private lateinit var adapter: MovieTrailersAdapter
-    private lateinit var loadingIndicator: ProgressBar
 
-    override fun initViews(view: View) {
-        loadingIndicator = view.findViewById(R.id.movie_trailers_loading_indicator)
-        rvTrailers = view.findViewById(R.id.rv_movie_trailers)
+    override fun initFields() {
         adapter = MovieTrailersAdapter(requireContext())
-        rvTrailers.adapter = adapter
+        binding.rvMovieTrailers.adapter = adapter
     }
 
-    override fun layoutId(): Int = R.layout.fragment_movie_trailers
+    override fun loadData() {}
 
-    override fun loadData() {
+    override fun bindViews() {}
 
-    }
-
-    override fun bindViews(view: View) {
-
-    }
-
-    override fun initListenersAndObservers(view: View) {
+    override fun initListenersAndObservers() {
         detailsViewModel.getMovieVideos().observeOnce(this, {
-            loadingIndicator.visibility = View.GONE
+            binding.movieTrailersLoadingIndicator.visibility = View.GONE
             adapter.setTrailers(it)
         })
-
     }
 }

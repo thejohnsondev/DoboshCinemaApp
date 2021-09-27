@@ -30,7 +30,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/iv_backdrop_rv_item"
+                    android:id="@+id/iv_backdrop"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:scaleType="centerCrop"
@@ -46,11 +46,11 @@
                     android:layout_height="0dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/mask"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_backdrop_rv_item"
-                    app:layout_constraintEnd_toEndOf="@+id/iv_backdrop_rv_item"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_backdrop"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_backdrop"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/iv_backdrop_rv_item"
-                    app:layout_constraintTop_toTopOf="@+id/iv_backdrop_rv_item"
+                    app:layout_constraintStart_toStartOf="@+id/iv_backdrop"
+                    app:layout_constraintTop_toTopOf="@+id/iv_backdrop"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <ImageView
@@ -64,12 +64,12 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/iv_poster_rv_item"
+                    android:id="@+id/iv_poster"
                     android:layout_width="106dp"
                     android:layout_height="160dp"
                     android:layout_marginStart="@dimen/dp_24"
                     android:background="@drawable/round_outline_10"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_backdrop_rv_item"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_backdrop"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@color/design_default_color_primary" />
@@ -85,8 +85,8 @@
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/iv_poster_rv_item"
-                    app:layout_constraintTop_toTopOf="@+id/iv_poster_rv_item"
+                    app:layout_constraintStart_toEndOf="@+id/iv_poster"
+                    app:layout_constraintTop_toTopOf="@+id/iv_poster"
                     tools:text="Movie Name" />
 
                 <TextView
@@ -134,8 +134,8 @@
                     android:progressBackgroundTint="@color/gray_middle"
                     android:progressTint="@color/genre_color_red"
                     android:secondaryProgressTint="@color/genre_color_red"
-                    app:layout_constraintStart_toEndOf="@+id/iv_poster_rv_item"
-                    app:layout_constraintTop_toTopOf="@+id/iv_poster_rv_item" />
+                    app:layout_constraintStart_toEndOf="@+id/iv_poster"
+                    app:layout_constraintTop_toTopOf="@+id/iv_poster" />
 
                 <TextView
                     android:id="@+id/tv_reviews"
@@ -157,8 +157,8 @@
                     android:layout_marginTop="142dp"
                     android:layout_marginEnd="88dp"
                     android:background="@drawable/pg_shape"
-                    app:layout_constraintEnd_toEndOf="@+id/iv_poster_rv_item"
-                    app:layout_constraintTop_toTopOf="@+id/iv_poster_rv_item" />
+                    app:layout_constraintEnd_toEndOf="@+id/iv_poster"
+                    app:layout_constraintTop_toTopOf="@+id/iv_poster" />
 
                 <TextView
                     android:id="@+id/tv_age"
@@ -199,7 +199,7 @@
                     android:layout_marginTop="@dimen/dp_24"
                     android:text="@string/genres"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_poster_rv_item" />
+                    app:layout_constraintTop_toBottomOf="@+id/iv_poster" />
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -248,27 +248,22 @@
                     app:tabTextColor="@color/gray">
 
                     <com.google.android.material.tabs.TabItem
-                        android:id="@+id/tab_movie_information"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <com.google.android.material.tabs.TabItem
-                        android:id="@+id/tab_movie_actors"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <com.google.android.material.tabs.TabItem
-                        android:id="@+id/tab_movie_recommendations"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <com.google.android.material.tabs.TabItem
-                        android:id="@+id/tab_movie_similar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <com.google.android.material.tabs.TabItem
-                        android:id="@+id/tab_movie_trailers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 

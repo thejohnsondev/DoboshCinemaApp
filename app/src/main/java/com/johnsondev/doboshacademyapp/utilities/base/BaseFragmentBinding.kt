@@ -14,7 +14,6 @@ abstract class BaseFragmentBinding(layoutId: Int) : Fragment(layoutId) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.doOnPreDraw { startPostponedEnterTransition() }
-//        postponeEnterTransition()
         initFields()
     }
 

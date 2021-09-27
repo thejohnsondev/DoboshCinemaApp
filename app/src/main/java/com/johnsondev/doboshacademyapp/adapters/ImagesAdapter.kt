@@ -58,7 +58,7 @@ class ImagesAdapter(
 
 class PosterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val posterImageView: ImageView = itemView.findViewById(R.id.iv_poster_rv_item)
+    private val posterImageView: ImageView = itemView.findViewById(R.id.iv_poster)
 
     fun bind(image: MovieImageDto) {
 
@@ -75,7 +75,7 @@ class PosterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 class BackdropViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val backdropImageView: ImageView = itemView.findViewById(R.id.iv_backdrop_rv_item)
+    private val backdropImageView: ImageView = itemView.findViewById(R.id.iv_backdrop)
 
     fun bind(image: MovieImageDto) {
 

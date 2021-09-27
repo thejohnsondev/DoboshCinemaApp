@@ -7,7 +7,7 @@
     android:padding="@dimen/dp_8">
 
     <ImageView
-        android:id="@+id/iv_backdrop_rv_item"
+        android:id="@+id/iv_backdrop"
         android:layout_width="match_parent"
         android:layout_height="@dimen/movie_card_height"
         android:layout_margin="1dp"

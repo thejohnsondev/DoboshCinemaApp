@@ -7,7 +7,7 @@
     android:padding="@dimen/dp_8">
 
     <ImageView
-        android:id="@+id/iv_poster_rv_item"
+        android:id="@+id/iv_poster"
         android:layout_width="@dimen/movie_card_width"
         android:layout_height="@dimen/movie_card_height"
         android:layout_margin="1dp"
