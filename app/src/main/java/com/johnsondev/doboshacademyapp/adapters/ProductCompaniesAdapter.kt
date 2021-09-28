@@ -4,13 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.load
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.network.dto.ProductionCompanyDto
-import com.johnsondev.doboshacademyapp.data.network.dto.ProductionCountryDto
+import com.johnsondev.doboshacademyapp.databinding.CompanyRvItemBinding
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 
 class ProductCompaniesAdapter(context: Context) :
@@ -24,11 +23,9 @@ class ProductCompaniesAdapter(context: Context) :
         return ProductCompanyViewHolder(view)
     }
 
-
     override fun onBindViewHolder(holder: ProductCompanyViewHolder, position: Int) {
         holder.bind(companiesList[position])
     }
-
 
     override fun getItemCount(): Int = companiesList.size
 
@@ -40,13 +37,12 @@ class ProductCompaniesAdapter(context: Context) :
 
 class ProductCompanyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val tvCompanyName: TextView = itemView.findViewById(R.id.tv_company_name)
-    private val ivCompanyLogo: ImageView = itemView.findViewById(R.id.iv_company_logo)
+    private val binding by viewBinding(CompanyRvItemBinding::bind)
 
     fun bind(productionCompany: ProductionCompanyDto) {
-        tvCompanyName.text = productionCompany.name
+        binding.tvCompanyName.text = productionCompany.name
 
-        ivCompanyLogo.load("$POSTER_PATH${productionCompany.logoPath}") {
+        binding.ivCompanyLogo.load("$POSTER_PATH${productionCompany.logoPath}") {
             crossfade(true)
         }
     }

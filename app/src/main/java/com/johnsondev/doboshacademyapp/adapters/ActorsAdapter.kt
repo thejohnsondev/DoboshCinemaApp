@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.load
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.base.Actor
+import com.johnsondev.doboshacademyapp.databinding.ActorRvItemBinding
+import com.johnsondev.doboshacademyapp.databinding.ActorRvItemHorizontalBinding
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_HORIZONTAL
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
 
@@ -65,39 +68,36 @@ class ActorsAdapter(
 
 class ActorViewHolderMini(view: View) : RecyclerView.ViewHolder(view) {
 
-    private val actorImg: ImageView = view.findViewById(R.id.actor_img)
-    private val actorName: TextView = view.findViewById(R.id.tv_actor_name)
+    private val binding by viewBinding(ActorRvItemBinding::bind)
 
     fun bind(actor: Actor) {
-        actorName.text = actor.name
+        binding.tvActorName.text = actor.name
 
-        actorImg.load(actor.picture) {
+        binding.actorImg.load(actor.picture) {
             crossfade(true)
             placeholder(R.drawable.ic_baseline_person_24)
             fallback(R.drawable.ic_baseline_person_24)
             error(R.drawable.ic_baseline_person_24)
         }
-
-        actorImg.clipToOutline = true
+        binding.actorImg.clipToOutline = true
     }
 
 }
 
 class ActorViewHolderHorizontal(view: View) : RecyclerView.ViewHolder(view) {
 
-    private val actorImg: ImageView = view.findViewById(R.id.actor_img_horizon)
-    private val actorName: TextView = view.findViewById(R.id.tv_actor_name_horizon)
+    private val binding by viewBinding(ActorRvItemHorizontalBinding::bind)
 
     fun bind(actor: Actor) {
-        actorName.text = actor.name
+        binding.tvActorNameHorizon.text = actor.name
 
-        actorImg.load(actor.picture) {
+        binding.actorImgHorizon.load(actor.picture) {
             crossfade(true)
             placeholder(R.drawable.ic_baseline_person_24)
             error(R.drawable.ic_baseline_person_24)
         }
 
-        actorImg.clipToOutline = true
+        binding.actorImgHorizon.clipToOutline = true
     }
 }
 

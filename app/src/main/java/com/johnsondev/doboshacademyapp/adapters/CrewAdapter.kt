@@ -4,10 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.base.CrewMember
+import com.johnsondev.doboshacademyapp.databinding.CrewMemberRvItemBinding
 
 class CrewAdapter(context: Context) : RecyclerView.Adapter<CrewMemberViewHolder>() {
 
@@ -19,11 +20,9 @@ class CrewAdapter(context: Context) : RecyclerView.Adapter<CrewMemberViewHolder>
         return CrewMemberViewHolder(view)
     }
 
-
     override fun onBindViewHolder(holder: CrewMemberViewHolder, position: Int) {
         holder.bind(crewList[position])
     }
-
 
     override fun getItemCount(): Int = crewList.size
 
@@ -36,12 +35,11 @@ class CrewAdapter(context: Context) : RecyclerView.Adapter<CrewMemberViewHolder>
 
 class CrewMemberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val name: TextView = itemView.findViewById(R.id.crew_member_name)
-    private val job: TextView = itemView.findViewById(R.id.crew_member_job)
+    private val binding by viewBinding(CrewMemberRvItemBinding::bind)
 
     fun bind(crewMember: CrewMember) {
-        name.text = crewMember.name
-        job.text = crewMember.job
+        binding.crewMemberName.text = crewMember.name
+        binding.crewMemberJob.text = crewMember.job
     }
 
 }

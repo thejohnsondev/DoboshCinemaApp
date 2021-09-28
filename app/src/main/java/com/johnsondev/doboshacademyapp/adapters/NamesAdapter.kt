@@ -4,9 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.johnsondev.doboshacademyapp.R
+import com.johnsondev.doboshacademyapp.databinding.GenreRvItemBinding
 
 class NamesAdapter(
     context: Context,
@@ -19,7 +20,6 @@ class NamesAdapter(
         val itemView = inflater.inflate(R.layout.genre_rv_item, parent, false)
         return NameViewHolder(itemView)
     }
-
 
     override fun onBindViewHolder(holder: NameViewHolder, position: Int) {
         holder.bind(namesList[position])
@@ -35,10 +35,10 @@ class NamesAdapter(
 
 class NameViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val tvName: TextView = itemView.findViewById(R.id.pop_genre_name)
+    private val binding by viewBinding(GenreRvItemBinding::bind)
 
     fun bind(name: String) {
-        tvName.text = name
+        binding.popGenreName.text = name
     }
 
 }
