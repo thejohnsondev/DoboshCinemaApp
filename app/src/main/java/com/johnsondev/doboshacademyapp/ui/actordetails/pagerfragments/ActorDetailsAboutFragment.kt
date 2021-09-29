@@ -14,10 +14,10 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.ANIM_PROPERTY_MAX_LIN
 import com.johnsondev.doboshacademyapp.utilities.Constants.CURRENT_YEAR
 import com.johnsondev.doboshacademyapp.utilities.Constants.EMPTY_STRING
 import com.johnsondev.doboshacademyapp.utilities.animateView
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 
-class ActorDetailsAboutFragment : BaseFragmentBinding(R.layout.fragment_actor_details_about) {
+class ActorDetailsAboutFragment : BaseFragment(R.layout.fragment_actor_details_about) {
 
     private val viewModel by viewModels<ActorDetailsViewModel>()
     private val binding by viewBinding(FragmentActorDetailsAboutBinding::bind)

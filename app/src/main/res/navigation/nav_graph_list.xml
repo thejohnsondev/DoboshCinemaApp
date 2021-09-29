@@ -125,5 +125,54 @@
         android:id="@+id/settingsFragment"
         android:name="com.johnsondev.doboshacademyapp.ui.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_settingsInterfaceFragment"
+            app:destination="@id/settingsInterfaceFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_settingsFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_settingsFragment_to_settingsGeneralFragment"
+            app:destination="@id/settingsGeneralFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_settingsFragment_to_settingsContentFragment"
+            app:destination="@id/settingsContentFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsContentFragment"
+        android:name="com.johnsondev.doboshacademyapp.ui.settings.sectionfragments.SettingsContentFragment"
+        android:label="fragment_settings_content"
+        tools:layout="@layout/fragment_settings_content" />
+    <fragment
+        android:id="@+id/settingsGeneralFragment"
+        android:name="com.johnsondev.doboshacademyapp.ui.settings.sectionfragments.SettingsGeneralFragment"
+        android:label="fragment_settings_general"
+        tools:layout="@layout/fragment_settings_general" />
+    <fragment
+        android:id="@+id/settingsInterfaceFragment"
+        android:name="com.johnsondev.doboshacademyapp.ui.settings.sectionfragments.SettingsInterfaceFragment"
+        android:label="fragment_settings_interface"
+        tools:layout="@layout/fragment_settings_interface" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.johnsondev.doboshacademyapp.ui.settings.sectionfragments.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
 </navigation>

@@ -13,12 +13,12 @@ import com.johnsondev.doboshacademyapp.databinding.FragmentFavoriteMoviesBinding
 import com.johnsondev.doboshacademyapp.ui.favorite.FavoriteFragmentDirections
 import com.johnsondev.doboshacademyapp.ui.favorite.FavoritesViewModel
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.states.Loading
 
 
-class FavoriteMoviesFragment : BaseFragmentBinding(R.layout.fragment_favorite_movies) {
+class FavoriteMoviesFragment : BaseFragment(R.layout.fragment_favorite_movies) {
 
     private val favoritesViewModel by viewModels<FavoritesViewModel>()
     private val binding by viewBinding(FragmentFavoriteMoviesBinding::bind)

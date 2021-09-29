@@ -20,11 +20,11 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.SEARCH_RESULT_SPEC_TY
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
-class SpecificMoviesListFragment : BaseFragmentBinding(R.layout.fragment_specific_movies_list) {
+class SpecificMoviesListFragment : BaseFragment(R.layout.fragment_specific_movies_list) {
 
     private val moviesListViewModel by viewModels<MoviesListViewModel>()
     private val binding by viewBinding(FragmentSpecificMoviesListBinding::bind)

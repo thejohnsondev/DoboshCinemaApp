@@ -20,12 +20,12 @@ import com.johnsondev.doboshacademyapp.databinding.FragmentMoviesDetailsBinding
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_TAB_TITLES
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.timeToHFromMin
 import java.util.*
 
-class MoviesDetailsFragment : BaseFragmentBinding(R.layout.fragment_movies_details) {
+class MoviesDetailsFragment : BaseFragment(R.layout.fragment_movies_details) {
 
     private val detailsViewModel by viewModels<MovieDetailsViewModel>()
     private val binding by viewBinding(FragmentMoviesDetailsBinding::bind)

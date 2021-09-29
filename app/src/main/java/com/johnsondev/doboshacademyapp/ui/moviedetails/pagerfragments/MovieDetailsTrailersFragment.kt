@@ -7,10 +7,10 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.MovieTrailersAdapter
 import com.johnsondev.doboshacademyapp.databinding.FragmentMovieDetailsTrailersBinding
 import com.johnsondev.doboshacademyapp.ui.moviedetails.MovieDetailsViewModel
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 
-class MovieDetailsTrailersFragment : BaseFragmentBinding(R.layout.fragment_movie_details_trailers) {
+class MovieDetailsTrailersFragment : BaseFragment(R.layout.fragment_movie_details_trailers) {
 
     private val detailsViewModel by viewModels<MovieDetailsViewModel>()
     private val binding by viewBinding(FragmentMovieDetailsTrailersBinding::bind)

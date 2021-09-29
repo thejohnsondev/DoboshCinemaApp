@@ -15,10 +15,10 @@ import com.johnsondev.doboshacademyapp.ui.moviedetails.MovieDetailsViewModel
 import com.johnsondev.doboshacademyapp.ui.moviedetails.MoviesDetailsFragmentDirections
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_HORIZONTAL
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 
-class MovieDetailsActorsFragment : BaseFragmentBinding(R.layout.fragment_movie_details_actors) {
+class MovieDetailsActorsFragment : BaseFragment(R.layout.fragment_movie_details_actors) {
 
     private val detailsViewModel by viewModels<MovieDetailsViewModel>()
     private val binding by viewBinding(FragmentMovieDetailsActorsBinding::bind)

@@ -9,37 +9,25 @@ import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import com.johnsondev.doboshacademyapp.utilities.showMessage
 
-abstract class BaseFragment : Fragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(layoutId(), container, false)
-        postponeEnterTransition()
-        initViews(view)
-        return view
-    }
+abstract class BaseFragment(layoutId: Int) : Fragment(layoutId) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.doOnPreDraw { startPostponedEnterTransition() }
-
+        initFields()
     }
 
     override fun onResume() {
         super.onResume()
         loadData()
-        bindViews(requireView())
-        initListenersAndObservers(requireView())
+        bindViews()
+        initListenersAndObservers()
     }
 
-    abstract fun initViews(view: View)
-    abstract fun layoutId(): Int
+    abstract fun initFields()
     abstract fun loadData()
-    abstract fun bindViews(view: View)
-    abstract fun initListenersAndObservers(view: View)
+    abstract fun bindViews()
+    abstract fun initListenersAndObservers()
 
     protected fun onError(errorMessage: String) = Log.d("ERR", errorMessage)
 

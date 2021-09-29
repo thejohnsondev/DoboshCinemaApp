@@ -13,10 +13,10 @@ import com.johnsondev.doboshacademyapp.databinding.FragmentActorDetailsMoviesBin
 import com.johnsondev.doboshacademyapp.ui.actordetails.ActorDetailsFragmentDirections
 import com.johnsondev.doboshacademyapp.ui.actordetails.ActorDetailsViewModel
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 
-class ActorDetailsMoviesFragment : BaseFragmentBinding(R.layout.fragment_actor_details_movies) {
+class ActorDetailsMoviesFragment : BaseFragment(R.layout.fragment_actor_details_movies) {
 
     private val viewModel by viewModels<ActorDetailsViewModel>()
     private val binding by viewBinding(FragmentActorDetailsMoviesBinding::bind)

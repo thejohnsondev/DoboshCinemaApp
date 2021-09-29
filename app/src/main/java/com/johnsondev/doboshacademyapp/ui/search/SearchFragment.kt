@@ -25,7 +25,7 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_MINI
 import com.johnsondev.doboshacademyapp.utilities.Constants.SEARCH_RESULT_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.afterTextChanged
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.hideKeyboard
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.showMessage
@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 
-class SearchFragment : BaseFragmentBinding(R.layout.fragment_search) {
+class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
     private val searchViewModel by viewModels<SearchViewModel>()
     private val binding by viewBinding(FragmentSearchBinding::bind)

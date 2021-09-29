@@ -24,12 +24,12 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.POP_ACTORS_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.showMessage
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 
-class MoviesListFragment : BaseFragmentBinding(R.layout.fragment_movies_list) {
+class MoviesListFragment : BaseFragment(R.layout.fragment_movies_list) {
 
     private val listViewModel by viewModels<MoviesListViewModel>()
     private val binding by viewBinding(FragmentMoviesListBinding::bind)

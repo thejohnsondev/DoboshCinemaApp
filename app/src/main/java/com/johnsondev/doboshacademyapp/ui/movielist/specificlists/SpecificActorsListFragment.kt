@@ -15,9 +15,9 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_HORIZONTAL
 import com.johnsondev.doboshacademyapp.utilities.Constants.POP_ACTORS_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SEARCH_RESULT_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 
-class SpecificActorsListFragment : BaseFragmentBinding(R.layout.fragment_specific_actors_list) {
+class SpecificActorsListFragment : BaseFragment(R.layout.fragment_specific_actors_list) {
 
     private val moviesListViewModel by viewModels<MoviesListViewModel>()
     private val binding by viewBinding(FragmentSpecificActorsListBinding::bind)

@@ -11,6 +11,8 @@ import coil.transform.RoundedCornersTransformation
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.databinding.MovieRvItemBinding
+import com.johnsondev.doboshacademyapp.databinding.MovieRvItemHorizontalBinding
+import com.johnsondev.doboshacademyapp.databinding.MovieRvItemMiniBinding
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_DEFAULT
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_MINI
@@ -112,7 +114,7 @@ class MovieViewHolderDefault(private val view: View) :
 class MovieViewHolderLarge(private val view: View) :
     RecyclerView.ViewHolder(view) {
 
-    private val binding by viewBinding(MovieRvItemBinding::bind)
+    private val binding by viewBinding(MovieRvItemHorizontalBinding::bind)
 
     fun bind(movie: Movie) {
         with(binding) {
@@ -135,7 +137,7 @@ class MovieViewHolderLarge(private val view: View) :
 
 class MovieViewHolderMini(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val binding by viewBinding(MovieRvItemBinding::bind)
+    private val binding by viewBinding(MovieRvItemMiniBinding::bind)
 
     fun bind(movie: Movie) {
         with(binding) {

@@ -8,12 +8,12 @@ import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.FavoritesPagerAdapter
 import com.johnsondev.doboshacademyapp.databinding.FragmentFavoriteBinding
 import com.johnsondev.doboshacademyapp.utilities.Constants
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.isInternetConnectionAvailable
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 
 
-class FavoriteFragment : BaseFragmentBinding(R.layout.fragment_favorite) {
+class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
 
     private val favoritesViewModel by viewModels<FavoritesViewModel>()
     private val binding by viewBinding(FragmentFavoriteBinding::bind)

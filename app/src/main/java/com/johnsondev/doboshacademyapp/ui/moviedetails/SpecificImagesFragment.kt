@@ -11,10 +11,10 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.BACKDROP_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.IMAGES_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_POSTER
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_KEY
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 
-class SpecificImagesFragment : BaseFragmentBinding(R.layout.fragment_specific_images) {
+class SpecificImagesFragment : BaseFragment(R.layout.fragment_specific_images) {
 
     private val detailsViewModel by viewModels<MovieDetailsViewModel>()
     private val binding by viewBinding(FragmentSpecificImagesBinding::bind)

@@ -52,7 +52,7 @@
     <string name="uncknown_viewvmodel">Unknown ViewModel class</string>
     <string name="home">Home</string>
     <string name="favorite">Favorite</string>
-    <string name="settings">Settings</string>
+    <string name="settings">App settings</string>
     <string name="search">Search</string>
     <string name="movies_actors">Movies, actors</string>
     <string name="internet_connection_is_unavailable">Internet connection is unavailable</string>
@@ -94,5 +94,9 @@
     <string name="favorite_movies">Favorite movies</string>
     <string name="favorite_actors">Favorite actors</string>
     <string name="your_favorites">Your favorites</string>
+    <string name="interface_settings">Interface</string>
+    <string name="content_settings">Content</string>
+    <string name="general_settings">General</string>
+    <string name="about_settings">About</string>
 
 </resources>

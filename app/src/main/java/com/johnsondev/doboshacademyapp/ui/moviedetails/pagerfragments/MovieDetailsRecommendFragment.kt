@@ -15,12 +15,12 @@ import com.johnsondev.doboshacademyapp.ui.moviedetails.MoviesDetailsFragmentDire
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
 import com.johnsondev.doboshacademyapp.utilities.Constants.RECOMMENDATIONS_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SIMILAR_LIST_TYPE
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 
 class MovieDetailsRecommendFragment(
     private val listType: String
-) : BaseFragmentBinding(R.layout.fragment_movie_details_list) {
+) : BaseFragment(R.layout.fragment_movie_details_list) {
 
     private val detailsViewModel by viewModels<MovieDetailsViewModel>()
     private val binding by viewBinding(FragmentMovieDetailsListBinding::bind)

@@ -15,11 +15,11 @@ import com.johnsondev.doboshacademyapp.ui.favorite.FavoriteFragmentDirections
 import com.johnsondev.doboshacademyapp.ui.favorite.FavoritesViewModel
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_HORIZONTAL
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.states.Loading
 
-class FavoriteActorsFragment : BaseFragmentBinding(R.layout.fragment_favorite_actors) {
+class FavoriteActorsFragment : BaseFragment(R.layout.fragment_favorite_actors) {
 
     private val favoritesViewModel by viewModels<FavoritesViewModel>()
     private val binding by viewBinding(FragmentFavoriteActorsBinding::bind)

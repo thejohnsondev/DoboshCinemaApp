@@ -21,10 +21,10 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_POSTER
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 import com.johnsondev.doboshacademyapp.utilities.DtoMapper
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 
-class MovieDetailsInfoFragment : BaseFragmentBinding(R.layout.fragment_movie_details_info) {
+class MovieDetailsInfoFragment : BaseFragment(R.layout.fragment_movie_details_info) {
 
     private val detailsViewModel by viewModels<MovieDetailsViewModel>()
     private val binding by viewBinding(FragmentMovieDetailsInfoBinding::bind)

@@ -14,9 +14,9 @@ import com.johnsondev.doboshacademyapp.databinding.FragmentActorDetailsBinding
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
-import com.johnsondev.doboshacademyapp.utilities.base.BaseFragmentBinding
+import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 
-class ActorDetailsFragment : BaseFragmentBinding(R.layout.fragment_actor_details) {
+class ActorDetailsFragment : BaseFragment(R.layout.fragment_actor_details) {
 
     private val detailsViewModel by viewModels<ActorDetailsViewModel>()
     private val binding by viewBinding(FragmentActorDetailsBinding::bind)
