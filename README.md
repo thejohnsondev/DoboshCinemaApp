@@ -2,6 +2,9 @@
 ![Dark logo](https://user-images.githubusercontent.com/73844793/135581191-6aa79386-385a-4360-a28b-b978b64a97d7.png)
 ## Introduction
 This is an Android application that allows you to discover the most popular, interesting and other movies and actors. The application is based on the MVVM architecture, and [The Movie Database API](https://developers.themoviedb.org/3/getting-started/introduction) is used to receive data.
+
+Video with the application work at this link: https://youtu.be/O3ZFZlK25w8
+
 > In this repository API key is not included
 
 ## Technologies
