@@ -6,7 +6,7 @@
     app:startDestination="@id/moviesDetailsFragment">
     <fragment
         android:id="@+id/moviesDetailsFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.moviedetails.MoviesDetailsFragment"
+        android:name="com.johnsondev.doboshacademyapp.ui.moviedetails.MoviesDetailsFragment"
         android:label="MoviesDetailsFragment">
         <action
             android:id="@+id/action_moviesDetailsFragment_to_movieTrailersFragment"
@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/specificImagesFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.moviedetails.SpecificImagesFragment"
+        android:name="com.johnsondev.doboshacademyapp.ui.moviedetails.SpecificImagesFragment"
         android:label="fragment_specific_images" />
     <action
         android:id="@+id/action_moviesDetailsFragment_to_specificImagesFragment"
@@ -49,7 +49,7 @@
         app:popExitAnim="@anim/slide_out" />
     <fragment
         android:id="@+id/movieTrailersFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.moviedetails.pagerfragments.MovieDetailsTrailersFragment"
+        android:name="com.johnsondev.doboshacademyapp.ui.moviedetails.pagerfragments.MovieDetailsTrailersFragment"
         android:label="fragment_movie_trailers" />
     <action
         android:id="@+id/action_moviesDetailsFragment_to_movieTrailersFragment"
@@ -81,7 +81,7 @@
         app:popExitAnim="@anim/slide_out" />
     <fragment
         android:id="@+id/specificListFragment"
-        android:name="com.johnsondev.doboshacademyapp.views.movielist.SpecificMoviesListFragment"
+        android:name="com.johnsondev.doboshacademyapp.ui.movielist.specificlists.SpecificMoviesListFragment"
         android:label="fragment_specific_list">
         <action
             android:id="@+id/action_specificListFragment_to_detailsActivity"
@@ -89,7 +89,7 @@
     </fragment>
     <activity
         android:id="@+id/detailsActivity"
-        android:name="com.johnsondev.doboshacademyapp.views.moviedetails.DetailsActivity"
+        android:name="com.johnsondev.doboshacademyapp.ui.moviedetails.DetailsActivity"
         android:label="activity_details"
         tools:layout="@layout/activity_details">
         <argument
@@ -99,7 +99,7 @@
     </activity>
     <activity
         android:id="@+id/actorDetailsActivity"
-        android:name="com.johnsondev.doboshacademyapp.views.actordetails.ActorDetailsActivity"
+        android:name="com.johnsondev.doboshacademyapp.ui.actordetails.ActorDetailsActivity"
         android:label="activity_actor_details"
         tools:layout="@layout/activity_actor_details" >
         <argument

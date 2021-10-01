@@ -4,11 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.base.ProductionCountry
+import com.johnsondev.doboshacademyapp.databinding.CountyRvItemBinding
 
 class ProductCountriesAdapter(context: Context) :
     RecyclerView.Adapter<ProductCountriesViewHolder>() {
@@ -21,15 +21,13 @@ class ProductCountriesAdapter(context: Context) :
         return ProductCountriesViewHolder(view)
     }
 
-
     override fun onBindViewHolder(holder: ProductCountriesViewHolder, position: Int) {
         holder.bind(countriesList[position])
     }
 
-
     override fun getItemCount(): Int = countriesList.size
 
-    fun setCountries(list: List<ProductionCountry>){
+    fun setCountries(list: List<ProductionCountry>) {
         countriesList = list
         notifyDataSetChanged()
     }
@@ -37,12 +35,9 @@ class ProductCountriesAdapter(context: Context) :
 
 class ProductCountriesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val tvCountryName: TextView = itemView.findViewById(R.id.tv_country_name)
-    private val ivCountyFrag: ImageView = itemView.findViewById(R.id.iv_country_flag)
+    private val binding by viewBinding(CountyRvItemBinding::bind)
 
     fun bind(productionCountry: ProductionCountry) {
-        tvCountryName.text = productionCountry.countryName
-
+        binding.tvCountryName.text = productionCountry.countryName
     }
-
 }

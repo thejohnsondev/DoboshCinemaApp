@@ -43,6 +43,9 @@ android {
     androidExtensions {
         experimental = true
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -82,6 +85,7 @@ dependencies {
     implementation 'androidx.work:work-runtime-ktx:2.6.0'
 
     //view
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.5.0-beta01'
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'io.coil-kt:coil:1.1.1'

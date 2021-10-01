@@ -4,10 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.base.Genre
+import com.johnsondev.doboshacademyapp.databinding.GenreRvItemBinding
 
 class GenresAdapter(
     context: Context,
@@ -22,7 +23,6 @@ class GenresAdapter(
         return PopGenresViewHolder(itemView)
     }
 
-
     override fun onBindViewHolder(holder: PopGenresViewHolder, position: Int) {
         holder.bind(genresList[position])
         holder.itemView.setOnClickListener {
@@ -32,7 +32,7 @@ class GenresAdapter(
 
     override fun getItemCount(): Int = genresList.size
 
-    fun setGenresList(genres: List<Genre>){
+    fun setGenresList(genres: List<Genre>) {
         genresList = genres
         notifyDataSetChanged()
     }
@@ -40,12 +40,11 @@ class GenresAdapter(
 
 class PopGenresViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val genreName: TextView = itemView.findViewById(R.id.pop_genre_name)
+    private val binding by viewBinding(GenreRvItemBinding::bind)
 
     fun bind(genre: Genre) {
-        genreName.text = genre.name
+        binding.popGenreName.text = genre.name
     }
-
 }
 
 interface OnGenreClickListener {

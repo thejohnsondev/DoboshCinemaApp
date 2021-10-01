@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
-import com.johnsondev.doboshacademyapp.views.splash.SplashScreenActivity
+import com.johnsondev.doboshacademyapp.ui.splash.SplashScreenActivity
 import kotlinx.coroutines.*
 
 class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
@@ -108,7 +108,7 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
             notificationManagerCompat.createNotificationChannel(
                 NotificationChannelCompat.Builder(
                     CHANNEL_ID,
-                    NotificationManagerCompat.IMPORTANCE_HIGH
+                    NotificationManagerCompat.IMPORTANCE_DEFAULT
                 )
                     .setName(context.getString(R.string.channel_name))
                     .build()

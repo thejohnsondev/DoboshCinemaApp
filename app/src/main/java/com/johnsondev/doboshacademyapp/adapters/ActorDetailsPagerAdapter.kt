@@ -2,13 +2,12 @@ package com.johnsondev.doboshacademyapp.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.johnsondev.doboshacademyapp.views.actordetails.pagerfragments.ActorDetailsAboutFragment
-import com.johnsondev.doboshacademyapp.views.actordetails.pagerfragments.ActorDetailsMoviesFragment
+import com.johnsondev.doboshacademyapp.ui.actordetails.pagerfragments.ActorDetailsAboutFragment
+import com.johnsondev.doboshacademyapp.ui.actordetails.pagerfragments.ActorDetailsMoviesFragment
 
 class ActorDetailsPagerAdapter(
     fragment: Fragment
 ) : FragmentStateAdapter(fragment) {
-
 
     override fun getItemCount(): Int = 2
 

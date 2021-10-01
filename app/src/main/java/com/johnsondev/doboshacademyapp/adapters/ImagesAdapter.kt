@@ -1,16 +1,17 @@
 package com.johnsondev.doboshacademyapp.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieImageDto
+import com.johnsondev.doboshacademyapp.databinding.BackdropRvItemBinding
+import com.johnsondev.doboshacademyapp.databinding.PosterRvItemBinding
 import com.johnsondev.doboshacademyapp.utilities.Constants.BACKDROP_PATH
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_BACKDROP
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_POSTER
@@ -25,9 +26,7 @@ class ImagesAdapter(
     private var imagesList: List<MovieImageDto> = listOf()
 
     override fun getItemViewType(position: Int): Int {
-
         return if (listType == ITEM_TYPE_POSTER) ITEM_TYPE_POSTER else ITEM_TYPE_BACKDROP
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -61,35 +60,30 @@ class ImagesAdapter(
 
 class PosterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val posterImageView: ImageView = itemView.findViewById(R.id.iv_poster_rv_item)
+    private val binding by viewBinding(PosterRvItemBinding::bind)
 
     fun bind(image: MovieImageDto) {
 
-        posterImageView.load("$POSTER_PATH${image.filePath}") {
+        binding.ivPoster.load("$POSTER_PATH${image.filePath}") {
             crossfade(true)
             error(R.drawable.ic_baseline_image_24)
             placeholder(R.drawable.ic_baseline_image_24)
             transformations(RoundedCornersTransformation(10f))
         }
-
     }
-
 }
 
 class BackdropViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val backdropImageView: ImageView = itemView.findViewById(R.id.iv_backdrop_rv_item)
+    private val binding by viewBinding(BackdropRvItemBinding::bind)
 
     fun bind(image: MovieImageDto) {
 
-        backdropImageView.load("$BACKDROP_PATH${image.filePath}") {
+        binding.ivBackdrop.load("$BACKDROP_PATH${image.filePath}") {
             crossfade(true)
             error(R.drawable.ic_baseline_image_24)
             placeholder(R.drawable.ic_baseline_image_24)
             transformations(RoundedCornersTransformation(10f))
         }
-
     }
-
-
 }

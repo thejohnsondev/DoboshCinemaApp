@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
-    tools:context=".views.movielist.SpecificMoviesListFragment">
+    tools:context=".ui.movielist.specificlists.SpecificMoviesListFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/back_to_main_view_group"

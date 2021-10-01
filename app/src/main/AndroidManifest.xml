@@ -17,17 +17,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DoboshAcademyApp">
         <activity
-            android:name=".views.actordetails.ActorDetailsActivity"
+            android:name=".ui.actordetails.ActorDetailsActivity"
             android:exported="true" />
         <activity
-            android:name=".views.moviedetails.DetailsActivity"
+            android:name=".ui.moviedetails.DetailsActivity"
             android:exported="true" />
         <activity
-            android:name=".views.movielist.ListActivity"
+            android:name=".ui.movielist.ListActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".views.splash.SplashScreenActivity"
+            android:name=".ui.splash.SplashScreenActivity"
             android:launchMode="singleTop"
             android:theme="@style/SplashScreenTheme">
             <intent-filter>

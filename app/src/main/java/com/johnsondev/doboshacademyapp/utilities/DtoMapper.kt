@@ -13,39 +13,39 @@ object DtoMapper {
 
     fun convertMovieDetailsFromDto(movieDetailsDto: MovieDetailsDto) = MovieDetails(
         id = movieDetailsDto.id,
-        title = movieDetailsDto.title ?: "missing title",
+        title = movieDetailsDto.title,
         poster = "${POSTER_PATH}${movieDetailsDto.poster}",
-        overview = movieDetailsDto.overview ?: "overview missing",
+        overview = movieDetailsDto.overview,
         backdrop = "${POSTER_PATH}${movieDetailsDto.backdropImg}",
-        ratings = (movieDetailsDto.rating ?: 1f).div(2),
-        numberOfRatings = movieDetailsDto.voteCount ?: 0,
+        ratings = (movieDetailsDto.rating).div(2),
+        numberOfRatings = movieDetailsDto.voteCount,
         minimumAge = if (movieDetailsDto.adult) 16 else 13,
         runtime = movieDetailsDto.runtime,
-        genres = movieDetailsDto.genres?.map { convertGenreFromDto(it) },
+        genres = movieDetailsDto.genres.map { convertGenreFromDto(it) },
         actors = emptyList(),
-        budget = movieDetailsDto.budget ?: 0,
-        revenue = movieDetailsDto.revenue ?: 0,
-        origLanguage = movieDetailsDto.origLanguage ?: "missing info",
-        origTitle = movieDetailsDto.origTitle ?: "missing info",
+        budget = movieDetailsDto.budget,
+        revenue = movieDetailsDto.revenue,
+        origLanguage = movieDetailsDto.origLanguage,
+        origTitle = movieDetailsDto.origTitle,
         productionCompanies = movieDetailsDto.productionCompanies,
         productionCountries = movieDetailsDto.productionCountries,
-        releaseDate = revertDate(movieDetailsDto.releaseDate ?: ""),
-        status = movieDetailsDto.status ?: "missing info",
-        tagLine = movieDetailsDto.tagLine ?: "missing info"
+        releaseDate = revertDate(movieDetailsDto.releaseDate),
+        status = movieDetailsDto.status,
+        tagLine = movieDetailsDto.tagLine
     )
 
     fun convertMovieFromDto(movieDto: MovieDto): Movie {
         return Movie(
             id = movieDto.id,
-            title = movieDto.title ?: "missing title",
+            title = movieDto.title,
             poster = "${POSTER_PATH}${movieDto.poster}",
-            overview = movieDto.overview ?: "overview missing",
+            overview = movieDto.overview,
             backdrop = "${POSTER_PATH}${movieDto.backdropImg}",
-            ratings = (movieDto.rating ?: 1f).div(2),
-            numberOfRatings = movieDto.voteCount ?: 0,
-            minimumAge = if (movieDto.adult == true) 16 else 13,
+            ratings = (movieDto.rating).div(2),
+            numberOfRatings = movieDto.voteCount,
+            minimumAge = if (movieDto.adult) 16 else 13,
             runtime = movieDto.runtime,
-            genres = movieDto.genres?.map { convertGenreFromDto(it) },
+            genres = movieDto.genres.map { convertGenreFromDto(it) },
             actors = emptyList()
         )
     }

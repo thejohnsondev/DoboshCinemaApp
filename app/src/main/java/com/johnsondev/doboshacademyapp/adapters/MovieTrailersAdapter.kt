@@ -1,26 +1,20 @@
 package com.johnsondev.doboshacademyapp.adapters
 
 import android.content.Context
-import android.util.Log
-import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
+import com.johnsondev.doboshacademyapp.databinding.MovieTrailerRvItemBinding
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerFullScreenListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 class MovieTrailersAdapter(context: Context) : RecyclerView.Adapter<MovieTrailerViewHolder>() {
 
     private var trailersList: List<MovieVideoDto> = listOf()
-
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieTrailerViewHolder {
@@ -28,11 +22,9 @@ class MovieTrailersAdapter(context: Context) : RecyclerView.Adapter<MovieTrailer
         return MovieTrailerViewHolder(itemView)
     }
 
-
     override fun onBindViewHolder(holder: MovieTrailerViewHolder, position: Int) {
         holder.bind(trailersList[position])
     }
-
 
     override fun getItemCount(): Int = trailersList.size
 
@@ -45,21 +37,17 @@ class MovieTrailersAdapter(context: Context) : RecyclerView.Adapter<MovieTrailer
 
 class MovieTrailerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    private val trailerTitle: TextView = view.findViewById(R.id.trailer_title)
-    private val ytPlayer: YouTubePlayerView = view.findViewById(R.id.yt_player)
+    private val binding by viewBinding(MovieTrailerRvItemBinding::bind)
 
     fun bind(trailer: MovieVideoDto) {
-        trailerTitle.text = trailer.name
-        ytPlayer.clipToOutline = true
+        binding.trailerTitle.text = trailer.name
+        binding.ytPlayer.clipToOutline = true
 
-
-        ytPlayer.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+        binding.ytPlayer.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 youTubePlayer.cueVideo(trailer.key, 0f)
                 youTubePlayer.pause()
             }
-
         })
-
     }
 }

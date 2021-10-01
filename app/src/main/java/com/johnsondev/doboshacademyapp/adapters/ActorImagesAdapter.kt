@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.load
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
+import com.johnsondev.doboshacademyapp.databinding.ActorImageRvItemBinding
 import com.johnsondev.doboshacademyapp.utilities.Constants
 
 class ActorImagesAdapter(
@@ -19,11 +21,11 @@ class ActorImagesAdapter(
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var images: List<ActorImageProfileDto> = listOf()
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActorImageViewHolder {
         val itemView = inflater.inflate(R.layout.actor_image_rv_item, parent, false)
         return ActorImageViewHolder(itemView)
     }
-
 
     override fun onBindViewHolder(holder: ActorImageViewHolder, position: Int) {
         holder.bind(images[position])
@@ -31,7 +33,6 @@ class ActorImagesAdapter(
             clickListener.onClick(images[position])
         }
     }
-
 
     override fun getItemCount(): Int = images.size
 
@@ -44,16 +45,16 @@ class ActorImagesAdapter(
 
 class ActorImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    private val actorImageView: ImageView = view.findViewById(R.id.iv_actor_img)
+    private val binding by viewBinding(ActorImageRvItemBinding::bind)
 
     fun bind(actorImage: ActorImageProfileDto) {
 
-        actorImageView.load("${Constants.POSTER_PATH}${actorImage.imagePath}") {
+        binding.ivActorImg.load("${Constants.POSTER_PATH}${actorImage.imagePath}") {
             crossfade(true)
             placeholder(R.drawable.ic_baseline_image_24)
             fallback(R.drawable.ic_baseline_image_24)
         }
-        actorImageView.clipToOutline = true
+        binding.ivActorImg.clipToOutline = true
     }
 }
 
