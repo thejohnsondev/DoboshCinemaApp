@@ -54,14 +54,10 @@ Here you can configure several application settings, such as: interface settings
 
 ![settings_1](https://user-images.githubusercontent.com/73844793/135609876-2315b688-d459-455d-a8a7-9ce322cb4b97.png)
 
-
-
-
-
-
-
-
-
-
-
-
+## Project setup
+To build a project and run it, you need to follow these steps:
+1. Sign up and retrieve a API key from [The Movie Database API](https://developers.themoviedb.org/3/getting-started/introduction)
+2. Download and open the project in Android Studio
+3. Edit the file **local.properties** and add the line: **apiKey="---YOUR API KEY---"**
+4. Build and run the app on a physical device or emulator in Android studio
+5. Mission completed :)
