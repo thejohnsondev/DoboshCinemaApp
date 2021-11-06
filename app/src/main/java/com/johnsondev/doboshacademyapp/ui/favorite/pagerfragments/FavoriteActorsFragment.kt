@@ -1,8 +1,10 @@
 package com.johnsondev.doboshacademyapp.ui.favorite.pagerfragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -15,15 +17,26 @@ import com.johnsondev.doboshacademyapp.ui.favorite.FavoriteFragmentDirections
 import com.johnsondev.doboshacademyapp.ui.favorite.FavoritesViewModel
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_HORIZONTAL
+import com.johnsondev.doboshacademyapp.utilities.appComponent
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.states.Loading
+import javax.inject.Inject
 
 class FavoriteActorsFragment : BaseFragment(R.layout.fragment_favorite_actors) {
 
-    private val favoritesViewModel by viewModels<FavoritesViewModel>()
+    @Inject
+    lateinit var factory: FavoritesViewModel.Factory
+    private val viewModel: FavoritesViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[FavoritesViewModel::class.java]
+    }
     private val binding by viewBinding(FragmentFavoriteActorsBinding::bind)
     private lateinit var actorsAdapter: ActorsAdapter
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appComponent().inject(this)
+    }
 
     override fun initFields() {
         with(binding) {
@@ -44,13 +57,13 @@ class FavoriteActorsFragment : BaseFragment(R.layout.fragment_favorite_actors) {
 
     override fun initListenersAndObservers() {
         with(binding) {
-            favoritesViewModel.getFavoriteActors().observeOnce(viewLifecycleOwner, {
+            viewModel.getFavoriteActors().observeOnce(viewLifecycleOwner, {
                 favoriteActorsLoadingIndicator.visibility = View.GONE
                 rvFavoriteActorsList.visibility = View.VISIBLE
                 actorsAdapter.setActors(it)
             })
 
-            favoritesViewModel.actorsLoadingState.observeOnce(viewLifecycleOwner, {
+            viewModel.actorsLoadingState.observeOnce(viewLifecycleOwner, {
                 when (it) {
                     is Loading -> {
                         rvFavoriteActorsList.visibility = View.GONE

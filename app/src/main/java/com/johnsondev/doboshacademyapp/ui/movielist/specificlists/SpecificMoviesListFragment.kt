@@ -1,6 +1,7 @@
 package com.johnsondev.doboshacademyapp.ui.movielist.specificlists
 
-import androidx.fragment.app.viewModels
+import android.content.Context
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -20,17 +21,29 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.SEARCH_RESULT_SPEC_TY
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
+import com.johnsondev.doboshacademyapp.utilities.appComponent
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import javax.inject.Inject
 
 class SpecificMoviesListFragment : BaseFragment(R.layout.fragment_specific_movies_list) {
 
-    private val moviesListViewModel by viewModels<MoviesListViewModel>()
+    @Inject
+    lateinit var viewModelFactory: MoviesListViewModel.Factory
+    private val listViewModel: MoviesListViewModel by lazy {
+        ViewModelProvider(requireActivity(), viewModelFactory)[MoviesListViewModel::class.java]
+    }
+
     private val binding by viewBinding(FragmentSpecificMoviesListBinding::bind)
     private lateinit var adapter: MoviesAdapter
     private lateinit var specType: String
     private var genre: Genre? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appComponent().inject(this)
+    }
 
     override fun initFields() {
         with(binding) {
@@ -45,7 +58,7 @@ class SpecificMoviesListFragment : BaseFragment(R.layout.fragment_specific_movie
         when (specType) {
             GENRE_SPEC_TYPE -> {
                 genre = arguments?.getParcelable(GENRE_KEY)
-                moviesListViewModel.loadMoviesByGenreId(genre?.id ?: 0)
+                listViewModel.loadMoviesByGenreId(genre?.id ?: 0)
             }
         }
     }
@@ -68,22 +81,22 @@ class SpecificMoviesListFragment : BaseFragment(R.layout.fragment_specific_movie
 
         when (specType) {
             POPULAR_SPEC_TYPE -> {
-                moviesListViewModel.getPopularMovies().observe(viewLifecycleOwner) {
+                listViewModel.getPopularMovies().observe(viewLifecycleOwner) {
                     adapter.setMovies(it)
                 }
             }
             TOP_RATED_SPEC_TYPE -> {
-                moviesListViewModel.getTopRatedMovies().observe(viewLifecycleOwner) {
+                listViewModel.getTopRatedMovies().observe(viewLifecycleOwner) {
                     adapter.setMovies(it)
                 }
             }
             UPCOMING_SPEC_TYPE -> {
-                moviesListViewModel.getUpcomingMovies().observe(viewLifecycleOwner) {
+                listViewModel.getUpcomingMovies().observe(viewLifecycleOwner) {
                     adapter.setMovies(it)
                 }
             }
             GENRE_SPEC_TYPE -> {
-                moviesListViewModel.getMoviesByGenre().observe(viewLifecycleOwner) {
+                listViewModel.getMoviesByGenre().observe(viewLifecycleOwner) {
                     adapter.setMovies(it)
                 }
             }

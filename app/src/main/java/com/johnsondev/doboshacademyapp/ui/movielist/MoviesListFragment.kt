@@ -1,8 +1,9 @@
 package com.johnsondev.doboshacademyapp.ui.movielist
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.work.*
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -24,14 +25,22 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.POP_ACTORS_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.TOP_RATED_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
+import com.johnsondev.doboshacademyapp.utilities.appComponent
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
+import com.johnsondev.doboshacademyapp.utilities.isInternetConnectionAvailable
 import com.johnsondev.doboshacademyapp.utilities.showMessage
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 class MoviesListFragment : BaseFragment(R.layout.fragment_movies_list) {
 
-    private val listViewModel by viewModels<MoviesListViewModel>()
+    @Inject
+    lateinit var viewModelFactory: MoviesListViewModel.Factory
+    private val listViewModel: MoviesListViewModel by lazy {
+        ViewModelProvider(requireActivity(), viewModelFactory)[MoviesListViewModel::class.java]
+    }
+
     private val binding by viewBinding(FragmentMoviesListBinding::bind)
     private val scope = CoroutineScope(Dispatchers.IO + Job())
     private var isConnectionErrorFromBundle: Boolean? = null
@@ -41,8 +50,15 @@ class MoviesListFragment : BaseFragment(R.layout.fragment_movies_list) {
     private lateinit var popGenresAdapter: GenresAdapter
     private lateinit var popActorsAdapter: ActorsAdapter
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appComponent().inject(this)
+    }
+
 
     override fun initFields() {
+
+
         with(binding) {
             popularMoviesAdapter =
                 MoviesAdapter(requireContext(), movieClickListener, MOVIE_ITEM_DEFAULT)
@@ -77,12 +93,12 @@ class MoviesListFragment : BaseFragment(R.layout.fragment_movies_list) {
     override fun initListenersAndObservers() {
         with(binding) {
 
-            if (isConnectionErrorFromBundle == true && !listViewModel.isInternetConnectionAvailable()) {
+            if (isConnectionErrorFromBundle == true && !isInternetConnectionAvailable(requireContext())) {
                 showMessage(getString(R.string.internet_connection_error))
             }
 
             swipeLayout.setOnRefreshListener {
-                if (!listViewModel.isInternetConnectionAvailable()) {
+                if (!isInternetConnectionAvailable(requireContext())) {
                     showMessage(getString(R.string.internet_connection_error))
                     swipeLayout.isRefreshing = false
                 } else {

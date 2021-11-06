@@ -14,9 +14,11 @@ import androidx.work.WorkerParameters
 import com.bumptech.glide.Glide
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.base.Movie
-import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
+import com.johnsondev.doboshacademyapp.data.repositories.movies.MoviesRepository
 import com.johnsondev.doboshacademyapp.ui.splash.SplashScreenActivity
+import com.johnsondev.doboshacademyapp.utilities.appComponent
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
 class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
@@ -27,19 +29,23 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
         private const val NOTIFICATION_TAG = "newMovies"
     }
 
+    @Inject
+    lateinit var moviesRepository: MoviesRepository
+
     private val notificationManagerCompat = NotificationManagerCompat.from(context)
     private var isNewMovie = false
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
+        appComponent().inject(this)
         return try {
             var newMovieList: List<Movie>
             scope.launch {
 
                 withContext(scope.coroutineContext) {
-                    MoviesRepository.loadUpcomingMoviesFromNet().apply {
-                        newMovieList = MoviesRepository.getUpcomingMovies()
+                    moviesRepository.loadUpcomingMoviesFromNet().apply {
+                        newMovieList = moviesRepository.getUpcomingMovies()
                     }
                 }
 

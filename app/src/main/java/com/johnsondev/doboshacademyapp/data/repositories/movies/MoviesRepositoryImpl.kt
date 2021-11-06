@@ -1,4 +1,4 @@
-package com.johnsondev.doboshacademyapp.data.repositories
+package com.johnsondev.doboshacademyapp.data.repositories.movies
 
 import androidx.lifecycle.MutableLiveData
 import com.johnsondev.doboshacademyapp.App
@@ -8,26 +8,23 @@ import com.johnsondev.doboshacademyapp.data.models.base.Actor
 import com.johnsondev.doboshacademyapp.data.models.base.Genre
 import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.data.models.base.MovieDetails
-import com.johnsondev.doboshacademyapp.data.network.NetworkService
+import com.johnsondev.doboshacademyapp.data.network.api.MovieApi
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieImageDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
 import com.johnsondev.doboshacademyapp.data.network.exception.ConnectionErrorException
 import com.johnsondev.doboshacademyapp.data.network.exception.UnexpectedErrorException
-import com.johnsondev.doboshacademyapp.utilities.Constants.BACKDROP_KEY
-import com.johnsondev.doboshacademyapp.utilities.Constants.FAVORITE_ACTOR_ENTITY_TYPE
-import com.johnsondev.doboshacademyapp.utilities.Constants.FAVORITE_MOVIE_ENTITY_TYPE
-import com.johnsondev.doboshacademyapp.utilities.Constants.LANG_RU
-import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_KEY
+import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.DtoMapper
 import retrofit2.HttpException
 import java.io.IOException
 import java.util.concurrent.TimeoutException
+import javax.inject.Inject
 
-object MoviesRepository {
+class MoviesRepositoryImpl @Inject constructor(
+    var movieApi: MovieApi
+) : MoviesRepository {
 
-    private val movieApi = NetworkService.MOVIE_API
     private val favoritesDatabase = App.getInstance().getFavoritesDatabase()
-
     private var popularMoviesList: List<Movie> = listOf()
     private var topRatedMoviesList: List<Movie> = listOf()
     private var upcomingMoviesList: List<Movie> = listOf()
@@ -44,10 +41,10 @@ object MoviesRepository {
     private var movieVideos = MutableLiveData<List<MovieVideoDto>>()
     private var movieImages = MutableLiveData<Map<String, List<MovieImageDto>>>()
 
-    suspend fun getFavoriteMoviesIds(): MutableLiveData<List<Int>> {
+    override suspend fun getFavoriteMoviesIds(): MutableLiveData<List<Int>> {
         try {
             favoriteMoviesIds.value = favoritesDatabase.favoritesDao()
-                .getFavoritesEntityIdByType(FAVORITE_MOVIE_ENTITY_TYPE)
+                .getFavoritesEntityIdByType(Constants.FAVORITE_MOVIE_ENTITY_TYPE)
         } catch (e: Exception) {
             handleExceptions(e)
         }
@@ -55,10 +52,10 @@ object MoviesRepository {
     }
 
 
-    suspend fun loadFavoritesMoviesFromDb() {
+    override suspend fun loadFavoritesMoviesFromDb() {
         try {
             favoriteMovies.value = favoritesDatabase.favoritesDao()
-                .getFavoritesEntityIdByType(FAVORITE_MOVIE_ENTITY_TYPE).map { id ->
+                .getFavoritesEntityIdByType(Constants.FAVORITE_MOVIE_ENTITY_TYPE).map { id ->
                     DtoMapper.convertMovieFromDto(movieApi.getMovieById(id))
                 }
 
@@ -67,12 +64,12 @@ object MoviesRepository {
         }
     }
 
-    suspend fun insertMovieToFavorites(movieId: Int) {
+    override suspend fun insertMovieToFavorites(movieId: Int) {
 
         try {
             favoritesDatabase.favoritesDao().insertFavoriteEntity(
                 FavoriteEntity(
-                    entityType = FAVORITE_MOVIE_ENTITY_TYPE,
+                    entityType = Constants.FAVORITE_MOVIE_ENTITY_TYPE,
                     entityId = movieId
                 )
             )
@@ -81,19 +78,19 @@ object MoviesRepository {
         }
     }
 
-    suspend fun deleteMovieFromFavorites(movieId: Int) {
+    override suspend fun deleteMovieFromFavorites(movieId: Int) {
         try {
             favoritesDatabase.favoritesDao()
-                .deleteFavoriteEntity(FAVORITE_MOVIE_ENTITY_TYPE, movieId)
+                .deleteFavoriteEntity(Constants.FAVORITE_MOVIE_ENTITY_TYPE, movieId)
         } catch (e: Exception) {
             handleExceptions(e)
         }
 
     }
 
-    fun getFavoritesMovies(): MutableLiveData<List<Movie>> = favoriteMovies
+    override fun getFavoritesMovies(): MutableLiveData<List<Movie>> = favoriteMovies
 
-    suspend fun search(query: String): SearchResultLists {
+    override suspend fun search(query: String): SearchResultLists {
         var moviesSearchResult: List<Movie> = listOf()
         var actorsSearchResult: List<Actor> = listOf()
 
@@ -115,7 +112,7 @@ object MoviesRepository {
         return SearchResultLists(moviesSearchResult, actorsSearchResult)
     }
 
-    suspend fun loadSimilarMoviesById(movieId: Int) {
+    override suspend fun loadSimilarMoviesById(movieId: Int) {
         try {
             similarMovies.postValue(
                 movieApi.getSimilarMoviesByMovieId(movieId).results.distinct().map {
@@ -126,7 +123,7 @@ object MoviesRepository {
         }
     }
 
-    suspend fun loadRecommendationsByMovieId(id: Int) {
+    override suspend fun loadRecommendationsByMovieId(id: Int) {
         try {
             movieRecommendations.postValue(
                 movieApi.getRecommendationsByMovieId(id).results.distinct().map {
@@ -137,13 +134,13 @@ object MoviesRepository {
         }
     }
 
-    suspend fun loadMovieImages(id: Int) {
+    override suspend fun loadMovieImages(id: Int) {
         try {
             val movieImagesFromApi = movieApi.getMovieImages(id)
             movieImages.postValue(
                 mapOf(
-                    POSTER_KEY to movieImagesFromApi.posters,
-                    BACKDROP_KEY to movieImagesFromApi.backdrops
+                    Constants.POSTER_KEY to movieImagesFromApi.posters,
+                    Constants.BACKDROP_KEY to movieImagesFromApi.backdrops
                 )
             )
         } catch (e: Exception) {
@@ -151,16 +148,16 @@ object MoviesRepository {
         }
     }
 
-    suspend fun loadMovieVideosById(id: Int) {
+    override suspend fun loadMovieVideosById(id: Int) {
         try {
-            movieVideos.postValue(movieApi.getMovieVideos(id, LANG_RU).results)
+            movieVideos.postValue(movieApi.getMovieVideos(id, Constants.LANG_RU).results)
         } catch (e: Exception) {
             handleExceptions(e)
         }
 
     }
 
-    suspend fun loadMovieById(id: Int) {
+    override suspend fun loadMovieById(id: Int) {
         try {
             currentMovieDetails.value =
                 DtoMapper.convertMovieDetailsFromDto(movieApi.getMovieDetailsById(id))
@@ -169,7 +166,7 @@ object MoviesRepository {
         }
     }
 
-    suspend fun loadGenresList() {
+    override suspend fun loadGenresList() {
         try {
             genresList.value = movieApi.getGenresList().genres.distinct().map {
                 DtoMapper.convertGenreFromDto(it)
@@ -179,7 +176,7 @@ object MoviesRepository {
         }
     }
 
-    suspend fun loadMoviesByGenreId(id: Int) {
+    override suspend fun loadMoviesByGenreId(id: Int) {
         try {
             moviesByGenre.value = movieApi.getMoviesListByGenreId(id).results.distinct().map {
                 DtoMapper.convertMovieFromDto(it)
@@ -189,7 +186,7 @@ object MoviesRepository {
         }
     }
 
-    suspend fun loadPopularActorsList() {
+    override suspend fun loadPopularActorsList() {
         try {
             popularActorsList.value = movieApi.getPopularActors().results.distinct().map {
                 DtoMapper.convertActorFromDto(it)
@@ -199,24 +196,24 @@ object MoviesRepository {
         }
     }
 
-    fun getPopularActors(): MutableLiveData<List<Actor>> = popularActorsList
+    override fun getPopularActors(): MutableLiveData<List<Actor>> = popularActorsList
 
-    fun getMoviesByGenre(): MutableLiveData<List<Movie>> = moviesByGenre
+    override fun getMoviesByGenre(): MutableLiveData<List<Movie>> = moviesByGenre
 
-    fun getGenresList(): MutableLiveData<List<Genre>> = genresList
+    override fun getGenresList(): MutableLiveData<List<Genre>> = genresList
 
-    fun getMovieVideos(): MutableLiveData<List<MovieVideoDto>> = movieVideos
+    override fun getMovieVideos(): MutableLiveData<List<MovieVideoDto>> = movieVideos
 
-    fun getCurrentMovie(): MutableLiveData<MovieDetails> = currentMovieDetails
+    override fun getCurrentMovie(): MutableLiveData<MovieDetails> = currentMovieDetails
 
-    fun getMovieImages(): MutableLiveData<Map<String, List<MovieImageDto>>> = movieImages
+    override fun getMovieImages(): MutableLiveData<Map<String, List<MovieImageDto>>> = movieImages
 
-    fun getRecommendations(): MutableLiveData<List<Movie>> = movieRecommendations
+    override fun getRecommendations(): MutableLiveData<List<Movie>> = movieRecommendations
 
-    fun getSimilarMovies(): MutableLiveData<List<Movie>> = similarMovies
+    override fun getSimilarMovies(): MutableLiveData<List<Movie>> = similarMovies
 
 
-    suspend fun loadPopularMoviesFromNet() {
+    override suspend fun loadPopularMoviesFromNet() {
         try {
             popularMoviesList = movieApi.getPopular().results.distinct().map {
                 DtoMapper.convertMovieFromDto(
@@ -229,7 +226,7 @@ object MoviesRepository {
 
     }
 
-    suspend fun loadTopRatedMoviesFromNet() {
+    override suspend fun loadTopRatedMoviesFromNet() {
         try {
             topRatedMoviesList = movieApi.getTopRated().results.distinct().map {
                 DtoMapper.convertMovieFromDto(
@@ -242,7 +239,7 @@ object MoviesRepository {
 
     }
 
-    suspend fun loadUpcomingMoviesFromNet() {
+    override suspend fun loadUpcomingMoviesFromNet() {
         try {
             upcomingMoviesList = movieApi.getUpcoming().results.distinct().map {
                 DtoMapper.convertMovieFromDto(
@@ -256,15 +253,15 @@ object MoviesRepository {
     }
 
 
-    fun getTopRatedMovies(): List<Movie> {
+    override fun getTopRatedMovies(): List<Movie> {
         return topRatedMoviesList
     }
 
-    fun getPopularMovies(): List<Movie> {
+    override fun getPopularMovies(): List<Movie> {
         return popularMoviesList
     }
 
-    fun getUpcomingMovies(): List<Movie> {
+    override fun getUpcomingMovies(): List<Movie> {
         return upcomingMoviesList
     }
 
@@ -274,6 +271,4 @@ object MoviesRepository {
             else -> UnexpectedErrorException()
         }
     }
-
-
 }

@@ -1,9 +1,11 @@
 package com.johnsondev.doboshacademyapp.ui.actordetails
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.load
 import coil.transform.BlurTransformation
@@ -11,16 +13,29 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorDetailsPagerAdapter
 import com.johnsondev.doboshacademyapp.databinding.FragmentActorDetailsBinding
+import com.johnsondev.doboshacademyapp.ui.favorite.FavoritesViewModel
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
+import com.johnsondev.doboshacademyapp.utilities.appComponent
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
+import javax.inject.Inject
 
 class ActorDetailsFragment : BaseFragment(R.layout.fragment_actor_details) {
 
-    private val detailsViewModel by viewModels<ActorDetailsViewModel>()
+    @Inject
+    lateinit var factory: ActorDetailsViewModel.Factory
+    private val viewModel: ActorDetailsViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[ActorDetailsViewModel::class.java]
+    }
+
     private val binding by viewBinding(FragmentActorDetailsBinding::bind)
     private var currentActorId: Int? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appComponent().inject(this)
+    }
 
 
     override fun initFields() {
@@ -37,9 +52,9 @@ class ActorDetailsFragment : BaseFragment(R.layout.fragment_actor_details) {
     override fun loadData() {
         currentActorId = arguments?.getInt(ACTOR_KEY)
 
-        if (detailsViewModel.checkInternetConnection(requireContext())) {
+        if (viewModel.checkInternetConnection(requireContext())) {
             if (currentActorId != 0) {
-                detailsViewModel.apply {
+                viewModel.apply {
                     loadActorDetailsById(currentActorId!!)
                     loadFavoriteActorsIds()
                 }
@@ -52,9 +67,9 @@ class ActorDetailsFragment : BaseFragment(R.layout.fragment_actor_details) {
     override fun initListenersAndObservers() {
 
         with(binding) {
-            detailsViewModel.getActorDetails().observe(viewLifecycleOwner) {
+            viewModel.getActorDetails().observe(viewLifecycleOwner) {
 
-                if (detailsViewModel.isActorFavorite(currentActorId!!)) {
+                if (viewModel.isActorFavorite(currentActorId!!)) {
                     favoriteActorBtn.load(R.drawable.ic_favorite_filled)
                 }
 
@@ -77,7 +92,7 @@ class ActorDetailsFragment : BaseFragment(R.layout.fragment_actor_details) {
 
             }
 
-            detailsViewModel.error.observe(viewLifecycleOwner) {
+            viewModel.error.observe(viewLifecycleOwner) {
                 if (it != null) {
                     onError(it)
                     hideViews()
@@ -85,12 +100,12 @@ class ActorDetailsFragment : BaseFragment(R.layout.fragment_actor_details) {
             }
 
             favoriteActorBtn.setOnClickListener {
-                detailsViewModel.loadFavoriteActorsIds()
-                if (detailsViewModel.isActorFavorite(currentActorId!!)) {
-                    detailsViewModel.deleteActorFromFavorites(currentActorId!!)
+                viewModel.loadFavoriteActorsIds()
+                if (viewModel.isActorFavorite(currentActorId!!)) {
+                    viewModel.deleteActorFromFavorites(currentActorId!!)
                     favoriteActorBtn.load(R.drawable.ic_favorite_icon)
                 } else {
-                    detailsViewModel.insertActorToFavorites(currentActorId!!)
+                    viewModel.insertActorToFavorites(currentActorId!!)
                     favoriteActorBtn.load(R.drawable.ic_favorite_filled)
                 }
             }
@@ -108,7 +123,7 @@ class ActorDetailsFragment : BaseFragment(R.layout.fragment_actor_details) {
 
     override fun onDestroy() {
         super.onDestroy()
-        detailsViewModel.clearActorDetails()
+        viewModel.clearActorDetails()
     }
 
 

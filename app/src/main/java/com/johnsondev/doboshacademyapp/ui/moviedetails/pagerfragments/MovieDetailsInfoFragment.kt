@@ -1,8 +1,10 @@
 package com.johnsondev.doboshacademyapp.ui.moviedetails.pagerfragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.clear
@@ -21,16 +23,28 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_POSTER
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 import com.johnsondev.doboshacademyapp.utilities.DtoMapper
+import com.johnsondev.doboshacademyapp.utilities.appComponent
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
+import javax.inject.Inject
 
 class MovieDetailsInfoFragment : BaseFragment(R.layout.fragment_movie_details_info) {
 
-    private val detailsViewModel by viewModels<MovieDetailsViewModel>()
+    @Inject
+    lateinit var factory: MovieDetailsViewModel.Factory
+    private val viewModel: MovieDetailsViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[MovieDetailsViewModel::class.java]
+    }
+
     private val binding by viewBinding(FragmentMovieDetailsInfoBinding::bind)
     private lateinit var filmCrewAdapter: CrewAdapter
     private lateinit var productCountriesAdapter: ProductCountriesAdapter
     private lateinit var productCompaniesAdapter: ProductCompaniesAdapter
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appComponent().inject(this)
+    }
 
     override fun initFields() {
         filmCrewAdapter = CrewAdapter(requireContext())
@@ -51,7 +65,7 @@ class MovieDetailsInfoFragment : BaseFragment(R.layout.fragment_movie_details_in
     override fun initListenersAndObservers() {
         with(binding) {
 
-            detailsViewModel.getCurrentMovieFromNet().observeOnce(viewLifecycleOwner, { movie ->
+            viewModel.getCurrentMovieFromNet().observeOnce(viewLifecycleOwner, { movie ->
                 movieInfoLoadingIndicator.visibility = View.GONE
                 tvStoryLine.text = movie.overview
                 tvStatus.text = movie.status
@@ -67,11 +81,11 @@ class MovieDetailsInfoFragment : BaseFragment(R.layout.fragment_movie_details_in
 
             })
 
-            detailsViewModel.getCrewForCurrentMovie().observeOnce(viewLifecycleOwner, {
+            viewModel.getCrewForCurrentMovie().observeOnce(viewLifecycleOwner, {
                 filmCrewAdapter.setCrewList(it)
             })
 
-            detailsViewModel.getMovieImagesForCurrentMovie().observeOnce(viewLifecycleOwner, {
+            viewModel.getMovieImagesForCurrentMovie().observeOnce(viewLifecycleOwner, {
 
                 if (it[POSTER_KEY]?.size != 0) {
                     ivMediaPoster.load("$POSTER_PATH${it[POSTER_KEY]?.get(0)?.filePath}") {

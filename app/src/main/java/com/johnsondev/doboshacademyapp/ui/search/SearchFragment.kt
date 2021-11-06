@@ -1,12 +1,11 @@
 package com.johnsondev.doboshacademyapp.ui.search
 
-import android.os.Bundle
-import android.os.Parcelable
+import android.content.Context
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -18,30 +17,36 @@ import com.johnsondev.doboshacademyapp.adapters.OnMovieItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.base.Actor
 import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.databinding.FragmentSearchBinding
-import com.johnsondev.doboshacademyapp.utilities.Constants.ACTORS_SEARCH_RESULT_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_MINI
-import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIES_SEARCH_RESULT_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_MINI
-import com.johnsondev.doboshacademyapp.utilities.Constants.SEARCH_RESULT_SPEC_TYPE
-import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.afterTextChanged
+import com.johnsondev.doboshacademyapp.utilities.appComponent
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.hideKeyboard
-import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.showMessage
 import com.johnsondev.doboshacademyapp.utilities.states.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
-import java.util.*
+import javax.inject.Inject
 
 
 class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
-    private val searchViewModel by viewModels<SearchViewModel>()
+    @Inject
+    lateinit var factory: SearchViewModel.Factory
+    private val searchViewModel: SearchViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[SearchViewModel::class.java]
+    }
+
     private val binding by viewBinding(FragmentSearchBinding::bind)
     private lateinit var moviesAdapter: MoviesAdapter
     private lateinit var actorsAdapter: ActorsAdapter
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appComponent().inject(this)
+    }
 
     override fun initFields() {
         moviesAdapter = MoviesAdapter(requireContext(), onMovieClickListener, MOVIE_ITEM_MINI)
@@ -85,41 +90,41 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                 }
             }
 
-            searchViewModel.searchResultMap.observeOnce(
-                viewLifecycleOwner,
-                { handleSearchResult(it) })
-            searchViewModel.searchState.observeOnce(viewLifecycleOwner, { handleSearchState(it) })
+//            searchViewModel.searchResultMap.observeOnce(
+//                viewLifecycleOwner,
+//                { handleSearchResult(it) })
+//            searchViewModel.searchState.observeOnce(viewLifecycleOwner, { handleSearchState(it) })
 
-            moviesResultSpecBtn.setOnClickListener {
-                if (searchViewModel.searchResultMap.value is ValidSearchResult) {
-                    val bundle = Bundle()
-                    bundle.putParcelableArrayList(
-                        MOVIES_SEARCH_RESULT_SPEC_TYPE,
-                        (searchViewModel.searchResultMap.value as ValidSearchResult).resultLists.movies as ArrayList<out Parcelable>
-                    )
-                    bundle.putString(SPECIFIC_LIST_TYPE, SEARCH_RESULT_SPEC_TYPE)
-                    findNavController().navigate(
-                        R.id.action_searchFragment_to_specificListFragment,
-                        bundle
-                    )
-                }
-            }
+//            moviesResultSpecBtn.setOnClickListener {
+//                if (searchViewModel.searchResultMap.value is ValidSearchResult) {
+//                    val bundle = Bundle()
+//                    bundle.putParcelableArrayList(
+//                        MOVIES_SEARCH_RESULT_SPEC_TYPE,
+//                        (searchViewModel.searchResultMap.value as ValidSearchResult).resultLists.movies as ArrayList<out Parcelable>
+//                    )
+//                    bundle.putString(SPECIFIC_LIST_TYPE, SEARCH_RESULT_SPEC_TYPE)
+//                    findNavController().navigate(
+//                        R.id.action_searchFragment_to_specificListFragment,
+//                        bundle
+//                    )
+//                }
+//            }
 
-            actorsResultSpecBtn.setOnClickListener {
-                if (searchViewModel.searchResultMap.value is ValidSearchResult) {
-                    val bundle = Bundle()
-                    bundle.putParcelableArrayList(
-                        ACTORS_SEARCH_RESULT_SPEC_TYPE,
-                        (searchViewModel.searchResultMap.value as ValidSearchResult).resultLists.actors as ArrayList<out Parcelable>
-                    )
-                    bundle.putString(SPECIFIC_LIST_TYPE, SEARCH_RESULT_SPEC_TYPE)
-                    findNavController().navigate(
-                        R.id.action_searchFragment_to_specificActorsListFragment,
-                        bundle
-                    )
-                }
-
-            }
+//            actorsResultSpecBtn.setOnClickListener {
+//                if (searchViewModel.searchResultMap.value is ValidSearchResult) {
+//                    val bundle = Bundle()
+//                    bundle.putParcelableArrayList(
+//                        ACTORS_SEARCH_RESULT_SPEC_TYPE,
+//                        (searchViewModel.searchResultMap.value as ValidSearchResult).resultLists.actors as ArrayList<out Parcelable>
+//                    )
+//                    bundle.putString(SPECIFIC_LIST_TYPE, SEARCH_RESULT_SPEC_TYPE)
+//                    findNavController().navigate(
+//                        R.id.action_searchFragment_to_specificActorsListFragment,
+//                        bundle
+//                    )
+//                }
+//
+//            }
         }
     }
 

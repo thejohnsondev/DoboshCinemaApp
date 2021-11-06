@@ -1,8 +1,10 @@
 package com.johnsondev.doboshacademyapp.ui.moviedetails.pagerfragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -15,14 +17,25 @@ import com.johnsondev.doboshacademyapp.ui.moviedetails.MovieDetailsViewModel
 import com.johnsondev.doboshacademyapp.ui.moviedetails.MoviesDetailsFragmentDirections
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_HORIZONTAL
+import com.johnsondev.doboshacademyapp.utilities.appComponent
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
+import javax.inject.Inject
 
 class MovieDetailsActorsFragment : BaseFragment(R.layout.fragment_movie_details_actors) {
 
-    private val detailsViewModel by viewModels<MovieDetailsViewModel>()
+    @Inject
+    lateinit var factory: MovieDetailsViewModel.Factory
+    private val viewModel: MovieDetailsViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[MovieDetailsViewModel::class.java]
+    }
     private val binding by viewBinding(FragmentMovieDetailsActorsBinding::bind)
     private lateinit var movieActorsAdapter: ActorsAdapter
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appComponent().inject(this)
+    }
 
     override fun initFields() {
         movieActorsAdapter = ActorsAdapter(
@@ -39,7 +52,7 @@ class MovieDetailsActorsFragment : BaseFragment(R.layout.fragment_movie_details_
 
     override fun initListenersAndObservers() {
 
-        detailsViewModel.getActorsForCurrentMovie().observeOnce(this, {
+        viewModel.getActorsForCurrentMovie().observeOnce(this, {
             binding.movieActorsLoadingIndicator.visibility = View.GONE
             movieActorsAdapter.setActors(it)
         })

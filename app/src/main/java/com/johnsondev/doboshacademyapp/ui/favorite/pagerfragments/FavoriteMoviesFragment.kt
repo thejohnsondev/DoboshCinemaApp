@@ -1,7 +1,9 @@
 package com.johnsondev.doboshacademyapp.ui.favorite.pagerfragments
 
+import android.content.Context
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -13,17 +15,27 @@ import com.johnsondev.doboshacademyapp.databinding.FragmentFavoriteMoviesBinding
 import com.johnsondev.doboshacademyapp.ui.favorite.FavoriteFragmentDirections
 import com.johnsondev.doboshacademyapp.ui.favorite.FavoritesViewModel
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_ITEM_LARGE
+import com.johnsondev.doboshacademyapp.utilities.appComponent
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.states.Loading
+import javax.inject.Inject
 
 
 class FavoriteMoviesFragment : BaseFragment(R.layout.fragment_favorite_movies) {
 
-    private val favoritesViewModel by viewModels<FavoritesViewModel>()
+    @Inject
+    lateinit var factory: FavoritesViewModel.Factory
+    private val viewModel: FavoritesViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[FavoritesViewModel::class.java]
+    }
     private val binding by viewBinding(FragmentFavoriteMoviesBinding::bind)
     private lateinit var moviesListAdapter: MoviesAdapter
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appComponent().inject(this)
+    }
 
     override fun initFields() {
         with(binding) {
@@ -42,13 +54,13 @@ class FavoriteMoviesFragment : BaseFragment(R.layout.fragment_favorite_movies) {
 
     override fun initListenersAndObservers() {
         with(binding) {
-            favoritesViewModel.getFavoriteMovies().observeOnce(viewLifecycleOwner, {
+            viewModel.getFavoriteMovies().observeOnce(viewLifecycleOwner, {
                 favoriteMoviesLoadingIndicator.visibility = View.GONE
                 rvFavoriteMoviesList.visibility = View.VISIBLE
                 moviesListAdapter.setMovies(it)
             })
 
-            favoritesViewModel.moviesLoadingState.observeOnce(viewLifecycleOwner, {
+            viewModel.moviesLoadingState.observeOnce(viewLifecycleOwner, {
                 when (it) {
                     is Loading -> {
                         favoriteMoviesLoadingIndicator.visibility = View.VISIBLE

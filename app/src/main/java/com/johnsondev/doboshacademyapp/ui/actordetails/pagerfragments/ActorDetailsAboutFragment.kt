@@ -1,7 +1,9 @@
 package com.johnsondev.doboshacademyapp.ui.actordetails.pagerfragments
 
+import android.content.Context
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorImagesAdapter
@@ -14,15 +16,26 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.ANIM_PROPERTY_MAX_LIN
 import com.johnsondev.doboshacademyapp.utilities.Constants.CURRENT_YEAR
 import com.johnsondev.doboshacademyapp.utilities.Constants.EMPTY_STRING
 import com.johnsondev.doboshacademyapp.utilities.animateView
+import com.johnsondev.doboshacademyapp.utilities.appComponent
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
+import javax.inject.Inject
 
 class ActorDetailsAboutFragment : BaseFragment(R.layout.fragment_actor_details_about) {
 
-    private val viewModel by viewModels<ActorDetailsViewModel>()
+    @Inject
+    lateinit var factory: ActorDetailsViewModel.Factory
+    private val viewModel: ActorDetailsViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[ActorDetailsViewModel::class.java]
+    }
     private val binding by viewBinding(FragmentActorDetailsAboutBinding::bind)
     private var alsoKnownAdapter: NamesAdapter? = null
     private var actorImagesAdapter: ActorImagesAdapter? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appComponent().inject(this)
+    }
 
     override fun initFields() {
         alsoKnownAdapter = NamesAdapter(requireContext())

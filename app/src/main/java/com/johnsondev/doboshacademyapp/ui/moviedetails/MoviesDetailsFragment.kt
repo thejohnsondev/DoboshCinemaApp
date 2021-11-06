@@ -1,9 +1,10 @@
 package com.johnsondev.doboshacademyapp.ui.moviedetails
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.load
@@ -20,20 +21,32 @@ import com.johnsondev.doboshacademyapp.databinding.FragmentMoviesDetailsBinding
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_TAB_TITLES
+import com.johnsondev.doboshacademyapp.utilities.appComponent
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.timeToHFromMin
 import java.util.*
+import javax.inject.Inject
 
 class MoviesDetailsFragment : BaseFragment(R.layout.fragment_movies_details) {
 
-    private val detailsViewModel by viewModels<MovieDetailsViewModel>()
+    @Inject
+    lateinit var factory: MovieDetailsViewModel.Factory
+    private val viewModel: MovieDetailsViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[MovieDetailsViewModel::class.java]
+    }
+
     private val binding by viewBinding(FragmentMoviesDetailsBinding::bind)
     private var currentMovieId: Int = 0
     private var currentMovie: Movie? = null
     private var date: Calendar? = null
     private lateinit var movieGenresAdapter: GenresAdapter
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appComponent().inject(this)
+    }
 
     override fun initFields() {
         binding.movieViewPager.adapter = MovieDetailsPagerAdapter(this)
@@ -57,7 +70,7 @@ class MoviesDetailsFragment : BaseFragment(R.layout.fragment_movies_details) {
         date = Calendar.getInstance()
         val movieId = arguments?.getInt(MOVIE_KEY)
         if (movieId != 0 && movieId != null) {
-            detailsViewModel.apply {
+            viewModel.apply {
                 loadMovieFromNetById(movieId)
                 loadCastForMovieById(movieId)
                 loadMovieVideosById(movieId)
@@ -76,11 +89,11 @@ class MoviesDetailsFragment : BaseFragment(R.layout.fragment_movies_details) {
 
     override fun initListenersAndObservers() {
         with(binding) {
-            detailsViewModel.getCurrentMovieFromNet().observeOnce(viewLifecycleOwner, { movie ->
+            viewModel.getCurrentMovieFromNet().observeOnce(viewLifecycleOwner, { movie ->
                 currentMovieId = movie.id
                 currentMovie = Movie(id = movie.id, title = movie.title)
 
-                if (detailsViewModel.isMovieFavorite(currentMovieId)) {
+                if (viewModel.isMovieFavorite(currentMovieId)) {
                     favoriteBtn.load(R.drawable.ic_favorite_filled)
                 }
                 val movieReviews: String =
@@ -113,11 +126,11 @@ class MoviesDetailsFragment : BaseFragment(R.layout.fragment_movies_details) {
                 rbRating.progress = (movie.ratings * 2).toInt()
                 tvReviews.text = movieReviews
                 tvAge.text = getString(R.string.plus, movie.minimumAge)
-                movieGenresAdapter.setGenresList(movie.genres ?: emptyList())
+                movieGenresAdapter.setGenresList(movie.genres)
 
             })
 
-            detailsViewModel.error.observe(viewLifecycleOwner) {
+            viewModel.error.observe(viewLifecycleOwner) {
                 if (it != null) {
                     onError(it)
                     hideViews()
@@ -129,19 +142,19 @@ class MoviesDetailsFragment : BaseFragment(R.layout.fragment_movies_details) {
             }
 
             favoriteBtn.setOnClickListener {
-                detailsViewModel.loadFavoriteMoviesIds()
-                if (detailsViewModel.isMovieFavorite(currentMovieId)) {
-                    detailsViewModel.deleteMovieFromFavorites(currentMovieId)
+                viewModel.loadFavoriteMoviesIds()
+                if (viewModel.isMovieFavorite(currentMovieId)) {
+                    viewModel.deleteMovieFromFavorites(currentMovieId)
                     favoriteBtn.load(R.drawable.ic_favorite_icon)
                 } else {
-                    detailsViewModel.insertMovieToFavorites(currentMovieId)
+                    viewModel.insertMovieToFavorites(currentMovieId)
                     favoriteBtn.load(R.drawable.ic_favorite_filled)
                 }
 
             }
 
             detailsBottomSheet.addToCalendarBtn.setOnClickListener {
-                detailsViewModel.callDatePicker(requireContext(), date!!, currentMovie!!)
+                viewModel.callDatePicker(requireContext(), date!!, currentMovie!!)
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             }
 
