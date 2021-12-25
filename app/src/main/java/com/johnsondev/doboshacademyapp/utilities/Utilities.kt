@@ -104,8 +104,8 @@ fun calculateAge(dateOfBirth: String): String {
     return (currentYear - birthYear).toString()
 }
 
-fun isInternetConnectionAvailable(app: Application): Boolean {
-    val checkInternetConnection = InternetConnectionManager(app)
+fun isInternetConnectionAvailable(context: Context): Boolean {
+    val checkInternetConnection = InternetConnectionManager(context)
     if (checkInternetConnection.isNetworkAvailable()) {
         return true
     }

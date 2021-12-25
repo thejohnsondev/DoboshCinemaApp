@@ -1,10 +1,10 @@
 package com.johnsondev.doboshacademyapp.utilities
 
 
+import android.app.Activity
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
@@ -12,6 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.work.CoroutineWorker
+import com.johnsondev.doboshacademyapp.App
+import com.johnsondev.doboshacademyapp.di.AppComponent
 
 
 fun Fragment.showMessage(message: String) {
@@ -52,4 +55,16 @@ fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
             afterTextChanged.invoke(editable.toString())
         }
     })
+}
+
+fun Fragment.appComponent(): AppComponent {
+    return (this.activity?.application as App).appComponent
+}
+
+fun Activity.appComponent(): AppComponent {
+    return (this.application as App).appComponent
+}
+
+fun CoroutineWorker.appComponent(): AppComponent {
+    return (this.applicationContext as App).appComponent
 }
