@@ -14,12 +14,16 @@ import androidx.work.WorkerParameters
 import com.bumptech.glide.Glide
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.base.Movie
-import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
+import com.johnsondev.doboshacademyapp.data.repositories.movies.MoviesRepository
 import com.johnsondev.doboshacademyapp.ui.splash.SplashScreenActivity
 import kotlinx.coroutines.*
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
+import org.kodein.di.generic.instance
 
 class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
-    CoroutineWorker(context, params) {
+    CoroutineWorker(context, params), KodeinAware {
 
     companion object {
         private const val CHANNEL_ID = "MOVIE_CHANNEL_ID"
@@ -27,6 +31,8 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
         private const val NOTIFICATION_TAG = "newMovies"
     }
 
+    override val kodein = Kodein.lazy { kodein() }
+    private val moviesRepository: MoviesRepository by instance()
     private val notificationManagerCompat = NotificationManagerCompat.from(context)
     private var isNewMovie = false
     private val scope = CoroutineScope(Dispatchers.IO + Job())
@@ -38,8 +44,8 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
             scope.launch {
 
                 withContext(scope.coroutineContext) {
-                    MoviesRepository.loadUpcomingMoviesFromNet().apply {
-                        newMovieList = MoviesRepository.getUpcomingMovies()
+                    moviesRepository.loadUpcomingMoviesFromNet().apply {
+                        newMovieList = moviesRepository.getUpcomingMovies()
                     }
                 }
 

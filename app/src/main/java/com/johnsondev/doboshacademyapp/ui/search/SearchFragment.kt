@@ -6,7 +6,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -32,13 +32,23 @@ import com.johnsondev.doboshacademyapp.utilities.showMessage
 import com.johnsondev.doboshacademyapp.utilities.states.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.launch
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 import java.util.*
 
 
-class SearchFragment : BaseFragment(R.layout.fragment_search) {
+class SearchFragment : BaseFragment(R.layout.fragment_search), KodeinAware {
 
-    private val searchViewModel by viewModels<SearchViewModel>()
+    override val kodein by kodein()
+
+    private val factory: SearchViewModelFactory by instance()
+    private val searchViewModel: SearchViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[SearchViewModel::class.java]
+    }
+
     private val binding by viewBinding(FragmentSearchBinding::bind)
     private lateinit var moviesAdapter: MoviesAdapter
     private lateinit var actorsAdapter: ActorsAdapter
@@ -56,6 +66,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
     override fun bindViews() {}
 
 
+    @ObsoleteCoroutinesApi
     @FlowPreview
     @ExperimentalCoroutinesApi
     override fun initListenersAndObservers() {
@@ -144,7 +155,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                         nothingFoundPlaceholder.root.visibility = View.GONE
                         findSomethingPlaceholder.root.visibility = View.GONE
                         moviesResultSpecBtn.visibility = View.VISIBLE
-                        moviesAdapter.setMovies(result.resultLists.movies)
+                        moviesAdapter.setMovies(result.resultLists.movies.sortedByDescending { movie -> movie.numberOfRatings })
                         tvMoviesCount.text = result.resultLists.movies.size.toString()
                     }
                     if (result.resultLists.actors.isNotEmpty()) {

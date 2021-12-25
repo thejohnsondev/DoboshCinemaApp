@@ -8,7 +8,6 @@ import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.johnsondev.doboshacademyapp.App
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.models.base.Actor
 import com.johnsondev.doboshacademyapp.data.models.base.CrewMember
@@ -16,21 +15,23 @@ import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.data.models.base.MovieDetails
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieImageDto
 import com.johnsondev.doboshacademyapp.data.network.dto.MovieVideoDto
-import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
-import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
-import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_TITLE
+import com.johnsondev.doboshacademyapp.data.repositories.actors.ActorsRepository
+import com.johnsondev.doboshacademyapp.data.repositories.movies.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_PATH
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_ALL_DAY
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_BEGIN_TIME
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_DESCRIPTION
 import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_END_TIME
+import com.johnsondev.doboshacademyapp.utilities.Constants.CALENDAR_VAL_TITLE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseViewModel
-import com.johnsondev.doboshacademyapp.utilities.states.Loading
-import com.johnsondev.doboshacademyapp.utilities.states.LoadingState
 import kotlinx.coroutines.launch
 import java.util.*
 
-class MovieDetailsViewModel(application: Application) : BaseViewModel(application) {
+class MovieDetailsViewModel(
+    val app: Application,
+    private val actorsRepository: ActorsRepository,
+    private val moviesRepository: MoviesRepository
+) : BaseViewModel(app) {
 
     private var _actorList = MutableLiveData<List<Actor>>()
     private var _crewList = MutableLiveData<List<CrewMember>>()
@@ -43,110 +44,108 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
     private var _favoriteMoviesIds = MutableLiveData<List<Int>>()
 
 
-
-
-    fun loadFavoriteMoviesIds(){
+    fun loadFavoriteMoviesIds() {
         viewModelScope.launch(exceptionHandler()) {
-            _favoriteMoviesIds = MoviesRepository.getFavoriteMoviesIds()
+            _favoriteMoviesIds = moviesRepository.getFavoriteMoviesIds()
             mutableError.value = null
         }
     }
 
-    fun isMovieFavorite(movieId: Int): Boolean{
+    fun isMovieFavorite(movieId: Int): Boolean {
         return _favoriteMoviesIds.value?.contains(movieId) == true
     }
 
 
-    fun insertMovieToFavorites(movieId: Int){
+    fun insertMovieToFavorites(movieId: Int) {
         viewModelScope.launch(exceptionHandler()) {
-            MoviesRepository.insertMovieToFavorites(movieId)
+            moviesRepository.insertMovieToFavorites(movieId)
             mutableError.value = null
         }
     }
 
-    fun deleteMovieFromFavorites(movieId: Int){
+    fun deleteMovieFromFavorites(movieId: Int) {
         viewModelScope.launch(exceptionHandler()) {
-            MoviesRepository.deleteMovieFromFavorites(movieId)
+            moviesRepository.deleteMovieFromFavorites(movieId)
             mutableError.value = null
         }
     }
 
     fun loadMovieFromNetById(id: Int) {
         viewModelScope.launch(exceptionHandler()) {
-            MoviesRepository.loadMovieById(id)
+            moviesRepository.loadMovieById(id)
             mutableError.value = null
         }
     }
 
     fun loadCastForMovieById(movieId: Int) {
         viewModelScope.launch(exceptionHandler()) {
-            ActorsRepository.loadCast(movieId)
+            actorsRepository.loadCast(movieId)
             mutableError.value = null
         }
     }
 
     fun loadMovieVideosById(id: Int) {
         viewModelScope.launch(exceptionHandler()) {
-            MoviesRepository.loadMovieVideosById(id)
+            moviesRepository.loadMovieVideosById(id)
             mutableError.value = null
         }
     }
 
     fun loadMovieImagesById(id: Int) {
         viewModelScope.launch(exceptionHandler()) {
-            MoviesRepository.loadMovieImages(id)
+            moviesRepository.loadMovieImages(id)
             mutableError.value = null
         }
     }
 
-    fun loadRecommendationsByMovieId(id: Int){
+    fun loadRecommendationsByMovieId(id: Int) {
         viewModelScope.launch(exceptionHandler()) {
-            MoviesRepository.loadRecommendationsByMovieId(id)
+            moviesRepository.loadRecommendationsByMovieId(id)
             mutableError.value = null
         }
     }
 
-    fun loadSimilarMoviesById(movieId: Int){
+    fun loadSimilarMoviesById(movieId: Int) {
         viewModelScope.launch(exceptionHandler()) {
-            MoviesRepository.loadSimilarMoviesById(movieId)
+            moviesRepository.loadSimilarMoviesById(movieId)
             mutableError.value = null
         }
     }
 
-    fun getSimilarMovies(): LiveData<List<Movie>>{
-        _similarMovies = MoviesRepository.getSimilarMovies()
+    fun getSimilarMovies(): LiveData<List<Movie>> {
+        _similarMovies = moviesRepository.getSimilarMovies()
         return _similarMovies
     }
 
-    fun getRecommendations(): LiveData<List<Movie>>{
-        _movieRecommendations = MoviesRepository.getRecommendations()
+    fun getRecommendations(): LiveData<List<Movie>> {
+        _movieRecommendations = moviesRepository.getRecommendations()
         return _movieRecommendations
     }
 
     fun getMovieImagesForCurrentMovie(): LiveData<Map<String, List<MovieImageDto>>> {
-        _movieImages = MoviesRepository.getMovieImages()
+        _movieImages = moviesRepository.getMovieImages()
         return _movieImages
     }
 
 
     fun getCurrentMovieFromNet(): LiveData<MovieDetails> {
-        _currentMovie = MoviesRepository.getCurrentMovie()
+        _currentMovie = moviesRepository.getCurrentMovie()
         return _currentMovie
     }
 
 
     fun getActorsForCurrentMovie(): LiveData<List<Actor>> {
-        _actorList = ActorsRepository.getActorsForCurrentMovie()
+        _actorList = actorsRepository.getActorsForCurrentMovie()
         return _actorList
     }
 
     fun getCrewForCurrentMovie(): LiveData<List<CrewMember>> {
-        _crewList = ActorsRepository.getCrewForCurrentMovie()
+        _crewList = actorsRepository.getCrewForCurrentMovie()
         return _crewList
     }
 
     fun getMovieVideos(): LiveData<List<MovieVideoDto>> {
-        _movieVideos = MoviesRepository.getMovieVideos()
+        _movieVideos = moviesRepository.getMovieVideos()
         return _movieVideos
     }
 
@@ -195,7 +194,7 @@ class MovieDetailsViewModel(application: Application) : BaseViewModel(applicatio
             putExtra(CALENDAR_VAL_END_TIME, date.timeInMillis + 60 * 60 * 1000)
             putExtra(
                 CALENDAR_VAL_TITLE,
-                "${App.getInstance().getString(R.string.watch_the_movie)} ${currentMovie.title}"
+                "${app.getString(R.string.watch_the_movie)} ${currentMovie.title}"
             )
             putExtra(
                 CALENDAR_VAL_DESCRIPTION,

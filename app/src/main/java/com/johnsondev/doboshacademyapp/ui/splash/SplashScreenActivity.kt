@@ -7,19 +7,22 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.data.network.exception.ConnectionErrorException
-import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
-import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
+import com.johnsondev.doboshacademyapp.data.repositories.movies.MoviesRepository
+import com.johnsondev.doboshacademyapp.ui.movielist.ListActivity
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_KEY
-import com.johnsondev.doboshacademyapp.ui.movielist.ListActivity
+import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import kotlinx.coroutines.*
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
+import org.kodein.di.generic.instance
 
-class SplashScreenActivity : AppCompatActivity() {
+class SplashScreenActivity : AppCompatActivity(), KodeinAware {
 
+    override val kodein by kodein()
+    private val moviesRepository: MoviesRepository by instance()
     private val scope = CoroutineScope(Dispatchers.IO + Job())
-
     private lateinit var checkInternetConnection: InternetConnectionManager
-
     private var movieId: Int? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -33,9 +36,9 @@ class SplashScreenActivity : AppCompatActivity() {
             if (checkInternetConnection.isNetworkAvailable()) {
                 scope.launch {
                     try {
-                        MoviesRepository.loadPopularMoviesFromNet()
-                        MoviesRepository.loadTopRatedMoviesFromNet()
-                        MoviesRepository.loadUpcomingMoviesFromNet()
+                        moviesRepository.loadPopularMoviesFromNet()
+                        moviesRepository.loadTopRatedMoviesFromNet()
+                        moviesRepository.loadUpcomingMoviesFromNet()
                     } catch (e: Exception) {
                         when (e) {
                             is ConnectionErrorException -> {
@@ -77,6 +80,5 @@ class SplashScreenActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
 
 }

@@ -7,12 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.johnsondev.doboshacademyapp.data.models.base.Actor
 import com.johnsondev.doboshacademyapp.data.models.base.Genre
 import com.johnsondev.doboshacademyapp.data.models.base.Movie
-import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
+import com.johnsondev.doboshacademyapp.data.repositories.movies.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class MoviesListViewModel(application: Application) : BaseViewModel(application) {
+class MoviesListViewModel(
+    application: Application,
+    private val moviesRepository: MoviesRepository,
+) : BaseViewModel(application) {
 
     private var popularMovies = MutableLiveData<List<Movie>>()
     val popularMoviesList: LiveData<List<Movie>> get() = popularMovies
@@ -28,40 +31,39 @@ class MoviesListViewModel(application: Application) : BaseViewModel(application)
     private var checkInternetConnection: InternetConnectionManager? = null
 
 
-
     fun loadGenresList() {
         viewModelScope.launch(exceptionHandler()) {
-            MoviesRepository.loadGenresList()
+            moviesRepository.loadGenresList()
             mutableError.value = null
         }
     }
 
     fun getGenresList(): LiveData<List<Genre>> {
-        _popularGenres = MoviesRepository.getGenresList()
+        _popularGenres = moviesRepository.getGenresList()
         return _popularGenres
     }
 
     fun loadMoviesByGenreId(id: Int) {
         viewModelScope.launch(exceptionHandler()) {
-            MoviesRepository.loadMoviesByGenreId(id)
+            moviesRepository.loadMoviesByGenreId(id)
             mutableError.value = null
         }
     }
 
     fun getMoviesByGenre(): LiveData<List<Movie>> {
-        _moviesByGenre = MoviesRepository.getMoviesByGenre()
+        _moviesByGenre = moviesRepository.getMoviesByGenre()
         return _moviesByGenre
     }
 
     fun loadPopularActors() {
         viewModelScope.launch(exceptionHandler()) {
-            MoviesRepository.loadPopularActorsList()
+            moviesRepository.loadPopularActorsList()
             mutableError.value = null
         }
     }
 
     fun getPopularActors(): LiveData<List<Actor>> {
-        _popularActors = MoviesRepository.getPopularActors()
+        _popularActors = moviesRepository.getPopularActors()
         return _popularActors
     }
 
@@ -69,7 +71,7 @@ class MoviesListViewModel(application: Application) : BaseViewModel(application)
     fun getPopularMovies(): LiveData<List<Movie>> {
         if (popularMovies.value.isNullOrEmpty()) {
             viewModelScope.launch(exceptionHandler()) {
-                popularMovies.postValue(MoviesRepository.getPopularMovies())
+                popularMovies.postValue(moviesRepository.getPopularMovies())
                 mutableError.value = null
             }
         }
@@ -79,7 +81,7 @@ class MoviesListViewModel(application: Application) : BaseViewModel(application)
     fun getTopRatedMovies(): LiveData<List<Movie>> {
         if (topRatedMovies.value.isNullOrEmpty()) {
             viewModelScope.launch(exceptionHandler()) {
-                topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
+                topRatedMovies.postValue(moviesRepository.getTopRatedMovies())
                 mutableError.value = null
             }
         }
@@ -89,7 +91,7 @@ class MoviesListViewModel(application: Application) : BaseViewModel(application)
     fun getUpcomingMovies(): LiveData<List<Movie>> {
         if (upcomingMovies.value.isNullOrEmpty()) {
             viewModelScope.launch(exceptionHandler()) {
-                upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
+                upcomingMovies.postValue(moviesRepository.getUpcomingMovies())
                 mutableError.value = null
             }
         }
@@ -107,13 +109,13 @@ class MoviesListViewModel(application: Application) : BaseViewModel(application)
 
     suspend fun loadMoviesFromNet() {
         viewModelScope.launch(exceptionHandler()) {
-            if(popularMovies.value.isNullOrEmpty()){
-                MoviesRepository.loadPopularMoviesFromNet()
-                MoviesRepository.loadTopRatedMoviesFromNet()
-                MoviesRepository.loadUpcomingMoviesFromNet()
-                popularMovies.postValue(MoviesRepository.getPopularMovies())
-                topRatedMovies.postValue(MoviesRepository.getTopRatedMovies())
-                upcomingMovies.postValue(MoviesRepository.getUpcomingMovies())
+            if (popularMovies.value.isNullOrEmpty()) {
+                moviesRepository.loadPopularMoviesFromNet()
+                moviesRepository.loadTopRatedMoviesFromNet()
+                moviesRepository.loadUpcomingMoviesFromNet()
+                popularMovies.postValue(moviesRepository.getPopularMovies())
+                topRatedMovies.postValue(moviesRepository.getTopRatedMovies())
+                upcomingMovies.postValue(moviesRepository.getUpcomingMovies())
                 mutableError.value = null
             }
         }.join()

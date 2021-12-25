@@ -2,7 +2,7 @@ package com.johnsondev.doboshacademyapp.ui.movielist
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.work.*
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -27,11 +27,20 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.UPCOMING_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.showMessage
 import kotlinx.coroutines.*
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 import java.util.concurrent.TimeUnit
 
-class MoviesListFragment : BaseFragment(R.layout.fragment_movies_list) {
+class MoviesListFragment : BaseFragment(R.layout.fragment_movies_list), KodeinAware {
 
-    private val listViewModel by viewModels<MoviesListViewModel>()
+    override val kodein by kodein()
+
+    private val factory: MoviesListViewModelFactory by instance()
+    private val listViewModel: MoviesListViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[MoviesListViewModel::class.java]
+    }
+
     private val binding by viewBinding(FragmentMoviesListBinding::bind)
     private val scope = CoroutineScope(Dispatchers.IO + Job())
     private var isConnectionErrorFromBundle: Boolean? = null

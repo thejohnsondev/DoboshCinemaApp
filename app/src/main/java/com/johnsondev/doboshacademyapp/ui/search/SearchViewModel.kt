@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
+import com.johnsondev.doboshacademyapp.data.repositories.movies.MoviesRepository
 import com.johnsondev.doboshacademyapp.utilities.base.BaseViewModel
 import com.johnsondev.doboshacademyapp.utilities.states.*
 import kotlinx.coroutines.CancellationException
@@ -15,7 +15,10 @@ import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
-class SearchViewModel(application: Application) : BaseViewModel(application) {
+class SearchViewModel(
+    application: Application,
+    private val moviesRepository: MoviesRepository
+) : BaseViewModel(application) {
 
     @ExperimentalCoroutinesApi
     val queryChannel = BroadcastChannel<String>(Channel.CONFLATED)
@@ -35,7 +38,7 @@ class SearchViewModel(application: Application) : BaseViewModel(application) {
                 EmptyQuery
             } else {
                 try {
-                    val result = MoviesRepository.search(it)
+                    val result = moviesRepository.search(it)
                     when {
                         result.actors.isEmpty() && result.movies.isEmpty() -> {
                             EmptySearchResult

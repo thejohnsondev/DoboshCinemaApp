@@ -1,7 +1,7 @@
 package com.johnsondev.doboshacademyapp.ui.actordetails.pagerfragments
 
 import android.view.View
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.johnsondev.doboshacademyapp.R
 import com.johnsondev.doboshacademyapp.adapters.ActorImagesAdapter
@@ -10,16 +10,25 @@ import com.johnsondev.doboshacademyapp.adapters.OnImageClickListener
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
 import com.johnsondev.doboshacademyapp.databinding.FragmentActorDetailsAboutBinding
 import com.johnsondev.doboshacademyapp.ui.actordetails.ActorDetailsViewModel
+import com.johnsondev.doboshacademyapp.ui.actordetails.ActorDetailsViewModelFactory
 import com.johnsondev.doboshacademyapp.utilities.Constants.ANIM_PROPERTY_MAX_LINES
 import com.johnsondev.doboshacademyapp.utilities.Constants.CURRENT_YEAR
 import com.johnsondev.doboshacademyapp.utilities.Constants.EMPTY_STRING
 import com.johnsondev.doboshacademyapp.utilities.animateView
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 
-class ActorDetailsAboutFragment : BaseFragment(R.layout.fragment_actor_details_about) {
+class ActorDetailsAboutFragment : BaseFragment(R.layout.fragment_actor_details_about), KodeinAware {
 
-    private val viewModel by viewModels<ActorDetailsViewModel>()
+    override val kodein by kodein()
+
+    private val factory: ActorDetailsViewModelFactory by instance()
+    private val viewModel: ActorDetailsViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[ActorDetailsViewModel::class.java]
+    }
     private val binding by viewBinding(FragmentActorDetailsAboutBinding::bind)
     private var alsoKnownAdapter: NamesAdapter? = null
     private var actorImagesAdapter: ActorImagesAdapter? = null

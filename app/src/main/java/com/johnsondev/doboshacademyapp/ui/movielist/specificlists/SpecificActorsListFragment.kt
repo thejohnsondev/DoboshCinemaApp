@@ -1,6 +1,6 @@
 package com.johnsondev.doboshacademyapp.ui.movielist.specificlists
 
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -10,16 +10,26 @@ import com.johnsondev.doboshacademyapp.adapters.OnActorItemClickListener
 import com.johnsondev.doboshacademyapp.data.models.base.Actor
 import com.johnsondev.doboshacademyapp.databinding.FragmentSpecificActorsListBinding
 import com.johnsondev.doboshacademyapp.ui.movielist.MoviesListViewModel
+import com.johnsondev.doboshacademyapp.ui.movielist.MoviesListViewModelFactory
 import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_HORIZONTAL
 import com.johnsondev.doboshacademyapp.utilities.Constants.POP_ACTORS_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SEARCH_RESULT_SPEC_TYPE
 import com.johnsondev.doboshacademyapp.utilities.Constants.SPECIFIC_LIST_TYPE
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 
-class SpecificActorsListFragment : BaseFragment(R.layout.fragment_specific_actors_list) {
+class SpecificActorsListFragment : BaseFragment(R.layout.fragment_specific_actors_list),
+    KodeinAware {
 
-    private val moviesListViewModel by viewModels<MoviesListViewModel>()
+    override val kodein by kodein()
+
+    private val factory: MoviesListViewModelFactory by instance()
+    private val listViewModel: MoviesListViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[MoviesListViewModel::class.java]
+    }
     private val binding by viewBinding(FragmentSpecificActorsListBinding::bind)
     private lateinit var adapter: ActorsAdapter
     private lateinit var specType: String
@@ -34,7 +44,7 @@ class SpecificActorsListFragment : BaseFragment(R.layout.fragment_specific_actor
         specType = arguments?.getString(SPECIFIC_LIST_TYPE) ?: getString(R.string.actors_list)
         when (specType) {
             POP_ACTORS_SPEC_TYPE -> {
-                moviesListViewModel.loadPopularActors()
+                listViewModel.loadPopularActors()
             }
         }
     }
@@ -57,7 +67,7 @@ class SpecificActorsListFragment : BaseFragment(R.layout.fragment_specific_actor
 
         when (specType) {
             POP_ACTORS_SPEC_TYPE -> {
-                moviesListViewModel.getPopularActors().observe(viewLifecycleOwner) {
+                listViewModel.getPopularActors().observe(viewLifecycleOwner) {
                     adapter.setActors(it)
                 }
             }

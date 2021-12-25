@@ -1,27 +1,26 @@
-package com.johnsondev.doboshacademyapp.data.repositories
+package com.johnsondev.doboshacademyapp.data.repositories.actors
 
 import androidx.lifecycle.MutableLiveData
-import com.johnsondev.doboshacademyapp.App
+import com.johnsondev.doboshacademyapp.data.db.FavoritesDb
 import com.johnsondev.doboshacademyapp.data.db.entities.FavoriteEntity
 import com.johnsondev.doboshacademyapp.data.models.base.Actor
 import com.johnsondev.doboshacademyapp.data.models.base.CrewMember
 import com.johnsondev.doboshacademyapp.data.models.base.Movie
-import com.johnsondev.doboshacademyapp.data.network.NetworkService
+import com.johnsondev.doboshacademyapp.data.network.api.MovieApi
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
 import com.johnsondev.doboshacademyapp.data.network.exception.ConnectionErrorException
 import com.johnsondev.doboshacademyapp.data.network.exception.UnexpectedErrorException
-import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.FAVORITE_ACTOR_ENTITY_TYPE
 import com.johnsondev.doboshacademyapp.utilities.DtoMapper
 import retrofit2.HttpException
 import java.io.IOException
 import java.util.concurrent.TimeoutException
 
-object ActorsRepository {
-
-    private val movieApi = NetworkService.MOVIE_API
-    private val favoritesDatabase = App.getInstance().getFavoritesDatabase()
+class ActorsRepositoryImpl(
+    private val movieApi: MovieApi,
+    private val favoritesDatabase: FavoritesDb
+) : ActorsRepository {
 
     private var actors = MutableLiveData<List<Actor>>()
     private var crew = MutableLiveData<List<CrewMember>>()
@@ -33,7 +32,7 @@ object ActorsRepository {
     private var favoriteActors = MutableLiveData<List<Actor>>()
     private var favoriteActorsIds = MutableLiveData<List<Int>>()
 
-    suspend fun getFavoriteActorsIds(): MutableLiveData<List<Int>> {
+    override suspend fun getFavoriteActorsIds(): MutableLiveData<List<Int>> {
         try {
             favoriteActorsIds.value = favoritesDatabase.favoritesDao()
                 .getFavoritesEntityIdByType(FAVORITE_ACTOR_ENTITY_TYPE)
@@ -44,7 +43,7 @@ object ActorsRepository {
     }
 
 
-    suspend fun loadFavoritesActorsFromDb() {
+    override suspend fun loadFavoritesActorsFromDb() {
         try {
             favoriteActors.value = favoritesDatabase.favoritesDao()
                 .getFavoritesEntityIdByType(FAVORITE_ACTOR_ENTITY_TYPE).map { id ->
@@ -56,7 +55,7 @@ object ActorsRepository {
         }
     }
 
-    suspend fun insertActorToFavorites(actorId: Int) {
+    override suspend fun insertActorToFavorites(actorId: Int) {
 
         try {
             favoritesDatabase.favoritesDao().insertFavoriteEntity(
@@ -70,7 +69,7 @@ object ActorsRepository {
         }
     }
 
-    suspend fun deleteActorFromFavorites(actorId: Int) {
+    override suspend fun deleteActorFromFavorites(actorId: Int) {
         try {
             favoritesDatabase.favoritesDao()
                 .deleteFavoriteEntity(FAVORITE_ACTOR_ENTITY_TYPE, actorId)
@@ -80,9 +79,9 @@ object ActorsRepository {
 
     }
 
-    fun getFavoritesActors(): MutableLiveData<List<Actor>> = favoriteActors
+    override fun getFavoritesActors(): MutableLiveData<List<Actor>> = favoriteActors
 
-    suspend fun loadCast(movieId: Int) {
+    override suspend fun loadCast(movieId: Int) {
         try {
             val response = movieApi.getActors(movieId)
 
@@ -99,11 +98,11 @@ object ActorsRepository {
         }
     }
 
-    fun getActorsForCurrentMovie(): MutableLiveData<List<Actor>> = actors
+    override fun getActorsForCurrentMovie(): MutableLiveData<List<Actor>> = actors
 
-    fun getCrewForCurrentMovie(): MutableLiveData<List<CrewMember>> = crew
+    override fun getCrewForCurrentMovie(): MutableLiveData<List<CrewMember>> = crew
 
-    suspend fun loadActorDetailsById(id: Int) {
+    override suspend fun loadActorDetailsById(id: Int) {
         try {
             actorDetails.postValue(movieApi.getActorDetails(id))
             actorMovieCredits.postValue(movieApi.getActorMovieCredits(id).cast.distinct().map {
@@ -117,11 +116,11 @@ object ActorsRepository {
 
     }
 
-    fun getActorDetails(): MutableLiveData<ActorDetailsDto> = actorDetails
+    override fun getActorDetails(): MutableLiveData<ActorDetailsDto> = actorDetails
 
-    fun getActorMovieCredits(): MutableLiveData<List<Movie>> = actorMovieCredits
+    override fun getActorMovieCredits(): MutableLiveData<List<Movie>> = actorMovieCredits
 
-    fun getActorImages(): MutableLiveData<List<ActorImageProfileDto>> = actorImages
+    override fun getActorImages(): MutableLiveData<List<ActorImageProfileDto>> = actorImages
 
     private fun handleExceptions(e: Exception) {
         throw when (e) {

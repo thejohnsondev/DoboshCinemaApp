@@ -1,6 +1,6 @@
 package com.johnsondev.doboshacademyapp.ui.moviedetails
 
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -13,10 +13,19 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.ITEM_TYPE_POSTER
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_KEY
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 
-class SpecificImagesFragment : BaseFragment(R.layout.fragment_specific_images) {
+class SpecificImagesFragment : BaseFragment(R.layout.fragment_specific_images), KodeinAware {
 
-    private val detailsViewModel by viewModels<MovieDetailsViewModel>()
+    override val kodein by kodein()
+
+    private val factory: MovieDetailsViewModelFactory by instance()
+    private val detailsViewModel: MovieDetailsViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[MovieDetailsViewModel::class.java]
+    }
+
     private val binding by viewBinding(FragmentSpecificImagesBinding::bind)
     private lateinit var movieImagesAdapter: ImagesAdapter
     private var listType: Int? = null

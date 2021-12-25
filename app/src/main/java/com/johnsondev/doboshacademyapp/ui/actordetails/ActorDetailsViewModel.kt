@@ -5,17 +5,18 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.johnsondev.doboshacademyapp.data.models.base.Actor
 import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorDetailsDto
 import com.johnsondev.doboshacademyapp.data.network.dto.ActorImageProfileDto
-import com.johnsondev.doboshacademyapp.data.repositories.ActorsRepository
-import com.johnsondev.doboshacademyapp.data.repositories.MoviesRepository
+import com.johnsondev.doboshacademyapp.data.repositories.actors.ActorsRepository
 import com.johnsondev.doboshacademyapp.utilities.InternetConnectionManager
 import com.johnsondev.doboshacademyapp.utilities.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class ActorDetailsViewModel(application: Application) : BaseViewModel(application) {
+class ActorDetailsViewModel(
+    application: Application,
+    private val actorsRepository: ActorsRepository
+) : BaseViewModel(application) {
 
     private var _actorDetails = MutableLiveData<ActorDetailsDto>()
     private var _actorMovieCredits = MutableLiveData<List<Movie>>()
@@ -24,51 +25,50 @@ class ActorDetailsViewModel(application: Application) : BaseViewModel(applicatio
     private var _favoriteActorsIds = MutableLiveData<List<Int>>()
 
 
-
     fun loadFavoriteActorsIds() {
         viewModelScope.launch(exceptionHandler()) {
-            _favoriteActorsIds = ActorsRepository.getFavoriteActorsIds()
+            _favoriteActorsIds = actorsRepository.getFavoriteActorsIds()
             mutableError.value = null
         }
     }
 
-    fun isActorFavorite(actorId: Int): Boolean{
+    fun isActorFavorite(actorId: Int): Boolean {
         return _favoriteActorsIds.value?.contains(actorId) == true
     }
 
     fun insertActorToFavorites(actorId: Int) {
         viewModelScope.launch(exceptionHandler()) {
-            ActorsRepository.insertActorToFavorites(actorId)
+            actorsRepository.insertActorToFavorites(actorId)
             mutableError.value = null
         }
     }
 
-    fun deleteActorFromFavorites(actorId: Int){
+    fun deleteActorFromFavorites(actorId: Int) {
         viewModelScope.launch(exceptionHandler()) {
-            ActorsRepository.deleteActorFromFavorites(actorId)
+            actorsRepository.deleteActorFromFavorites(actorId)
             mutableError.value = null
         }
     }
 
     fun loadActorDetailsById(id: Int) {
         viewModelScope.launch(exceptionHandler()) {
-            ActorsRepository.loadActorDetailsById(id)
+            actorsRepository.loadActorDetailsById(id)
             mutableError.value = null
         }
     }
 
     fun getActorDetails(): LiveData<ActorDetailsDto> {
-        _actorDetails = ActorsRepository.getActorDetails()
+        _actorDetails = actorsRepository.getActorDetails()
         return _actorDetails
     }
 
     fun getActorMovieCredits(): LiveData<List<Movie>> {
-        _actorMovieCredits = ActorsRepository.getActorMovieCredits()
+        _actorMovieCredits = actorsRepository.getActorMovieCredits()
         return _actorMovieCredits
     }
 
     fun getActorImages(): LiveData<List<ActorImageProfileDto>> {
-        _actorImages = ActorsRepository.getActorImages()
+        _actorImages = actorsRepository.getActorImages()
         return _actorImages
     }
 

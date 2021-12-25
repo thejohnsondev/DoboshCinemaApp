@@ -3,7 +3,7 @@ package com.johnsondev.doboshacademyapp.ui.moviedetails
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.load
@@ -23,11 +23,20 @@ import com.johnsondev.doboshacademyapp.utilities.Constants.MOVIE_TAB_TITLES
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
 import com.johnsondev.doboshacademyapp.utilities.observeOnce
 import com.johnsondev.doboshacademyapp.utilities.timeToHFromMin
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 import java.util.*
 
-class MoviesDetailsFragment : BaseFragment(R.layout.fragment_movies_details) {
+class MoviesDetailsFragment : BaseFragment(R.layout.fragment_movies_details), KodeinAware {
 
-    private val detailsViewModel by viewModels<MovieDetailsViewModel>()
+    override val kodein by kodein()
+
+    private val factory: MovieDetailsViewModelFactory by instance()
+    private val detailsViewModel: MovieDetailsViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[MovieDetailsViewModel::class.java]
+    }
+
     private val binding by viewBinding(FragmentMoviesDetailsBinding::bind)
     private var currentMovieId: Int = 0
     private var currentMovie: Movie? = null
@@ -113,7 +122,7 @@ class MoviesDetailsFragment : BaseFragment(R.layout.fragment_movies_details) {
                 rbRating.progress = (movie.ratings * 2).toInt()
                 tvReviews.text = movieReviews
                 tvAge.text = getString(R.string.plus, movie.minimumAge)
-                movieGenresAdapter.setGenresList(movie.genres ?: emptyList())
+                movieGenresAdapter.setGenresList(movie.genres)
 
             })
 

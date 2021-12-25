@@ -3,7 +3,7 @@ package com.johnsondev.doboshacademyapp.ui.actordetails
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.load
 import coil.transform.BlurTransformation
@@ -15,10 +15,18 @@ import com.johnsondev.doboshacademyapp.utilities.Constants
 import com.johnsondev.doboshacademyapp.utilities.Constants.ACTOR_KEY
 import com.johnsondev.doboshacademyapp.utilities.Constants.POSTER_PATH
 import com.johnsondev.doboshacademyapp.utilities.base.BaseFragment
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 
-class ActorDetailsFragment : BaseFragment(R.layout.fragment_actor_details) {
+class ActorDetailsFragment : BaseFragment(R.layout.fragment_actor_details), KodeinAware {
 
-    private val detailsViewModel by viewModels<ActorDetailsViewModel>()
+    override val kodein by kodein()
+
+    private val factory: ActorDetailsViewModelFactory by instance()
+    private val detailsViewModel: ActorDetailsViewModel by lazy {
+        ViewModelProvider(requireActivity(), factory)[ActorDetailsViewModel::class.java]
+    }
     private val binding by viewBinding(FragmentActorDetailsBinding::bind)
     private var currentActorId: Int? = null
 
