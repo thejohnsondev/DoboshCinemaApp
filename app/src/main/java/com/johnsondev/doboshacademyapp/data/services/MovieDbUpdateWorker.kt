@@ -17,7 +17,6 @@ import com.johnsondev.doboshacademyapp.data.models.base.Movie
 import com.johnsondev.doboshacademyapp.data.repositories.movies.MoviesRepository
 import com.johnsondev.doboshacademyapp.ui.splash.SplashScreenActivity
 import kotlinx.coroutines.*
-import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
@@ -31,7 +30,8 @@ class MovieDbUpdateWorker(val context: Context, params: WorkerParameters) :
         private const val NOTIFICATION_TAG = "newMovies"
     }
 
-    override val kodein = Kodein.lazy { kodein() }
+    override val kodein by kodein(context)
+
     private val moviesRepository: MoviesRepository by instance()
     private val notificationManagerCompat = NotificationManagerCompat.from(context)
     private var isNewMovie = false
